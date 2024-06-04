@@ -21,25 +21,37 @@ import jakarta.persistence.Column;
 @Entity
 @Table(name = "OrderItem")
 public class OrderItem {
-	@Id
-	private int orderItemId;
-	@Column(name="orderid")
-	private int orderId;
-	private int itemId;
-	private int quantity;
-	/*Item 한개에 대한 가격 - unit*quantity로 sub구할 것임*/
-	private double unitPrice;
+	@Id @GeneratedValue
+	@Column(name = "order_item_id")
+	private int orderItem_id;
 
-	/*orderItem_id 는 자동 생성될 것인데 cart 구현자와 맞춰서 재수정 예정
-	public OrderItem(int orderId, CartItem cartItem) {
-	   this.orderId = orderId;
-	   this.quantity = cartItem.getQuantity();
-	   this.item_id = cartItem.getItem().getItemId();
-	   this.unitPrice = cartItem.getItem().getUnitPrice();
-	  }
-	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "item_id")
+	private Item item;
 
-	  public double getSubPrice() {
-		return this.unitPrice * this.quantity;
-	  }
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "order_id")
+	private Order order;
+
+	private int orderPrice; //주문가격
+
+	private int count; //수량
+
+	public static OrderItem createOrderItem(Item item, int count){
+		OrderItem orderItem = new OrderItem();
+		orderItem.setItem(item);
+		orderItem.setCount(count);
+		orderItem.setOrderPrice(item.getPrice());
+		item.removeStock(count);
+		return orderItem;
+	}
+
+	public int getTotalPrice(){
+		return orderPrice*count;
+	}
+
+	public void cancel() {
+		this.getItem().addStock(count);
+	}
+
 }

@@ -3,6 +3,8 @@ package com.luckyGirls.ForYourNutrition.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
@@ -25,6 +27,7 @@ public class Member implements Serializable {
 	private String password;
 	private String name;
 	private String nickname;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date birth;
 	private int gender;
 	private String phone_number;

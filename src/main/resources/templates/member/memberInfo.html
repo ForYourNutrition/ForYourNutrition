@@ -3,10 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <title>사용자 정보</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: navy;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 80%;
+            max-width: 800px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .user-info p {
+            margin: 15px 0;
+            font-size: 18px;
+        }
+        .user-info strong {
+            font-weight: bold;
+        }
+        button {
+            margin-top: 30px;
+            padding: 15px 30px;
+            border-radius: 5px;
+            border: 1px solid navy;
+            background-color: navy;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #001f4d;
+        }
+    </style>
 </head>
 <body>
+<div class="container">
     <h2>사용자 정보</h2>
-    <div>
+    <div class="user-info">
         <p><strong>아이디</strong><br>
         <span th:text="${member.id}"></span></p>
         
@@ -28,8 +69,9 @@
         <p><strong>이메일</strong><br>
         <span th:text="${member.email}"></span></p>
         
-        <button type="button" th:onclick="|location.href='@{/member/joinForm(member=${member})}'|">회원 수정</button> 
-		<button type="button" th:onclick="|location.href='@{/member/loginForm'|">회원 탈퇴</button>
+        <button type="button" th:onclick="|location.href='@{modifyMember.do}'|">회원 수정</button> 
+		<button type="button" th:onclick="|location.href='@{delete.do}'|">회원 탈퇴</button>
     </div>
+</div>
 </body>
 </html>

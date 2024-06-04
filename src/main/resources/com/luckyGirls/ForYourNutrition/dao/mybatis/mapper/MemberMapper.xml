@@ -18,14 +18,14 @@
   
   <insert id="insertMember" parameterType="Member">
     INSERT INTO MEMBER 
-    (ID, PASSWORD, NAME, NICKNAME, BIRTH, GENDER, PHONE_NUMBER, EMAIL, POINT, TAKING_TIME)
+    (MEMBER_ID, ID, PASSWORD, NAME, NICKNAME, BIRTH, GENDER, PHONE_NUMBER, EMAIL, POINT, TAKING_TIME)
     VALUES 
-    (#{id}, #{password}, #{name}, #{nickname}, #{birth}, #{gender}, #{phone_number}, #{email}, #{point}, #{taking_time})
+    (MEMBERID_SEQ.nextval, #{id}, #{password}, #{name}, #{nickname}, #{birth}, #{gender}, #{phone_number}, #{email}, 0, 0)
   </insert>
   
   <update id="updateMember" parameterType="Member">
     UPDATE MEMBER SET
-      PASSWORD = #{password},
+      NAME = #{name},
       NICKNAME = #{nickname},
       BIRTH = #{birth},
       GENDER = #{gender},

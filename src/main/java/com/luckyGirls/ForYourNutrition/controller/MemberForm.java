@@ -7,7 +7,6 @@ import com.luckyGirls.ForYourNutrition.domain.Member;
 
 @SuppressWarnings("serial")
 public class MemberForm implements Serializable {
-
 	private Member member;
 
 	private boolean newMember;
@@ -26,6 +25,10 @@ public class MemberForm implements Serializable {
 
 	public Member getMember() {
 		return member;
+	}
+
+	public void setMember(Member member) {
+		this.member = member;
 	}
 
 	public boolean isNewMember() {

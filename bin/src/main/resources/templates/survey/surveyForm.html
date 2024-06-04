@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>설문 입력</title>
+</head>
+<body>
+<div>
+    <h2>설문 입력</h2>
+    <form th:method="post" th:action="@{surveyInfo}" th:object="${survey}">
+        <!-- 아이디와 출생 연도는 입력받지 않음 -->
+        <input type="hidden" th:field="*{member.id}"/>
+        <input type="hidden" th:field="*{member.birth}"/>
+        <div>
+            <label>흡연 빈도</label><br>
+            <input type="radio" th:field="*{smoking}" name="smoking" value="1"/> 하루에 한 번
+            <input type="radio" th:field="*{smoking}" name="smoking" value="2"/> 하루에 두 번
+            <input type="radio" th:field="*{smoking}" name="smoking" value="3"/> 하루에 세 번 이상
+            <input type="radio" th:field="*{smoking}" name="smoking" value="0"/> 흡연하지 않음
+            <div th:each="err : ${#fields.errors('smoking')}" th:text="${err}"></div>
+        </div>
+        <br/>
+        <div>
+            <label>음주 빈도</label><br>
+            <input type="radio" th:field="*{drinking}" name="drinking" value="1"/> 주 1회 이하
+            <input type="radio" th:field="*{drinking}" name="drinking" value="2"/> 주 2~3회
+            <input type="radio" th:field="*{drinking}" name="drinking" value="3"/> 주 4회 이상
+            <input type="radio" th:field="*{drinking}" name="drinking" value="0"/> 음주하지 않음
+            <div th:each="err : ${#fields.errors('drinking')}" th:text="${err}"></div>
+        </div>
+        <br/>
+        <div>
+            <label>운동 빈도</label><br>
+            <input type="radio" th:field="*{exercising}" name="exercising" value="1"/> 주 1회 이하
+            <input type="radio" th:field="*{exercising}" name="exercising" value="2"/> 주 2~3회
+            <input type="radio" th:field="*{exercising}" name="exercising" value="3"/> 주 4회 이상
+            <input type="radio" th:field="*{exercising}" name="exercising" value="0"/> 운동하지 않음
+            <div th:each="err : ${#fields.errors('exercising')}" th:text="${err}"></div>
+        </div>
+        <br/>
+        <div>
+            <label>영양제 복용 이유</label><br>
+            <input type="checkbox" th:field="*{effects}" value="0"/> 면역력
+            <input type="checkbox" th:field="*{effects}" value="1"/> 다이어트
+            <input type="checkbox" th:field="*{effects}" value="2"/> 피로회복
+            <input type="checkbox" th:field="*{effects}" value="3"/> 눈건강
+            <input type="checkbox" th:field="*{effects}" value="4"/> 간건강
+            <input type="checkbox" th:field="*{effects}" value="5"/> 장건강
+            <input type="checkbox" th:field="*{effects}" value="6"/> 피부건강
+            <input type="checkbox" th:field="*{effects}" value="7"/> 관절&뼈
+            <input type="checkbox" th:field="*{effects}" value="8"/> 숙취해소
+            <input type="checkbox" th:field="*{effects}" value="9"/> 혈행개선
+            <input type="checkbox" th:field="*{effects}" value="10"/> 항산화
+            <div th:each="err : ${#fields.errors('effects')}" th:text="${err}"></div>
+        </div>
+        <br/>
+        <button type="submit">save</button>
+    </form>
+</div>
+</body>
+</html>

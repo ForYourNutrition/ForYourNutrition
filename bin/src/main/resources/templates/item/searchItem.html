@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .navbar img {
+            height: 40px;
+        }
+        .navbar a {
+            text-decoration: none;
+            color: black;
+            margin-left: 20px;
+        }
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+        .search-bar input {
+            width: 60%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+        }
+        .carousel {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+        .carousel img {
+            width: 50px;
+            height: 50px;
+            margin: 0 10px;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+        }
+        .product-grid {
+            width : 100%;
+            display: grid;
+            gap: 20px;
+            padding: 0 20px;
+        }
+        iframe {
+            width: 100%;
+            height: 600px; /* Adjust height as needed */
+            border: none;
+        }
+        .product-item {
+            background-color: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .product-item img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+        .product-item .price {
+            color: #333;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .product-item .name {
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+<div class="search-bar">
+    <input type="text" placeholder="Search for products...">
+</div>
+
+
+<div class="product-grid">
+    <iframe src="searchItemList.html"></iframe>
+</div>
+
+</body>
+</html>

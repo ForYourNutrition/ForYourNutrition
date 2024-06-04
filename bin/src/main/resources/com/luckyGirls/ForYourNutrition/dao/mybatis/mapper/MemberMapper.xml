@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.luckyGirls.ForYourNutrition.dao.mybatis.mapper.MemberMapper">
+  <cache />
+  
+  <select id="getAccountByIdAndPassword" resultType="Member">
+    SELECT ID, PASSWORD, NAME, NICKNAME, BIRTH, GENDER, PHONE_NUMBER, EMAIL, POINT, TAKING_TIME
+    FROM MEMBER 
+    WHERE ID = #{param1} AND PASSWORD = #{param2}
+  </select> 
+  
+  <select id="getAccountById" resultType="Member">
+    SELECT ID, PASSWORD, NAME, NICKNAME, BIRTH, GENDER, PHONE_NUMBER, EMAIL, POINT, TAKING_TIME
+    FROM MEMBER 
+    WHERE ID = #{param1}
+  </select>
+  
+  <insert id="insertMember" parameterType="Member">
+    INSERT INTO MEMBER 
+    (ID, PASSWORD, NAME, NICKNAME, BIRTH, GENDER, PHONE_NUMBER, EMAIL, POINT, TAKING_TIME)
+    VALUES 
+    (#{id}, #{password}, #{name}, #{nickname}, #{birth}, #{gender}, #{phone_number}, #{email}, #{point}, #{taking_time})
+  </insert>
+  
+  <update id="updateMember" parameterType="Member">
+    UPDATE MEMBER SET
+      PASSWORD = #{password},
+      NICKNAME = #{nickname},
+      BIRTH = #{birth},
+      GENDER = #{gender},
+      PHONE_NUMBER = #{phone_number},
+      EMAIL = #{email},
+      POINT = #{point},
+      TAKING_TIME = #{taking_time}
+    WHERE ID = #{id}
+  </update>
+  
+  <delete id="deleteMember" parameterType="String">
+    DELETE FROM MEMBER WHERE ID = #{param1}
+  </delete>
+</mapper>

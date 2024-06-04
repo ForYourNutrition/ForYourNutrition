@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>View Question</title>
+</head>
+<body>
+    <h1>Question Details</h1>
+    <div>
+        <h2 th:text="${question.title}">Title</h2>
+        <p th:text="${question.content}">Content</p>
+        <p th:text="${#dates.format(question.qdate, 'yyyy-MM-dd HH:mm')}">Date</p>
+    </div>
+    <a th:href="@{/question/edit/{id}(id=${question.question_id})}">Edit</a>
+    <a th:href="@{/question/delete/{id}(id=${question.question_id})}">Delete</a>
+    <a href="/question">Back to List</a>
+</body>
+</html>

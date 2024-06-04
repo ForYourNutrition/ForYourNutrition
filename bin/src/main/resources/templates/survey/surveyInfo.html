@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>설문 정보</title>
+</head>
+<body>
+    <h2>설문 정보</h2>
+    <div>
+        <p><strong>영양제 복용 이유</strong><br>
+        <span th:text="${survey.effect}"></span></p>
+        
+        <p><strong>흡연 빈도</strong><br>
+        <span th:text="${survey.smoking}"></span></p>
+        
+        <p><strong>음주 빈도</strong><br>
+        <span th:text="${survey.drinking}"></span></p>
+        
+        <p><strong>운동 빈도</strong>
+            <span th:each="exercising : ${survey.exercising}">
+                <span th:text="${exercising}"></span>
+            </span>
+        </p>
+    </div>
+</body>
+</html>

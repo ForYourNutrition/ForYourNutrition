@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>사용자 정보</title>
+</head>
+<body>
+    <h2>사용자 정보</h2>
+    <div>
+        <p><strong>아이디</strong><br>
+        <span th:text="${member.id}"></span></p>
+        
+        <p><strong>이름</strong><br>
+        <span th:text="${member.name}"></span></p>
+        
+        <p><strong>닉네임</strong><br>
+        <span th:text="${member.nickname}"></span></p>
+        
+        <p><strong>생년월일</strong><br>
+        <span th:text="${#dates.format(member.birth, 'yyyy-MM-dd')}"></span></p>
+        
+        <p><strong>성별</strong><br>
+        <span th:text="${member.gender == 1 ? '남성' : '여성'}"></span></p>
+        
+        <p><strong>연락처</strong><br>
+        <span th:text="${member.phone_number}"></span></p>
+        
+        <p><strong>이메일</strong><br>
+        <span th:text="${member.email}"></span></p>
+        
+        <button type="button" th:onclick="|location.href='@{/member/joinForm(member=${member})}'|">회원 수정</button> 
+		<button type="button" th:onclick="|location.href='@{/member/loginForm'|">회원 탈퇴</button>
+    </div>
+</body>
+</html>

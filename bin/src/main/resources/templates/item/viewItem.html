@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>뉴오리진 오메가3</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 50%;
+            margin: auto;
+        }
+        .product-main {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .product-main img {
+            max-width: 300px;
+        }
+        .product-details {
+            max-width: 400px;
+        }
+        .product-details h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .product-details .price {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .buttons {
+            margin-bottom: 10px;
+        }
+        .buttons button {
+            padding: 10px 20px;
+            margin-right: 10px;
+            border: none;
+            cursor: pointer;
+        }
+        .buttons .add-to-cart {
+            background-color: #007bff;
+            color: white;
+        }
+        .product-comparison {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .product-comparison .product-item {
+            text-align: center;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .product-comparison img {
+            max-width: 150px;
+            margin-bottom: 10px;
+        }
+        .product-info {
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+        }
+        .product-info h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .tabs {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .tabs button {
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        .tabs button.active {
+            background-color: #007bff;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="product-main">
+        <img src="/templates/image/img.png" alt="뉴오리진 오메가3">
+        <div class="product-details">
+            <h1 th:text="${item.name}"> <span th:text="${item.name}"></span></h1>
+            <div class="price" th:text="${item.price} + '원'"><span th:text="${item.price} + '원'"></span></div>
+            <div class="buttons">
+                <div>성분타입</div>
+                <div>건강관리</div>
+                <div>커피관리</div>
+            </div>
+            <button class="add-to-cart">Add to cart</button>
+        </div>
+    </div>
+<!--    <div class="product-comparison">-->
+<!--        <div class="product-item">-->
+<!--            <div>마그네슘1</div>-->
+<!--            <div>10,000원</div>-->
+<!--        </div>-->
+<!--        <div class="product-item">-->
+<!--            <div>마그네슘2</div>-->
+<!--            <div>15,000원</div>-->
+<!--        </div>-->
+<!--        <div class="product-item">-->
+<!--            <div>마그네슘3</div>-->
+<!--            <div>20,000원</div>-->
+<!--        </div>-->
+<!--    </div>-->
+    <div class="product-info">
+        <div class="tabs">
+            <button class="active" onclick="showTab('details')">상품 상세</button>
+            <button onclick="showTab('reviews')">구매 후기</button>
+            <button onclick="showTab('shipping')">배송 안내</button>
+        </div>
+        <div id="details" class="tab-content active">
+            <h2>상품 상세</h2>
+            <p>상세 정보 더보기</p>
+        </div>
+        <div id="reviews" class="tab-content">
+            <h2>구매 후기</h2>
+            <p>구매 후기 내용</p>
+        </div>
+        <div id="shipping" class="tab-content">
+            <h2>배송 안내</h2>
+            <p>배송 안내 내용</p>
+        </div>
+    </div>
+    <h1 th:text="${item.name}">Product Name</h1>
+    <div class="price" th:text="${item.price + '원'}">30,000원</div>
+    <div>
+        <p><strong>Name:</strong> <span th:text="${item.name}"></span></p>
+        <p><strong>Category:</strong> <span th:text="${item.category}"></span></p>
+        <p><strong>Detail:</strong> <span th:text="${item.detail}"></span></p>
+        <p><strong>Effect:</strong> <span th:text="${item.effect}"></span></p>
+        <p><strong>Price:</strong> <span th:text="${item.price}"></span></p>
+        <p><strong>Sales:</strong> <span th:text="${item.sales}"></span></p>
+        <p><strong>Stock:</strong> <span th:text="${item.stock}"></span></p>
+        <p><strong>Target:</strong> <span th:text="${item.target}"></span></p>
+    </div>
+</div>
+
+<script>
+    function showTab(tabId) {
+        var contents = document.getElementsByClassName('tab-content');
+        for (var i = 0; i < contents.length; i++) {
+            contents[i].classList.remove('active');
+        }
+        document.getElementById(tabId).classList.add('active');
+
+        var tabs = document.querySelectorAll('.tabs button');
+        tabs.forEach(function(tab) {
+            tab.classList.remove('active');
+        });
+        document.querySelector('.tabs button[onclick="showTab(\'' + tabId + '\')"]').classList.add('active');
+    }
+</script>
+
+</body>
+</html>

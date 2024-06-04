@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>View Question</title>
+	<title>update_form</title>
 </head>
 <body>
-    <h1>Question Details</h1>
-    <div class ="main">
-
-		<label for="name">작성자 : </label>
+	<div class ="main">
+		<form method="post" th:action="@{/question/update}">
+					<label for="name">작성자 : </label>
 		<input type="text" name="name" id="name" th:value="${question.member.name}" disabled>
 		
 		<label for="title">제목 : </label>
@@ -16,9 +15,8 @@
 		<label for="content">내용 : </label>
 		<textarea name="content" name="content" id="content" th:value="${question.content}" disabled></textarea>
 			
-		<a th:href="@{/question/update/{question_id}(question_id=${question.question_id})" id="update">수정</a>
-		<a th:href="@{/question/delete/{question_id}(question_id=${question.question_id})" id="delete">삭제</a>
+			<button type="submit">수정</button>
+		</form>
 	</div>
-    
 </body>
-</html>
+

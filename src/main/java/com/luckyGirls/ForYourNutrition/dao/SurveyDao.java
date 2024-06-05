@@ -19,5 +19,5 @@ public interface SurveyDao {
 
 	void updateSurvey(Survey survey) throws DataAccessException; //문진표 수정
 	
-	List<SRecommend> viewSRecommendList(Survey survey) throws DataAccessException; //문진표 바탕 추천
+	//List<SRecommend> viewSRecommendList(Survey survey) throws DataAccessException; //문진표 바탕 추천
 }

@@ -2,60 +2,121 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>설문 입력</title>
+    <title>문진표</title>
+    <style>
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            box-sizing: border-box;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        .radio-group, .checkbox-group {
+            text-align: left;
+            margin-bottom: 10px;
+        }
+        .radio-group label, .checkbox-group label {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .error-class {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+            text-align: left;
+        }
+        button {
+            width: 50%;
+            padding: 15px;
+            border-radius: 5px;
+            border: none;
+            background-color: navy;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #001f4d;
+        }
+        h2 {
+			color: navy;
+		}
+    </style>
+    <script>
+        function validateForm() {
+            const effectElements = document.getElementsByName('effect');
+            let isChecked = false;
+            for (let i = 0; i < effectElements.length; i++) {
+                if (effectElements[i].checked) {
+                    isChecked = true;
+                    break;
+                }
+            }
+            if (!isChecked) {
+                alert('영양제 복용 이유를 하나 이상 선택해 주세요.');
+                return false;
+            }
+            return true;
+        }
+    </script>
 </head>
 <body>
 <div>
-    <h2>설문 입력</h2>
-    <form th:method="post" th:action="@{surveyInfo}" th:object="${survey}">
-        <!-- 아이디와 출생 연도는 입력받지 않음 -->
-        <input type="hidden" th:field="*{member.id}"/>
-        <input type="hidden" th:field="*{member.birth}"/>
-        <div>
+<div th:insert="~{header}"></div>
+<div class="container">
+    <h2>문진표</h2>
+    <form action="#" method="post" th:action="@{saveSurvey.do}" th:object="${surveyForm}" onsubmit="return validateForm()">
+        <div class="radio-group">
             <label>흡연 빈도</label><br>
-            <input type="radio" th:field="*{smoking}" name="smoking" value="1"/> 하루에 한 번
-            <input type="radio" th:field="*{smoking}" name="smoking" value="2"/> 하루에 두 번
-            <input type="radio" th:field="*{smoking}" name="smoking" value="3"/> 하루에 세 번 이상
-            <input type="radio" th:field="*{smoking}" name="smoking" value="0"/> 흡연하지 않음
-            <div th:each="err : ${#fields.errors('smoking')}" th:text="${err}"></div>
+            <label><input type="radio" th:field="*{smoking}" name="smoking" value="1"/> 하루에 한 번</label>
+            <label><input type="radio" th:field="*{smoking}" name="smoking" value="2"/> 하루에 두 번</label>
+            <label><input type="radio" th:field="*{smoking}" name="smoking" value="3"/> 하루에 세 번 이상</label>
+            <label><input type="radio" th:field="*{smoking}" name="smoking" value="0"/> 흡연하지 않음</label>
+            <div th:each="err : ${#fields.errors('smoking')}" class="error-class" th:text="${err}"></div>
         </div>
-        <br/>
-        <div>
+        <div class="radio-group">
             <label>음주 빈도</label><br>
-            <input type="radio" th:field="*{drinking}" name="drinking" value="1"/> 주 1회 이하
-            <input type="radio" th:field="*{drinking}" name="drinking" value="2"/> 주 2~3회
-            <input type="radio" th:field="*{drinking}" name="drinking" value="3"/> 주 4회 이상
-            <input type="radio" th:field="*{drinking}" name="drinking" value="0"/> 음주하지 않음
-            <div th:each="err : ${#fields.errors('drinking')}" th:text="${err}"></div>
+            <label><input type="radio" th:field="*{drinking}" name="drinking" value="1"/> 주 1회 이하</label>
+            <label><input type="radio" th:field="*{drinking}" name="drinking" value="2"/> 주 2~3회</label>
+            <label><input type="radio" th:field="*{drinking}" name="drinking" value="3"/> 주 4회 이상</label>
+            <label><input type="radio" th:field="*{drinking}" name="drinking" value="0"/> 음주하지 않음</label>
+            <div th:each="err : ${#fields.errors('drinking')}" class="error-class" th:text="${err}"></div>
         </div>
-        <br/>
-        <div>
+        <div class="radio-group">
             <label>운동 빈도</label><br>
-            <input type="radio" th:field="*{exercising}" name="exercising" value="1"/> 주 1회 이하
-            <input type="radio" th:field="*{exercising}" name="exercising" value="2"/> 주 2~3회
-            <input type="radio" th:field="*{exercising}" name="exercising" value="3"/> 주 4회 이상
-            <input type="radio" th:field="*{exercising}" name="exercising" value="0"/> 운동하지 않음
-            <div th:each="err : ${#fields.errors('exercising')}" th:text="${err}"></div>
+            <label><input type="radio" th:field="*{exercising}" name="exercising" value="1"/> 주 1회 이하</label>
+            <label><input type="radio" th:field="*{exercising}" name="exercising" value="2"/> 주 2~3회</label>
+            <label><input type="radio" th:field="*{exercising}" name="exercising" value="3"/> 주 4회 이상</label>
+            <label><input type="radio" th:field="*{exercising}" name="exercising" value="0"/> 운동하지 않음</label>
+            <div th:each="err : ${#fields.errors('exercising')}" class="error-class" th:text="${err}"></div>
         </div>
-        <br/>
-        <div>
+        <div class="checkbox-group">
             <label>영양제 복용 이유</label><br>
-            <input type="checkbox" th:field="*{effects}" value="0"/> 면역력
-            <input type="checkbox" th:field="*{effects}" value="1"/> 다이어트
-            <input type="checkbox" th:field="*{effects}" value="2"/> 피로회복
-            <input type="checkbox" th:field="*{effects}" value="3"/> 눈건강
-            <input type="checkbox" th:field="*{effects}" value="4"/> 간건강
-            <input type="checkbox" th:field="*{effects}" value="5"/> 장건강
-            <input type="checkbox" th:field="*{effects}" value="6"/> 피부건강
-            <input type="checkbox" th:field="*{effects}" value="7"/> 관절&뼈
-            <input type="checkbox" th:field="*{effects}" value="8"/> 숙취해소
-            <input type="checkbox" th:field="*{effects}" value="9"/> 혈행개선
-            <input type="checkbox" th:field="*{effects}" value="10"/> 항산화
-            <div th:each="err : ${#fields.errors('effects')}" th:text="${err}"></div>
+            <label><input type="checkbox" th:field="*{effect}" name="effect" value="0"/> 면역력</label>
+            <label><input type="checkbox" th:field="*{effect}" name="effect" value="1"/> 다이어트</label>
+            <label><input type="checkbox" th:field="*{effect}" name="effect" value="2"/> 피로회복</label>
+            <label><input type="checkbox" th:field="*{effect}" name="effect" value="3"/> 눈건강</label>
+            <label><input type="checkbox" th:field="*{effect}" name="effect" value="4"/> 간건강</label>
+            <label><input type="checkbox" th:field="*{effect}" name="effect" value="5"/> 장건강</label>
+            <label><input type="checkbox" th:field="*{effect}" name="effect" value="6"/> 피부건강</label>
+            <label><input type="checkbox" th:field="*{effect}" name="effect" value="7"/> 관절&뼈</label>
+            <label><input type="checkbox" th:field="*{effect}" name="effect" value="8"/> 숙취해소</label>
+            <label><input type="checkbox" th:field="*{effect}" name="effect" value="9"/> 혈행개선</label>
+            <label><input type="checkbox" th:field="*{effect}" name="effect" value="10"/> 항산화</label>
+            <div th:each="err : ${#fields.errors('effect')}" class="error-class" th:text="${err}"></div>
         </div>
-        <br/>
-        <button type="submit">save</button>
+        <button type="submit">저장</button>
     </form>
+</div>
 </div>
 </body>
 </html>

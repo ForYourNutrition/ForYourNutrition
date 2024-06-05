@@ -3,24 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <title>설문 정보</title>
+    <style>
+        .container {
+		    background-color: white;
+		    padding: 20px;
+		    border-radius: 10px;
+		    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+		    text-align: center; /* 텍스트를 가운데로 정렬합니다. */
+		    align-items: center;
+		    justify-content: center;
+		}
+        .survey-info p {
+            margin: 15px 0;
+            font-size: 18px;
+        }
+        .survey-info strong {
+            font-weight: bold;
+        }
+        button {
+            margin-top: 30px;
+            padding: 15px 30px;
+            border-radius: 5px;
+            border: 1px solid navy;
+            background-color: navy;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #001f4d;
+        }
+        h2 {
+			color: navy;
+		}
+    </style>
 </head>
 <body>
-    <h2>설문 정보</h2>
-    <div>
-        <p><strong>영양제 복용 이유</strong><br>
-        <span th:text="${survey.effect}"></span></p>
+<div>
+<div th:insert="~{header}"></div>
+<div class="container">
+    <h2>문진표 정보</h2>
+    <div class="survey-info">
+        <p><strong>[영양제 복용 이유]</strong><br>
+        <span th:each="effect : ${surveyForm.effect}">
+            <span th:if="${effect == 0}">면역력</span>
+            <span th:if="${effect == 1}">다이어트</span>
+            <span th:if="${effect == 2}">피로회복</span>
+            <span th:if="${effect == 3}">눈건강</span>
+            <span th:if="${effect == 4}">간건강</span>
+            <span th:if="${effect == 5}">장건강</span>
+            <span th:if="${effect == 6}">피부건강</span>
+            <span th:if="${effect == 7}">관절&뼈</span>
+            <span th:if="${effect == 8}">숙취해소</span>
+            <span th:if="${effect == 9}">혈행개선</span>
+            <span th:if="${effect == 10}">항산화</span>
+            <br>
+        </span></p>
         
-        <p><strong>흡연 빈도</strong><br>
-        <span th:text="${survey.smoking}"></span></p>
+        <p><strong>[흡연 빈도]</strong><br>
+        <span th:if="${surveyForm.smoking == 0}">흡연하지 않음</span>
+        <span th:if="${surveyForm.smoking == 1}">하루에 한 번</span>
+        <span th:if="${surveyForm.smoking == 2}">하루에 두 번</span>
+        <span th:if="${surveyForm.smoking == 3}">하루에 세 번 이상</span></p>
         
-        <p><strong>음주 빈도</strong><br>
-        <span th:text="${survey.drinking}"></span></p>
+        <p><strong>[음주 빈도]</strong><br>
+        <span th:if="${surveyForm.drinking == 0}">음주하지 않음</span>
+        <span th:if="${surveyForm.drinking == 1}">주 1회 이하</span>
+        <span th:if="${surveyForm.drinking == 2}">주 2~3회</span>
+        <span th:if="${surveyForm.drinking == 3}">주 4회 이상</span></p>
         
-        <p><strong>운동 빈도</strong>
-            <span th:each="exercising : ${survey.exercising}">
-                <span th:text="${exercising}"></span>
-            </span>
-        </p>
+        <p><strong>[운동 빈도]</strong><br>
+        <span th:if="${surveyForm.exercising == 0}">운동하지 않음</span>
+        <span th:if="${surveyForm.exercising == 1}">주 1회 이하</span>
+        <span th:if="${surveyForm.exercising == 2}">주 2~3회</span>
+        <span th:if="${surveyForm.exercising == 3}">주 4회 이상</span></p>
+        
+        <button type="button" th:onclick="|location.href='@{surveyForm.do}'|">문진표 수정</button>
     </div>
+</div>
+</div>
 </body>
 </html>

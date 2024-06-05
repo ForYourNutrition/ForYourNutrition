@@ -3,19 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>item상세보기</title>
+    <title>Item 상세보기</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            background-color: #f8f9fa;
         }
         .container {
-            width: 50%;
-            margin: auto;
+            width: 80%;
+            max-width: 1200px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .product-main {
             display: flex;
@@ -23,56 +28,65 @@
             margin-bottom: 20px;
         }
         .product-main img {
-            max-width: 300px;
+            max-width: 200px;
+            border-radius: 10px;
         }
         .product-details {
-            max-width: 400px;
+            max-width: 50%;
+            padding: 20px;
         }
         .product-details h1 {
             font-size: 24px;
             margin-bottom: 10px;
+            color: #333;
+        }
+        .product-details p {
+            font-size: 16px;
+            color: #666;
         }
         .product-details .price {
-            font-size: 20px;
+            font-size: 24px;
             color: #333;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
-        .buttons {
-            margin-bottom: 10px;
-        }
-        .buttons button {
-            padding: 10px 20px;
-            margin-right: 10px;
-            border: none;
-            cursor: pointer;
-        }
-        .buttons .add-to-cart {
-            background-color: #007bff;
-            color: white;
-        }
-        .product-comparison {
+        .infos {
             display: flex;
             justify-content: space-between;
             margin-top: 20px;
         }
-        .product-comparison .product-item {
-            text-align: center;
+        .info {
+            background-color: #f1f1f1;
+            padding: 20px;
             border: 1px solid #ccc;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
+            border-radius: 10px;
+            text-align: center;
+            flex: 1;
+            margin: 0 10px;
+            box-sizing: border-box;
         }
-        .product-comparison img {
-            max-width: 150px;
-            margin-bottom: 10px;
+        .info:first-child {
+            margin-left: 0;
+        }
+        .info:last-child {
+            margin-right: 0;
+        }
+        .buttons {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .buttons button {
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            width: 100%;
+            max-width: 200px;
         }
         .product-info {
-            border-top: 1px solid #ccc;
-            padding-top: 20px;
-        }
-        .product-info h2 {
-            font-size: 20px;
-            margin-bottom: 10px;
+            margin-top: 20px;
         }
         .tabs {
             display: flex;
@@ -83,6 +97,18 @@
             padding: 10px 20px;
             border: none;
             cursor: pointer;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            flex: 1;
+            margin: 0 5px;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease;
+        }
+        .tabs button:first-child {
+            margin-left: 0;
+        }
+        .tabs button:last-child {
+            margin-right: 0;
         }
         .tabs button.active {
             background-color: #007bff;
@@ -101,30 +127,29 @@
     <div class="product-main">
         <img th:src="@{images/img.png}" alt="img">
         <div class="product-details">
-            <h1 th:text="${item.name}"> <span th:text="${item.name}"></span></h1>
-            <div class="price" th:text="${item.price} + '원'"><span th:text="${item.price} + '원'"></span></div>
-            <div class="buttons">
-                <div>성분타입</div>
-                <div>건강관리</div>
-                <div>커피관리</div>
+            <h1 th:text="${item.name}">Product Name</h1>
+            <p>카테고리 > <span th:text="${item.category}"></span></p>
+            <p class="price"><span th:text="${item.price}"></span>원</p>
+            <p><span th:text="${item.detail}"></span></p>
+            <div class="infos">
+                <div class="info">
+                    <div>섭취대상</div>
+                    <p><span th:text="${item.target}"></span></p>
+                </div>
+                <div class="info">
+                    <div>효과</div>
+                    <p><span th:text="${item.effect}"></span></p>
+                </div>
+                <div class="info">
+                    <div>카테고리</div>
+                    <p><span th:text="${item.category}"></span></p>
+                </div>
             </div>
-            <button class="add-to-cart">Add to cart</button>
+            <div class="buttons">
+                <button class="add-to-cart">Add to cart</button>
+            </div>
         </div>
     </div>
-<!--    <div class="product-comparison">-->
-<!--        <div class="product-item">-->
-<!--            <div>마그네슘1</div>-->
-<!--            <div>10,000원</div>-->
-<!--        </div>-->
-<!--        <div class="product-item">-->
-<!--            <div>마그네슘2</div>-->
-<!--            <div>15,000원</div>-->
-<!--        </div>-->
-<!--        <div class="product-item">-->
-<!--            <div>마그네슘3</div>-->
-<!--            <div>20,000원</div>-->
-<!--        </div>-->
-<!--    </div>-->
     <div class="product-info">
         <div class="tabs">
             <button class="active" onclick="showTab('details')">상품 상세</button>
@@ -133,7 +158,7 @@
         </div>
         <div id="details" class="tab-content active">
             <h2>상품 상세</h2>
-            <p>상세 정보 더보기</p>
+            <p><strong>Detail:</strong> <span th:text="${item.detail}"></span></p>
         </div>
         <div id="reviews" class="tab-content">
             <h2>구매 후기</h2>
@@ -143,18 +168,6 @@
             <h2>배송 안내</h2>
             <p>배송 안내 내용</p>
         </div>
-    </div>
-    <h1 th:text="${item.name}">Product Name</h1>
-    <div class="price" th:text="${item.price + '원'}">30,000원</div>
-    <div>
-        <p><strong>Name:</strong> <span th:text="${item.name}"></span></p>
-        <p><strong>Category:</strong> <span th:text="${item.category}"></span></p>
-        <p><strong>Detail:</strong> <span th:text="${item.detail}"></span></p>
-        <p><strong>Effect:</strong> <span th:text="${item.effect}"></span></p>
-        <p><strong>Price:</strong> <span th:text="${item.price}"></span></p>
-        <p><strong>Sales:</strong> <span th:text="${item.sales}"></span></p>
-        <p><strong>Stock:</strong> <span th:text="${item.stock}"></span></p>
-        <p><strong>Target:</strong> <span th:text="${item.target}"></span></p>
     </div>
 </div>
 

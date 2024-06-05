@@ -102,5 +102,9 @@ public class Member implements Serializable {
 	public void setTaking_time(int taking_time) {
 		this.taking_time = taking_time;
 	} 
+	
+	public boolean matchPassword(String inputPassword) {
+		return password.equals(inputPassword);
+	}
   
 }

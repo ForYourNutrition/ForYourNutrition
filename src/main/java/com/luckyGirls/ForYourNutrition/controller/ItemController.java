@@ -37,15 +37,15 @@ public class ItemController {
 	}
 
 	@GetMapping("/searchItemList.do")
-	public Page<Item> getItemList(@RequestParam("name") String name,
+	public Page<Item> getItemList(@RequestParam("text") String text,
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "9") int pageSize, HttpSession session, Model model) {
-		Page<Item> itemList = itemService.getSearchList(name, page, pageSize);
+		Page<Item> itemList = itemService.getSearchList(text, page, pageSize);
 		model.addAttribute("itemList", itemList);
 		model.addAttribute("currentPage", page);
 		model.addAttribute("pageSize", pageSize);
 		model.addAttribute("totalPages", itemList.getTotalPages());
-		model.addAttribute("name", name);
+		model.addAttribute("text", text);
 
 		System.out.println(itemList.getTotalElements());
 		System.out.println(page +", " + itemList.getTotalPages());

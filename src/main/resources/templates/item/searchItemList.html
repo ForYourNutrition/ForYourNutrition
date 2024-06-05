@@ -34,14 +34,14 @@
 
 <div>
         <span th:if="${currentPage > 0}">
-            <a th:href="@{/item/searchItemList.do(name=${name}, page=${currentPage - 1}, pageSize=${pageSize})}">Previous</a>
+            <a th:href="@{/item/searchItemList.do(text=${text}, page=${currentPage - 1}, pageSize=${pageSize})}">Previous</a>
         </span>
     <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-            <a th:href="@{/item/searchItemList.do(name=${name}, page=${i}, pageSize=${pageSize})}"
+            <a th:href="@{/item/searchItemList.do(text=${text}, page=${i}, pageSize=${pageSize})}"
                th:text="${i + 1}">1</a>
         </span>
     <span th:if="${currentPage < totalPages - 1}">
-            <a th:href="@{/item/searchItemList.do(name=${name}, page=${currentPage + 1}, pageSize=${pageSize})}">Next</a>
+            <a th:href="@{/item/searchItemList.do(text=${text}, page=${currentPage + 1}, pageSize=${pageSize})}">Next</a>
         </span>
 </div>
 </body>

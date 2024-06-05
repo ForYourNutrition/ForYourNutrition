@@ -25,10 +25,10 @@ public class ItemService {
 	}
 
 	@Transactional
-	public Page<Item> getSearchList(String name, int page, int pageSize){
+	public Page<Item> getSearchList(String text, int page, int pageSize){
 		// 페이지 번호와 페이지 크기를 이용하여 페이징된 목록 조회
 		Pageable pageable = PageRequest.of(page, pageSize);
-		Page<Item> itemList = itemJpaRepository.findByNameContaining(name, pageable);
+		Page<Item> itemList = itemJpaRepository.findByNameContaining(text, pageable);
 
 		return itemList;
 	}

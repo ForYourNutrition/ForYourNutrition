@@ -1,10 +1,146 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>추천 ITEM</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .container {
+            width: 90%;
+            margin: auto;
+            padding-top: 20px;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .carousel {
+            display: flex;
+            overflow: hidden;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .carousel-item {
+            flex: 1;
+            text-align: center;
+            margin: 0 10px;
+        }
+        .product-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .product {
+            text-align: center;
+            width: 32%;
+            margin-bottom: 20px;
+        }
+        .product p {
+            margin: 10px 0;
+        }
+        .price {
+            color: #333;
+        }
+        .tab-menu {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            border-bottom: 1px solid #ccc;
+        }
+        .tab-menu button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            border: none;
+            background-color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .tab-menu button.active {
+            color: #007BFF;
+            border-bottom: 2px solid #007BFF;
+        }
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .pagination span {
+            margin: 0 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+    </style>
 </head>
 <body>
-
+<div class="container">
+    <div class="section-title">추천 ITEM</div>
+    <div class="carousel">
+        <div class="carousel-item">
+            <p>Product 02</p>
+        </div>
+        <div class="carousel-item">
+            <p>Product 02</p>
+        </div>
+        <div class="carousel-item">
+            <p>Product 02</p>
+        </div>
+    </div>
+    <div class="carousel">
+        <div class="carousel-item" th:each="item, iterStat : ${items}">
+            <p th:text="${item.name}">Product</p>
+        </div>
+    </div>
+<!--    <div class="tab-menu">-->
+<!--        <button class="active">리뷰순</button>-->
+<!--        <button>판매순</button>-->
+<!--        <button>인기순</button>-->
+<!--    </div>-->
+<!--    <div class="product-section">-->
+<!--        <div class="product">-->
+<!--            <p>Product</p>-->
+<!--            <p>설명 첫 번째 제품</p>-->
+<!--            <p class="price">$10.99</p>-->
+<!--        </div>-->
+<!--        <div class="product">-->
+<!--            <p>Product</p>-->
+<!--            <p>설명 두 번째 제품</p>-->
+<!--            <p class="price">$10.99</p>-->
+<!--        </div>-->
+<!--        <div class="product">-->
+<!--            <p>Product</p>-->
+<!--            <p>설명 세 번째 제품</p>-->
+<!--            <p class="price">$10.99</p>-->
+<!--        </div>-->
+<!--        <div class="product">-->
+<!--            <p>Product</p>-->
+<!--            <p>설명 첫 번째 제품</p>-->
+<!--            <p class="price">$10.99</p>-->
+<!--        </div>-->
+<!--        <div class="product">-->
+<!--            <p>Product</p>-->
+<!--            <p>설명 두 번째 제품</p>-->
+<!--            <p class="price">$10.99</p>-->
+<!--        </div>-->
+<!--        <div class="product">-->
+<!--            <p>Product</p>-->
+<!--            <p>설명 세 번째 제품</p>-->
+<!--            <p class="price">$10.99</p>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="pagination">-->
+<!--        <span>&lt;&lt;</span>-->
+<!--        <span>1</span>-->
+<!--        <span>2</span>-->
+<!--        <span>3</span>-->
+<!--        <span>&gt;&gt;</span>-->
+<!--    </div>-->
+</div>
 </body>
 </html>

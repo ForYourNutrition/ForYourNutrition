@@ -99,7 +99,7 @@
 <body>
 <div class="container">
     <div class="product-main">
-        <img src="image/img.png" alt="img">
+        <img th:src="@{images/img.png}" alt="img">
         <div class="product-details">
             <h1 th:text="${item.name}"> <span th:text="${item.name}"></span></h1>
             <div class="price" th:text="${item.price} + '원'"><span th:text="${item.price} + '원'"></span></div>

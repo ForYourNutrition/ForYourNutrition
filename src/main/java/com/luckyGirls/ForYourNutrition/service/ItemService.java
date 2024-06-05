@@ -1,5 +1,8 @@
 package com.luckyGirls.ForYourNutrition.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,10 +19,18 @@ public class ItemService {
 	private final ItemJpaRepository itemJpaRepository;
 
 	public ItemGetResponse getItem(int id) throws Exception {
-		System.out.println("si" + id);
 		Item item = itemJpaRepository.findById(id);
-		System.out.println("ser" + item.toString());
+		System.out.println("item: " + item.toString());
 		return ItemGetResponse.from(item);
+	}
+
+	@Transactional
+	public Page<Item> getSearchList(String name, int page, int pageSize){
+		// 페이지 번호와 페이지 크기를 이용하여 페이징된 목록 조회
+		Pageable pageable = PageRequest.of(page, pageSize);
+		Page<Item> itemList = itemJpaRepository.findByNameContaining(name, pageable);
+
+		return itemList;
 	}
 
 }

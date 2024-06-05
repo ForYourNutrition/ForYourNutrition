@@ -23,14 +23,19 @@ public class Item {
 
 	private String detail;
 
+	//재고
 	private int stock;
 
+	//카테고리
 	private int category;
 
+	//섭취대상
 	private int target;
 
+	//건강 고민, 효과
 	private int effect;
 
+	//할인율.
 	private int sales;
 
 	// private String img;

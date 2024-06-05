@@ -2,26 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>사용자 정보</title>
+    <title>회원 정보</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            color: navy;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
         .container {
-            width: 80%;
-            max-width: 800px;
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
+		    background-color: white;
+		    padding: 20px;
+		    border-radius: 10px;
+		    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+		    text-align: center; /* 텍스트를 가운데로 정렬합니다. */
+		    align-items: center;
+		    justify-content: center;
+		}
         .user-info p {
             margin: 15px 0;
             font-size: 18px;
@@ -42,15 +33,20 @@
         button:hover {
             background-color: #001f4d;
         }
+        h2 {
+			color: navy;
+		}
     </style>
 </head>
 <body>
+<div>
+<div th:insert="~{header}"></div>
 <div class="container">
     <h2>사용자 정보</h2>
     <div class="user-info">
         <p><strong>아이디</strong><br>
         <span th:text="${member.id}"></span></p>
-        
+       
         <p><strong>이름</strong><br>
         <span th:text="${member.name}"></span></p>
         
@@ -69,9 +65,13 @@
         <p><strong>이메일</strong><br>
         <span th:text="${member.email}"></span></p>
         
+        <p><strong>영양제 섭취 시간</strong><br>
+		<span th:text="${member.taking_time + ':00'}"></span></p>
+
         <button type="button" th:onclick="|location.href='@{modifyMember.do}'|">회원 수정</button> 
 		<button type="button" th:onclick="|location.href='@{delete.do}'|">회원 탈퇴</button>
     </div>
+</div>
 </div>
 </body>
 </html>

@@ -3,6 +3,7 @@ package com.luckyGirls.ForYourNutrition.controller;
 import com.luckyGirls.ForYourNutrition.domain.Member;
 import com.luckyGirls.ForYourNutrition.service.MemberService;
 import com.luckyGirls.ForYourNutrition.validator.LoginFormValidator;
+import com.luckyGirls.ForYourNutrition.validator.MemberFormValidator;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -23,26 +24,9 @@ import org.springframework.web.servlet.ModelAndView;
 public class MemberController {
 	@Autowired
 	private MemberService memberService;
-
-	@Value("ModifyAccountForm")
-	private String formViewName;
-
-	/*
-	//회원가입 시, 존재하는 session = return account, 존재하지 않으면 새로운 account form return
+	
 	@Autowired
-	private AccountFormValidator validator;
-	public void setValidator(AccountFormValidator validator) {
-		this.validator = validator;
-	}
-	*/
-
-	/*
-	@ModelAttribute("memberForm")
-	public MemberForm formBackingObject(HttpServletRequest request) throws Exception {
-		MemberSession memberSession = (MemberSession) WebUtils.getSessionAttribute(request, "memberSession");
-		return new MemberForm(memberService.getMember(memberSession.getMember().getId()));
-	}
-	*/
+	private Authenticator authenticator;
 
 	@ModelAttribute("loginForm")
 	public LoginForm formBacking(HttpServletRequest request) throws Exception {
@@ -58,33 +42,25 @@ public class MemberController {
 	//로그인
 	@PostMapping("/member/login.do")
 	public ModelAndView handleRequest(HttpServletRequest request, HttpSession session,
-			@ModelAttribute("loginForm") LoginForm loginForm, Model model, Errors errors) throws Exception {
+			@ModelAttribute("loginForm") LoginForm loginForm, Model model, BindingResult bindingResult) throws Exception {
 		
-		new LoginFormValidator().validate(loginForm, errors);
+		new LoginFormValidator().validate(loginForm, bindingResult);
 
-		if (errors.hasErrors()) {
-			System.out.println(errors);
+		if (bindingResult.hasErrors()) {
+			System.out.println(bindingResult);
 			return new ModelAndView("member/loginForm");
 		}
 		
 		Member m = memberService.getMember(loginForm.getId(), loginForm.getPassword());
 		
-		if (m == null) {
-			return new ModelAndView("Error", "message", 
-					"Invalid username or password.  Signon failed.");
-		}
-		
-		else {
+		try {
+			authenticator.authenticate(loginForm); // id과 password가 맞는지 검증
 			MemberSession memberSession = new MemberSession(m);
-			
-			model.addAttribute("member", memberSession.getMember());
-			model.addAttribute("nickname", memberSession.getMember().getNickname());
-			model.addAttribute("id", memberSession.getMember().getId());
-			
 			session.setAttribute("ms", memberSession);
-			System.out.println(memberSession.getMember().getId());
-			
-			return new ModelAndView("member/memberInfo");
+			return new ModelAndView("redirect:/main.do");
+		} catch (AuthenticationException e) { // 검증 실패 시
+			bindingResult.reject(e.getMessage()); // error message
+			return new ModelAndView("member/loginForm");
 		}
 	}
     
@@ -120,7 +96,7 @@ public class MemberController {
 	public String handleRequest(HttpSession session, Model model) throws Exception {
 		session.removeAttribute("ms");
 		session.invalidate();
-		return "member/loginForm";
+		return "redirect:/main.do";
 	}
 	
 	//회원가입 폼
@@ -134,23 +110,19 @@ public class MemberController {
 	@PostMapping("member/join.do")
 	public String join(HttpServletRequest request, HttpSession session,
 			@ModelAttribute("memberForm") MemberForm memberForm, BindingResult result, Model model) throws Exception {
+		new MemberFormValidator().validate(memberForm, result);
 		
-		//new MemberFormValidator().validate(memberForm, result);
-		
-		try {
-			if (memberForm.isNewMember()) {
-				memberService.insertMember(memberForm.getMember());
-				return "redirect:/member/memberInfo.do";
-			}
-			else {
-				memberService.updateMember(memberForm.getMember());
-				return "redirect:/member/memberInfo.do";
-			}
+		if (memberService.getMember(memberForm.getMember().getId()) != null) {
+			result.reject("sameIdExist", new Object[] {}, null);
+			return "member/joinForm";
 		}
-		catch (DataIntegrityViolationException ex) {
-			result.rejectValue("member.id", "USER_ID_ALREADY_EXISTS",
-					"Member ID already exists: choose a different ID.");
-			return "member/joinForm"; 
+		
+		if (result.hasErrors()) {
+			return "member/joinForm";
+		} else {
+			memberService.insertMember(memberForm.getMember());
+			model.addAttribute("loginForm", new LoginForm());
+			return "member/loginForm";
 		}
 	}
 
@@ -175,15 +147,19 @@ public class MemberController {
 	@PostMapping("member/modifyMember.do")
 	public String modifyMember(HttpServletRequest request, HttpSession session,
 			@ModelAttribute("memberForm") MemberForm memberForm, BindingResult result, Model model) throws Exception {
+		new MemberFormValidator().validate(memberForm, result);
 		
-		//new MemberFormValidator().validate(memberForm, result);
-		memberService.updateMember(memberForm.getMember());
-		Member m = memberService.getMember(memberForm.getMember().getId());
-		MemberSession memberSession = new MemberSession(m);
-		session.setAttribute("ms", memberSession);
-		System.out.println(memberSession.getMember().getId());
-		
-		return "redirect:/member/memberInfo.do";
+		if (result.hasErrors()) {
+			return "member/updateForm";
+		} else {
+			memberService.updateMember(memberForm.getMember());
+			Member m = memberService.getMember(memberForm.getMember().getId());
+			MemberSession memberSession = new MemberSession(m);
+			session.setAttribute("ms", memberSession);
+			System.out.println(memberSession.getMember().getId());
+			
+			return "redirect:/member/memberInfo.do";
+		}
 	}
 	
 	//회원 삭제
@@ -211,7 +187,7 @@ public class MemberController {
 		}
 	}
 	
-	@GetMapping("/header.do")
+	@GetMapping("/header")
 	public String getHeader(Model model, HttpSession session) {
 		try {
 			MemberSession memberSession = (MemberSession) session.getAttribute("ms");
@@ -223,6 +199,23 @@ public class MemberController {
 		catch (NullPointerException ex) {
 			model.addAttribute("isLoggedIn", false);
 			return "header";
+		}
+	}
+	
+	@GetMapping("/main.do")
+	public String getMain(Model model, HttpSession session) {
+		try {
+			MemberSession ms = (MemberSession) session.getAttribute("ms");
+			Member member = ms.getMember();
+			System.out.println(ms.getMember().getId());
+			System.out.println(ms != null);
+			model.addAttribute("isLoggedIn", true);
+			model.addAttribute("member", member);
+			return "main";
+		}
+		catch (NullPointerException ex) {
+			model.addAttribute("isLoggedIn", false);
+			return "main";
 		}
 	}
 }

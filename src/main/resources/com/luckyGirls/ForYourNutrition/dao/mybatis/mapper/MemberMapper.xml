@@ -5,13 +5,13 @@
   <cache />
   
   <select id="getAccountByIdAndPassword" resultType="Member">
-    SELECT ID, PASSWORD, NAME, NICKNAME, BIRTH, GENDER, PHONE_NUMBER, EMAIL, POINT, TAKING_TIME
+    SELECT MEMBER_ID, ID, PASSWORD, NAME, NICKNAME, BIRTH, GENDER, PHONE_NUMBER, EMAIL, POINT, TAKING_TIME
     FROM MEMBER 
     WHERE ID = #{param1} AND PASSWORD = #{param2}
   </select> 
   
   <select id="getAccountById" resultType="Member">
-    SELECT ID, PASSWORD, NAME, NICKNAME, BIRTH, GENDER, PHONE_NUMBER, EMAIL, POINT, TAKING_TIME
+    SELECT MEMBER_ID, ID, PASSWORD, NAME, NICKNAME, BIRTH, GENDER, PHONE_NUMBER, EMAIL, POINT, TAKING_TIME
     FROM MEMBER 
     WHERE ID = #{param1}
   </select>
@@ -20,7 +20,7 @@
     INSERT INTO MEMBER 
     (MEMBER_ID, ID, PASSWORD, NAME, NICKNAME, BIRTH, GENDER, PHONE_NUMBER, EMAIL, POINT, TAKING_TIME)
     VALUES 
-    (MEMBERID_SEQ.nextval, #{id}, #{password}, #{name}, #{nickname}, #{birth}, #{gender}, #{phone_number}, #{email}, 0, 0)
+    (MEMBERID_SEQ.nextval, #{id}, #{password}, #{name}, #{nickname}, #{birth}, #{gender}, #{phone_number}, #{email}, 0, #{taking_time})
   </insert>
   
   <update id="updateMember" parameterType="Member">

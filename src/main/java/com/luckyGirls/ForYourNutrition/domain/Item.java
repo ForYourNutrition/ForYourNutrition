@@ -1,9 +1,14 @@
 package com.luckyGirls.ForYourNutrition.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,13 +40,17 @@ public class Item {
 	//건강 고민, 효과
 	private int effect;
 
-	//할인율.
+	//판매량
 	private int sales;
 
-	// private String img;
-	//
-	// @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
-	// private List<IRecommend> irecommendList = new ArrayList<>();
+	//img url
+	private String img;
+
+	//할인율
+	private int dcRate;
+
+	@OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<IRecommend> irecommendList = new ArrayList<>();
 
 	public void removeStock(int stock){
 		int restStock = this.stock - stock;

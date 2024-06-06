@@ -1,8 +1,11 @@
 package com.luckyGirls.ForYourNutrition.service;
 
+import java.util.Collection;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,12 +28,19 @@ public class ItemService {
 	}
 
 	@Transactional
-	public Page<Item> getSearchList(String text, int page, int pageSize){
-		// 페이지 번호와 페이지 크기를 이용하여 페이징된 목록 조회
-		Pageable pageable = PageRequest.of(page, pageSize);
-		Page<Item> itemList = itemJpaRepository.findByNameContaining(text, pageable);
+	public Page<Item> getSearchList(String text, int page, int pageSize, String sortBy){
+		Sort sort;
+		if ("sales".equals(sortBy)) {
+			sort = Sort.by(Sort.Order.desc("sales"));  // 수정: 필드 이름 "sales"로 정렬
+		} else if ("dcRate".equals(sortBy)) {
+			sort = Sort.by(Sort.Order.desc("dcRate"));  // 수정: 필드 이름 "discountRate"로 정렬
+		} else {
+			sort = Sort.by(Sort.Order.asc("name"));
+		}
+		Pageable pageable = PageRequest.of(page, pageSize, sort);
 
-		return itemList;
+		Page<Item> items = itemJpaRepository.findByNameContaining(text, pageable);
+		System.out.println("2 = " + items.getTotalPages());
+		return items;
 	}
-
 }

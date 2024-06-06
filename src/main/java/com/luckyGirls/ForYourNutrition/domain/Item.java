@@ -43,8 +43,8 @@ public class Item {
 	// @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
 	// private List<IRecommend> irecommendList = new ArrayList<>();
 
-	public void removeStock(int stockNumber){
-		int restStock = this.stock - stockNumber;
+	public void removeStock(int stock){
+		int restStock = this.stock - stock;
 		if(restStock<0){
 			//throw new OutOfStockException("상품의 재고가 부족 합니다. (현재 재고 수량: " + this.stockNumber + ")");
 		}

@@ -8,6 +8,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.ModelAndViewDefiningException;
 
 import com.luckyGirls.ForYourNutrition.domain.Cart;
+import com.luckyGirls.ForYourNutrition.domain.Member;
+import com.luckyGirls.ForYourNutrition.domain.Order;
 
 import jakarta.servlet.http.HttpServletRequest;
 

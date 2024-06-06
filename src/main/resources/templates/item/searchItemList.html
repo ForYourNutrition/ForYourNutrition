@@ -24,6 +24,10 @@
     </style>
 </head>
 <body>
+<div>
+    <button th:onclick="|location.href='@{/item/searchItemList.do(text=${text}, page=${currentPage}, pageSize=${pageSize}, sortBy='sales')}'|">판매량순</button>
+    <button th:onclick="|location.href='@{/item/searchItemList.do(text=${text}, page=${currentPage}, pageSize=${pageSize}, sortBy='dcRate')}'|">할인율순</button>
+</div>
 <div class="item-container">
     <div th:each="item : ${itemList.content}" class="item-box">
         <h3 th:text="${item.name}">Item Name</h3>
@@ -33,16 +37,16 @@
 </div>
 
 <div>
-        <span th:if="${currentPage > 0}">
-            <a th:href="@{/item/searchItemList.do(text=${text}, page=${currentPage - 1}, pageSize=${pageSize})}">Previous</a>
-        </span>
+    <span th:if="${currentPage > 0}">
+        <a th:href="@{/item/searchItemList.do(text=${text}, page=${currentPage - 1}, pageSize=${pageSize}, sortBy=${sortBy})}">Previous</a>
+    </span>
     <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-            <a th:href="@{/item/searchItemList.do(text=${text}, page=${i}, pageSize=${pageSize})}"
-               th:text="${i + 1}">1</a>
-        </span>
+        <a th:href="@{/item/searchItemList.do(text=${text}, page=${i}, pageSize=${pageSize}, sortBy=${sortBy})}"
+           th:text="${i + 1}">1</a>
+    </span>
     <span th:if="${currentPage < totalPages - 1}">
-            <a th:href="@{/item/searchItemList.do(text=${text}, page=${currentPage + 1}, pageSize=${pageSize})}">Next</a>
-        </span>
+        <a th:href="@{/item/searchItemList.do(text=${text}, page=${currentPage + 1}, pageSize=${pageSize}, sortBy=${sortBy})}">Next</a>
+    </span>
 </div>
 </body>
 </html>

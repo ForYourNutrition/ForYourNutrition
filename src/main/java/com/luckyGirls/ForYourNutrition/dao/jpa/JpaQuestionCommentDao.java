@@ -44,8 +44,10 @@ public class JpaQuestionCommentDao implements QuestionCommentDao {
 	@Override
 	public void deleteQuestionComment(QuestionComment questionComment) throws DataAccessException {
 		// TODO Auto-generated method stub
+		System.out.println("설마 여기서 오류?");
 		QuestionComment managedQC = em.merge(questionComment);
 		em.remove(managedQC);
+		System.out.println("는 아니지?");
 	}
 
 	@Transactional

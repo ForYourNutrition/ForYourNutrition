@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.luckyGirls.ForYourNutrition.domain.Member;
 import com.luckyGirls.ForYourNutrition.domain.Question;
+import com.luckyGirls.ForYourNutrition.domain.QuestionComment;
 import com.luckyGirls.ForYourNutrition.domain.Survey;
+import com.luckyGirls.ForYourNutrition.service.QuestionCommentService;
 import com.luckyGirls.ForYourNutrition.service.QuestionService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,6 +31,9 @@ public class QuestionController {
 	
 	@Autowired
 	private QuestionService questionService;
+	
+	@Autowired
+	QuestionCommentService questionCommentService;
 	
 	@ModelAttribute("questionForm")
 	public QuestionForm formBacking(HttpServletRequest request, HttpSession session) throws Exception {
@@ -219,6 +224,9 @@ public class QuestionController {
 		
 		System.out.println("71 + " + question.getQuestion_id());
 		
+		
+		List<QuestionComment> comments = questionCommentService.getQuestionCommentListForQuestion(question_id);
+		
 		QuestionForm questionForm = new QuestionForm();
 		questionForm.setQuestion_id(question.getQuestion_id());
 		questionForm.setTitle(question.getTitle());
@@ -226,8 +234,9 @@ public class QuestionController {
 		
 		 model.addAttribute("questionForm", questionForm);
 		 model.addAttribute("question", question);
+		 model.addAttribute("comments", comments);
+		 model.addAttribute("newComment", new QuestionComment());
 		 return "question/viewQuestion";
 	}
-	
 	
 }

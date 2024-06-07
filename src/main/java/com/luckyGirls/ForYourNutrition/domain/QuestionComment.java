@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @SuppressWarnings("serial")
@@ -18,7 +19,8 @@ public class QuestionComment implements Serializable{
 	
 	 /* Private Fields */
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY) 
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "questionCommment_seq")
+    @SequenceGenerator(name = "questionCommment_seq", sequenceName = "questionCommment_seq", allocationSize = 1) 
 	private int qc_id;
 	
 	@ManyToOne

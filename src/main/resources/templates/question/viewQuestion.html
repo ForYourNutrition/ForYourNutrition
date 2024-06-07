@@ -61,35 +61,98 @@
         button:hover {
             background-color: #001a4d;
         }
+
+        .comments {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .comment {
+            padding: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .comment .author {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .comment .content {
+            margin-bottom: 5px;
+        }
+
+        .comment .date {
+            font-size: 12px;
+            color: #999999;
+        }
     </style>
 </head>
 <body>
-    <div>
+<div>
         <div th:insert="~{header}"></div>
         <div class="container">
-			<h2>question details</h2>
+            <h2>question details</h2>
 
             <label for="name">작성자 :</label>  <span th:text="${memberName}"></span>
             
             <label for="writtenTime">작성시간 :</label>  <span th:text="${question.qdate}"></span>
 
-			<label for="title">제목 :</label> <span th:text="${question.title}"></span>
-			<!-- <input type="text" name="title" id="title"> -->
+            <label for="title">제목 :</label> <span th:text="${question.title}"></span>
                 
-			<label for="content">내용 :</label> <span th:text="${question.content}"></span>
-			<!-- <textarea name="content" id="content"></textarea> -->
+            <label for="content">내용 :</label> <span th:text="${question.content}"></span>
                
-			 <form th:action="@{/question/updateQuestionForm}" method="get" th:object="${questionForm}">
+            <form th:action="@{/question/updateQuestionForm}" method="get" th:object="${questionForm}">
                 <input type="hidden" th:field="*{question_id}" />
                 <button type="submit">Question 수정</button>
             </form>
-            <!-- 삭제 버튼 -->
+            
             <form th:action="@{/question/deleteQuestion}" method="post" th:object="${questionForm}">
                 <input type="hidden" th:field="*{question_id}" />
                 <button type="submit">Question 삭제</button>
             </form>
+            
+            <div class="comment-section">
+                <h3>댓글</h3>
+
+
+                <form th:action="@{/questionComment/addComment}" method="post" th:object="${newComment}">
+                    <input type="hidden" name="question_id" th:value="${question.question_id}" />
+                    <label for="content">댓글 작성:</label>
+                    <textarea th:field="*{content}" id="content" name="content"></textarea>
+                    <button type="submit">댓글 작성</button>
+                </form>
+                
+	  			<h3>댓글 List</h3>
+	  			<!--
+	  			 <ul>
+			        <li th:each="comment : ${comments}">
+			            <span th:text="${comment.content}"></span>
+			            <form th:action="@{/questionComment/deleteComment}" method="post">
+			                <input type="hidden" name="qc_id" th:value="${comment.qc_id}"/>
+			                <input type="hidden" name="question_id" th:value="${question_id}"/>
+			                <button type="submit">Delete 댓글</button>
+			            </form>
+			        </li>
+			    </ul>
+	  			 -->
+	  			
+                <div th:each="comment : ${comments}">
+                    <div class="comment">
+                        <div class="comment-author" th:text="${comment.member.name}">Author Name</div>
+                        <div class="comment-date" th:text="${comment.qcdate}">Comment Date</div>
+                        <div class="comment-content" th:text="${comment.content}">Comment Content</div>
+                        
+                        <form th:action="@{/questionComment/deleteComment}" method="post">
+                            <input type="hidden" name="qc_id" th:value="${comment.qc_id}" />
+                            <input type="hidden" name="question_id" th:value="${question.question_id}" /> 
+                            <button type="submit">삭제</button>
+                        </form>
+                    </div>
+                </div>
+                 
+                
+            </div>
         </div>
     </div>
 </body>
 </html>
-s

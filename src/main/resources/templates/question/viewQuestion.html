@@ -2,23 +2,94 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>View Question</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f8f8f8;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px 40px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            color: #333333;
+            margin-top: 10px;
+            text-align: left;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #002366;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #001a4d;
+        }
+    </style>
 </head>
 <body>
-    <h1>Question Details</h1>
-    <div class ="main">
+    <div>
+        <div th:insert="~{header}"></div>
+        <div class="container">
+			<h2>question details</h2>
 
-		<label for="name">작성자 : </label>
-		<input type="text" name="name" id="name" th:value="${question.member.name}" disabled>
-		
-		<label for="title">제목 : </label>
-		<input type="text" name="title" id="title" th:value="${question.title}" disabled>
-			
-		<label for="content">내용 : </label>
-		<textarea name="content" name="content" id="content" th:value="${question.content}" disabled></textarea>
-			
-		<a th:href="@{/question/update/{question_id}(question_id=${question.question_id})" id="update">수정</a>
-		<a th:href="@{/question/delete/{question_id}(question_id=${question.question_id})" id="delete">삭제</a>
-	</div>
-    
+            <label for="name">작성자 :</label>  <span th:text="${memberName}"></span>
+            
+            <label for="writtenTime">작성시간 :</label>  <span th:text="${question.qdate}"></span>
+
+			<label for="title">제목 :</label> <span th:text="${question.title}"></span>
+			<!-- <input type="text" name="title" id="title"> -->
+                
+			<label for="content">내용 :</label> <span th:text="${question.content}"></span>
+			<!-- <textarea name="content" id="content"></textarea> -->
+               
+			 <form th:action="@{/question/updateQuestionForm}" method="get" th:object="${questionForm}">
+                <input type="hidden" th:field="*{question_id}" />
+                <button type="submit">Question 수정</button>
+            </form>
+            <!-- 삭제 버튼 -->
+            <form th:action="@{/question/deleteQuestion}" method="post" th:object="${questionForm}">
+                <input type="hidden" th:field="*{question_id}" />
+                <button type="submit">Question 삭제</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
+s

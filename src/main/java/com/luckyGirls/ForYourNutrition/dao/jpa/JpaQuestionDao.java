@@ -18,13 +18,15 @@ public class JpaQuestionDao implements QuestionDao{
 
 	@PersistenceContext
 	private EntityManager em;
-	/*
-	@Transactional
-	@Override
-	public Question getQuestion(int question_id) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return em.find(Question.class, question_id);
-	}
+
+	 @Transactional
+	    @Override
+	    public List<Question> getQuestionListForMember(int member_id) throws DataAccessException {
+	        TypedQuery<Question> query = em.createQuery(
+	                "select q from Question q JOIN q.member m where m.member_id = :member_id", Question.class);
+	        query.setParameter("member_id", member_id);
+	        return query.getResultList();
+	    }
 	@Transactional
 	@Override
 	public void insertQuestion(Question question) throws DataAccessException {
@@ -33,58 +35,38 @@ public class JpaQuestionDao implements QuestionDao{
 	}
 	@Transactional
 	@Override
-	public void updateQuestion(Question question) throws DataAccessException {
+	public Question getQuestion(int question_id) throws DataAccessException {
 		// TODO Auto-generated method stub
-		em.merge(question);
+		return em.find(Question.class, question_id);
+	}
+	@Transactional
+	@Override
+	public List<Question> getAllQuestionList() throws DataAccessException {
+		// TODO Auto-generated method stub
+		TypedQuery<Question> query = em.createQuery("select q from Question q", Question.class);
+        return query.getResultList();
+	}
+	@Transactional
+	@Override
+	public Question updateQuestion(Question question) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return em.merge(question);
 	}
 	@Transactional
 	@Override
 	public void deleteQuestion(int question_id) throws DataAccessException {
 		// TODO Auto-generated method stub
-		Question managedQuestion = em.merge(getQuestion(question_id));
-		em.remove(managedQuestion);
+		 Question managedQuestion = em.find(Question.class, question_id);
+	        if (managedQuestion != null) {
+	            em.remove(managedQuestion);
+	        }
 	}
-
-	@Transactional
 	@Override
-	public List<Question> getQuestionListForMember(int member_id) throws DataAccessException {
+	public Question getQuestionByTitle(String title) throws DataAccessException {
 		// TODO Auto-generated method stub
-		TypedQuery<Question> query = em.createQuery(
-				"select q from Question q JOIN q.member m" + 
-				"where m.member_id=?1", Question.class);
-		query.setParameter(1, member_id);
-		List<Question> questionList = query.getResultList();
-		return questionList;
-	}*/
-
-	@Override
-	public void createQuestion(Question question) throws DataAccessException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public List<Question> questionList() throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Question detailQuestion(int question_id) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void updateQuestion(Question question) throws DataAccessException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void deleteQuestion(int question_id) throws DataAccessException {
-		// TODO Auto-generated method stub
-		
+		TypedQuery<Question> query = em.createQuery("SELECT q FROM Question q WHERE q.title = :title", Question.class);
+        query.setParameter("title", title);
+        return query.getSingleResult();
 	}
 
 	

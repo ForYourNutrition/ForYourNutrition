@@ -1,6 +1,6 @@
 package com.luckyGirls.ForYourNutrition.service;
 
-import java.util.Collection;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,8 +21,8 @@ import lombok.RequiredArgsConstructor;
 public class ItemService {
 	private final ItemJpaRepository itemJpaRepository;
 
-	public ItemGetResponse getItem(int id) throws Exception {
-		Item item = itemJpaRepository.findById(id);
+	public ItemGetResponse getItem(int item_id) throws Exception {
+		Item item = itemJpaRepository.findById(item_id);
 		System.out.println("item: " + item.toString());
 		return ItemGetResponse.from(item);
 	}

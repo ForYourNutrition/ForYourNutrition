@@ -13,7 +13,6 @@ import com.luckyGirls.ForYourNutrition.domain.Item;
 @Repository
 public interface ItemJpaRepository extends JpaRepository<Item, Integer> {
 	Item findById(int id);
-
 	List<Item> findAllByCategory(int category);
 	Page<Item> findByNameContaining(String name, Pageable pageable);
 }

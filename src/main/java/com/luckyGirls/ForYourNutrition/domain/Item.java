@@ -20,7 +20,7 @@ import lombok.Setter;
 public class Item {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private int item_id;
 
 	private String name;
 
@@ -49,8 +49,8 @@ public class Item {
 	//할인율
 	private int dcRate;
 
-	@OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<IRecommend> irecommendList = new ArrayList<>();
+	// @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+	// private List<IRecommend> irecommendList = new ArrayList<>();
 
 	public void removeStock(int stock){
 		int restStock = this.stock - stock;

@@ -20,7 +20,7 @@ import lombok.Setter;
 public class Item {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private int item_id;
 
 	private String name;
 

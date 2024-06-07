@@ -1,89 +1,73 @@
 package com.luckyGirls.ForYourNutrition.controller;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.ModelAndViewDefiningException;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.luckyGirls.ForYourNutrition.domain.Cart;
 import com.luckyGirls.ForYourNutrition.domain.Member;
 import com.luckyGirls.ForYourNutrition.domain.Order;
+import com.luckyGirls.ForYourNutrition.service.OrderService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
-//@SessionAttributes({"", "orderForm"})
 public class OrderController {
 	@Autowired
-	private Order order;
-	
-	@Autowired
-	private Member member;
-	
-//	@Autowired
-//	private OrderValidator orderValidator;
-	
-//	@ModelAttribute("orderForm")
-//	public OrderForm createOrderForm() {
-//		return new OrderForm();
-//	}
-	
-	@RequestMapping("/order/newOrder.do")
-	public String initNewOrder(HttpServletRequest request,
-			@ModelAttribute("sessionCart") Cart cart
-			//@ModelAttribute("orderForm") OrderForm orderForm
-			) throws ModelAndViewDefiningException {
-	//	UserSession userSession = (UserSession) request.getSession().getAttribute("userSession");
-		if (cart != null) {
-			// Re-read account from DB at team's request.
-			//Member member = member.getMember(userSession.getAccount().getMemberId());
-			//orderForm.getOrder().initOrder(member_id, cart);
-			return "NewOrderForm";	
+	private OrderService orderService;	
+
+	//주문서 작성 폼 띄우기
+	@GetMapping("/order/createOrder")
+	public String createForm(Model model, HttpSession session) {
+		MemberSession ms = (MemberSession) session.getAttribute("ms");
+		if (ms == null) {
+			return "redirect:/login"; // 세션이 만료되었거나 없는 경우 로그인 페이지로 리다이렉트
 		}
-		else {
-			ModelAndView modelAndView = new ModelAndView("Error");
-			modelAndView.addObject("message", "An order could not be created because a cart could not be found.");
-			throw new ModelAndViewDefiningException(modelAndView);
-		}
-	}
-	/*
-	@RequestMapping("/shop/newOrderSubmitted.do")
-	public String bindAndValidateOrder(HttpServletRequest request,
-			@ModelAttribute("orderForm") OrderForm orderForm, 
-			BindingResult result){
-		if (orderForm.didShippingAddressProvided() == false) {	
-			// from NewOrderForm
-			orderValidator.validateCreditCard(orderForm.getOrder(), result);
-			orderValidator.validateBillingAddress(orderForm.getOrder(), result);
-			if (result.hasErrors()) return "NewOrderForm";
-			
-			if (orderForm.isShippingAddressRequired() == true) {
-				orderForm.setShippingAddressProvided(true);
-				return "ShippingForm";
-			}
-			else {			
-				return "ConfirmOrder";
-			}
-		}
-		else {		// from ShippingForm
-			orderValidator.validateShippingAddress(orderForm.getOrder(), result);
-			if (result.hasErrors()) return "ShippingForm";
-			return "ConfirmOrder";
-		}
+		Member member = ms.getMember();		
+		String memberName = member.getName();
+
+		model.addAttribute("memberName", memberName);
+		return "order/orderForm";
 	}
 	
-	@RequestMapping("/shop/confirmOrder.do")
-	protected ModelAndView confirmOrder(
-			@ModelAttribute("orderForm") OrderForm orderForm, 
-			SessionStatus status) {
-		petStore.insertOrder(orderForm.getOrder());
-		ModelAndView mav = new ModelAndView("ViewOrder");
-		mav.addObject("order", orderForm.getOrder());
-		mav.addObject("message", "Thank you, your order has been submitted.");
-		status.setComplete();  // remove sessionCart and orderForm from session
-		return mav;
+	@PostMapping("/order/Order")
+	public String saveQuestion(HttpServletRequest request, HttpSession session,
+			@ModelAttribute("orderForm") QuestionForm questionForm, BindingResult result, Model model) throws Exception {
+		
+		try {
+			MemberSession ms = (MemberSession) session.getAttribute("ms");
+ 
+	        Member member = ms.getMember();	
+
+	        // 현재 시간 받아오기
+	        LocalDateTime now = LocalDateTime.now();
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	        String formattedNow = now.format(formatter);
+	        
+	        Order order = new Order();
+	        order.setMember(member);
+	        order.setOrderDate(now);
+	        order.setOrderStatus(0);
+	        
+	        model.addAttribute("memberName", member.getName());
+	        model.addAttribute("order", order);
+	        return "order/orderStatus";
+		} catch (NullPointerException ex) {
+            model.addAttribute("orderForm", new OrderForm());
+            return "order/orderForm";
+        }
 	}
-	*/
+	
+
 }

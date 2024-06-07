@@ -1,22 +1,86 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
-	<title>update_form</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>질문 수정이요</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f8f8f8;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px 40px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            color: #333333;
+            margin-top: 10px;
+            text-align: left;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #002366;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #001a4d;
+        }
+    </style>
 </head>
 <body>
-	<div class ="main">
-		<form method="post" th:action="@{/question/update}">
-					<label for="name">작성자 : </label>
-		<input type="text" name="name" id="name" th:value="${question.member.name}" disabled>
-		
-		<label for="title">제목 : </label>
-		<input type="text" name="title" id="title" th:value="${question.title}" disabled>
-			
-		<label for="content">내용 : </label>
-		<textarea name="content" name="content" id="content" th:value="${question.content}" disabled></textarea>
-			
-			<button type="submit">수정</button>
-		</form>
-	</div>
+    <div>
+        <div th:insert="~{header}"></div>
+        <div class="container">
+            <h2>Question Form Update</h2>
+            <form th:action="@{/question/updateQuestion}" th:object="${questionForm}" method="post">
+                <input type="hidden" th:field="*{question_id}" />
+                <label for="title">제목 :</label>
+                <input type="text" th:field="*{title}" id="title" />
+                <br>
+                <label for="content">내용 :</label>
+                <textarea th:field="*{content}" id="content"></textarea>
+                <br>
+                <button type="submit">저장</button>
+            </form>
+        </div>
+    </div>
 </body>
-
+</html>

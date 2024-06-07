@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -25,16 +26,15 @@ public class Question implements Serializable{
 	
 	 /* Private Fields */
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY) 
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "question_seq")
+    @SequenceGenerator(name = "question_seq", sequenceName = "question_seq", allocationSize = 1) 
 	private int question_id;
 	
 	@ManyToOne
 	@JoinColumn(name="member_id")
 	private Member member;
 	
-	@CreationTimestamp
-	@Column(updatable=false)
-	private LocalDateTime qdate = LocalDateTime.now();
+	private String qdate;
 	
 	@Column(nullable = false)
 	private String title;
@@ -68,24 +68,21 @@ public class Question implements Serializable{
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public LocalDateTime getQdate() {
+
+	public String getQdate() {
 		return qdate;
 	}
-	public void setQdate(LocalDateTime qdate) {
+	public void setQdate(String qdate) {
 		this.qdate = qdate;
 	}
-	/*
-	@PrePersist
-	protected void onCreate() {
-		if (this.qdate == null) {
-			qdate = new Date();
-		}
-	}*/
+	public int getMemberId() {
+		return member != null ? member.getMember_id() : null;
+	}
 	
 	public Question() {
 		super();
 	}
-	public Question(int question_id, Member member, LocalDateTime qdate, String title, String content) {
+	public Question(int question_id, Member member, String qdate, String title, String content) {
 		super();
 		this.question_id = question_id;
 		this.member = member;

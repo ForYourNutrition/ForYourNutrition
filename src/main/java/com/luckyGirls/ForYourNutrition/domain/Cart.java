@@ -11,6 +11,8 @@ import java.util.Map;
 import org.springframework.beans.support.PagedListHolder;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,6 +22,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
+@Entity
 @Table(name = "Cart")
 @SuppressWarnings("serial")
 public class Cart implements Serializable{
@@ -34,7 +37,9 @@ public class Cart implements Serializable{
 	@JoinColumn(name="member_id")
 	private Member member;
 	
-	@OneToMany(mappedBy = "cart", cascade = CascadeType.REMOVE, orphanRemoval = true)
+	private int quantity;//카트에 담긴 총 개수
+	
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<CartItem> cartItemList = new ArrayList<>();
 
 	/* JavaBeans Properties */
@@ -79,7 +84,23 @@ public class Cart implements Serializable{
         this.cartItemList = cartItems;
     }
 
-    // Utility methods
+    public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public List<CartItem> getCartItemList() {
+		return cartItemList;
+	}
+
+	public void setCartItemList(List<CartItem> cartItemList) {
+		this.cartItemList = cartItemList;
+	}
+
+	// Utility methods
     public void addCartItem(CartItem cartItem) {
         cartItemList.add(cartItem);
         cartItem.setCart(this);

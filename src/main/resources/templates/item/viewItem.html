@@ -145,9 +145,13 @@
                     <p><span th:text="${item.category}"></span></p>
                 </div>
             </div>
-            <div class="buttons">
-                <button class="add-to-cart">Add to cart</button>
+            <div>
+                <button onclick="decreaseQuantity()">-</button>
+                <input type="number" id="quantity" class="quantity" value="1" min="1">
+                <button onclick="increaseQuantity()">+</button>
             </div>
+            <button onclick="addToCart()">장바구니에 담기</button>
+            <button onclick="buyNow()">구매하기</button>
         </div>
     </div>
     <div class="product-info">
@@ -172,6 +176,20 @@
 </div>
 
 <script>
+    function decreaseQuantity() {
+        let quantityInput = document.getElementById('quantity');
+        let currentQuantity = parseInt(quantityInput.value);
+        if (currentQuantity > 1) {
+            quantityInput.value = currentQuantity - 1;
+        }
+    }
+
+    function increaseQuantity() {
+        let quantityInput = document.getElementById('quantity');
+        let currentQuantity = parseInt(quantityInput.value);
+        quantityInput.value = currentQuantity + 1;
+    }
+
     function showTab(tabId) {
         var contents = document.getElementsByClassName('tab-content');
         for (var i = 0; i < contents.length; i++) {

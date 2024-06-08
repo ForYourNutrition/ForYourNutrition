@@ -1,6 +1,8 @@
 package com.luckyGirls.ForYourNutrition.controller;
 
+import com.luckyGirls.ForYourNutrition.domain.Cart;
 import com.luckyGirls.ForYourNutrition.domain.Member;
+import com.luckyGirls.ForYourNutrition.service.CartService;
 import com.luckyGirls.ForYourNutrition.service.MemberService;
 import com.luckyGirls.ForYourNutrition.validator.LoginFormValidator;
 import com.luckyGirls.ForYourNutrition.validator.MemberFormValidator;
@@ -27,6 +29,9 @@ public class MemberController {
 	
 	@Autowired
 	private Authenticator authenticator;
+	
+	@Autowired
+	private CartService cartService;
 
 	@ModelAttribute("loginForm")
 	public LoginForm formBacking(HttpServletRequest request) throws Exception {
@@ -121,7 +126,14 @@ public class MemberController {
 			return "member/joinForm";
 		} else {
 			memberService.insertMember(memberForm.getMember());
+
+			//회원가입 시 자동으로 cart 생성
+			Cart cart = new Cart();
+			Member new_m = memberService.getMember(memberForm.getMember().getId());
+			cart.setMember(new_m);;
+			cartService.createCart(new_m);
 			model.addAttribute("loginForm", new LoginForm());
+			
 			return "member/loginForm";
 		}
 	}

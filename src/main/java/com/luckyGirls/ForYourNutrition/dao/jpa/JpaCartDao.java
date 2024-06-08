@@ -7,46 +7,71 @@ import org.springframework.stereotype.Repository;
 
 import com.luckyGirls.ForYourNutrition.dao.CartDao;
 import com.luckyGirls.ForYourNutrition.domain.Cart;
+import com.luckyGirls.ForYourNutrition.domain.CartItem;
+import com.luckyGirls.ForYourNutrition.domain.Member;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
 @Repository
-@Transactional
+
 public class JpaCartDao implements CartDao{
 
 	@PersistenceContext
 	private EntityManager em;
 	
+	@Transactional
 	@Override
-	public void saveCart(Cart cart) throws DataAccessException {
+	public void saveCart(Cart cart) {
 		// TODO Auto-generated method stub
-		em.persist(cart);
+		if (cart.getCart_id() == 0) {
+			em.persist(cart);
+		} else {
+			em.merge(cart);
+		}
 	}
-
+	
+	@Transactional
 	@Override
-	public void updateCart(Cart cart) throws DataAccessException {
+	public Cart findCartByMember(Member member) {
 		// TODO Auto-generated method stub
-		em.merge(cart);
+		 String jpql = "SELECT c FROM Cart c WHERE c.member = :member";
+		 TypedQuery<Cart> query = em.createQuery(jpql, Cart.class);
+		 query.setParameter("member", member);
+		 try {
+			 return query.getSingleResult();
+		 } catch (Exception e) {
+			 return null;
+		 }
 	}
-
+	
+	@Transactional
 	@Override
-	public void deleteCart(Cart cart) throws DataAccessException {
+	public void saveCartItem(CartItem cartItem) {
 		// TODO Auto-generated method stub
-		em.remove(cart);
+		if (cartItem.getCartItem_id() == 0) {
+            em.persist(cartItem);
+        } else {
+            em.merge(cartItem);
+        }
 	}
-
+	
+	@Transactional
 	@Override
-	public Cart findById(int cart_id) throws DataAccessException {
+	public void deleteCartItemById(int cartItem_id) {
 		// TODO Auto-generated method stub
-		return em.find(Cart.class, cart_id);
+		CartItem cartItem = em.find(CartItem.class, cartItem_id);
+        if (cartItem != null) {
+            em.remove(cartItem);
+        }
 	}
-
+	
+	@Transactional
 	@Override
-	public List<Cart> findAll() throws DataAccessException {
+	public CartItem findCartItemById(int cartItem_id) {
 		// TODO Auto-generated method stub
-		return em.createQuery("from Cart", Cart.class).getResultList();
+		return em.find(CartItem.class, cartItem_id);
 	}
-
 }

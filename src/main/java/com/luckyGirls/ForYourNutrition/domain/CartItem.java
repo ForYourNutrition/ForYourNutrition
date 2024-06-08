@@ -31,9 +31,11 @@ public class CartItem implements Serializable {
 	@JoinColumn(name="member_id")
 	private Member member;
 	
-	@OneToOne
+	@ManyToOne
+	@JoinColumn(name="item_id")
 	private Item item;
-	private int quantity;
+	
+	private int quantity;//상품 개수
 
 	/* JavaBeans Properties */
 	
@@ -70,6 +72,7 @@ public class CartItem implements Serializable {
 	public void setCart(Cart cart) {
 		this.cart = cart;
 	}
+	
 	public CartItem() {
 		super();
 	}
@@ -95,4 +98,11 @@ public class CartItem implements Serializable {
 				+ ", quantity=" + quantity + "]";
 	}
 	
+	public void addQuantity(int quantity) {
+		this.quantity += quantity;
+	}
+	
+	public void removeQuantity(int quantity) {
+		this.quantity -= quantity;
+	}
 }

@@ -7,9 +7,9 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.luckyGirls.ForYourNutrition.dao.CartDao;
-import com.luckyGirls.ForYourNutrition.dao.CartItemDao;
 import com.luckyGirls.ForYourNutrition.domain.Cart;
 import com.luckyGirls.ForYourNutrition.domain.CartItem;
+import com.luckyGirls.ForYourNutrition.domain.Member;
 
 import jakarta.transaction.Transactional;
 
@@ -18,68 +18,62 @@ public class CartServiceImpl implements CartService {
 
 	@Autowired
 	private CartDao cartDao;
-	
-	@Autowired
-	private CartItemDao cartItemDao;
-	
-	public CartServiceImpl(CartDao cartDao) {
-		this.cartDao = cartDao;
-	}
-	@Transactional
+
 	@Override
-	public void saveCart(Cart cart) throws DataAccessException {
+	@Transactional
+	public void createCart(Member member) {
 		// TODO Auto-generated method stub
+		Cart cart = new Cart(member);
 		cartDao.saveCart(cart);
-	}
-	@Transactional
-	@Override
-	public void updateCart(Cart cart) throws DataAccessException {
-		// TODO Auto-generated method stub
-		cartDao.updateCart(cart);
-	}
-	@Transactional
-	@Override
-	public void deleteCart(Cart cart) throws DataAccessException {
-		// TODO Auto-generated method stub
-		cartDao.deleteCart(cart);
+		System.out.println("ㅅㅂ" + cart.toString());
 	}
 
-	@Transactional
 	@Override
-	public Cart findById(int cart_id) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return cartDao.findById(cart_id);
-	}
 	@Transactional
+	public Cart getCartByMember(Member member) {
+		// TODO Auto-generated method stub
+		return cartDao.findCartByMember(member);
+	}
+
 	@Override
-	public List<Cart> findAll() throws DataAccessException {
+	@Transactional
+	public void addCartItem(Member member, CartItem cartItem) {
 		// TODO Auto-generated method stub
-		return cartDao.findAll();
+		Cart cart = cartDao.findCartByMember(member);
+		if (cart == null) {
+            cart = new Cart(member);
+            cartDao.saveCart(cart);
+        }
+        cartItem.setCart(cart);
+        cartDao.saveCartItem(cartItem);
 	}
+
+	@Override
 	@Transactional
-	public Cart createCart(Cart cart) {
-		cartDao.saveCart(cart);
-		return cart;
+	public void removeCartItem(Member member, int cartItemId) {
+		// TODO Auto-generated method stub
+		cartDao.deleteCartItemById(cartItemId);
 	}
-	
+
+	@Override
 	@Transactional
-	public CartItem addItemToCart(CartItem cartItem) {
-        cartItemDao.saveCartItem(cartItem);
-        return cartItem;
-    }
+	public void addQuantity(Member member, int cartItemId, int quantity) {
+		// TODO Auto-generated method stub
+		CartItem cartItem = cartDao.findCartItemById(cartItemId);
+        if (cartItem != null) {
+            cartItem.addQuantity(quantity);
+            cartDao.saveCartItem(cartItem);
+        }
+	}
+
+	@Override
 	@Transactional
-    public List<CartItem> getCartItems(int cart_id) {
-        return cartDao.findById(cart_id).getCartItems();
-    }
-	@Transactional
-    public void removeItemFromCart(int cartItem_id) {
-        CartItem cartItem = cartItemDao.findById(cartItem_id);
-        cartItemDao.deleteCartItem(cartItem);
-    }
-	@Transactional
-    public void clearCart(int cart_id) {
-        Cart cart = cartDao.findById(cart_id);
-        cart.getCartItems().clear();
-        cartDao.updateCart(cart);
-    }
+	public void removeQuantity(Member member, int cartItemId, int quantity) {
+		// TODO Auto-generated method stub
+		CartItem cartItem = cartDao.findCartItemById(cartItemId);
+        if (cartItem != null) {
+            cartItem.removeQuantity(quantity);
+            cartDao.saveCartItem(cartItem);
+        }
+	}
 }

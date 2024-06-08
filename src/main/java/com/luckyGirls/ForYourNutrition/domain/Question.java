@@ -3,9 +3,11 @@ package com.luckyGirls.ForYourNutrition.domain;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,6 +15,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -41,6 +44,9 @@ public class Question implements Serializable{
 	
 	@Column(nullable = false)
 	private String content;
+	
+	@OneToMany(mappedBy="question", cascade=CascadeType.REMOVE)
+	private List<QuestionComment> qcList;
 	
 	/* JavaBeans Properties */
 	
@@ -79,6 +85,12 @@ public class Question implements Serializable{
 		return member != null ? member.getMember_id() : null;
 	}
 	
+	public List<QuestionComment> getQcList() {
+		return qcList;
+	}
+	public void setQcList(List<QuestionComment> qcList) {
+		this.qcList = qcList;
+	}
 	public Question() {
 		super();
 	}
@@ -90,10 +102,21 @@ public class Question implements Serializable{
 		this.title = title;
 		this.content = content;
 	}
+	public Question(int question_id, Member member, String qdate, String title, String content,
+			List<QuestionComment> qcList) {
+		super();
+		this.question_id = question_id;
+		this.member = member;
+		this.qdate = qdate;
+		this.title = title;
+		this.content = content;
+		this.qcList = qcList;
+	}
 	@Override
 	public String toString() {
 		return "Question [question_id=" + question_id + ", member=" + member + ", qdate=" + qdate + ", title=" + title
-				+ ", content=" + content + "]";
+				+ ", content=" + content + ", qcList=" + qcList + "]";
 	}
+
 
 }

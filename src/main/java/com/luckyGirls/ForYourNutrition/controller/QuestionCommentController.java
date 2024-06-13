@@ -44,33 +44,6 @@ public class QuestionCommentController {
 	    return "redirect:/question/viewQuestion?question_id=" + question_id;
 	}
 	
-	// 댓글 작성
-    /*@PostMapping("/questionComment/addComment")
-    public String addComment(HttpServletRequest request, HttpSession session,
-                             @RequestParam("question_id") int question_id,
-                             @RequestParam("content") String content,
-                             Model model) {
-        MemberSession ms = (MemberSession) session.getAttribute("ms");
-        if (ms == null) {
-            return "redirect:/login"; // 세션이 만료되었거나 없는 경우 로그인 페이지로 리다이렉트
-        }
-        
-        Member member = ms.getMember();
-        Question question = questionService.getQuestion(question_id);
-       */ 
-        /*QuestionComment comment = new QuestionComment();
-        comment.setMember(member);
-        comment.setQuestion(question);
-        comment.setContent(content);
-        comment.setQcdate(new java.util.Date());
-        
-        questionCommentService.insertQuestionComment(comment);*/
-        
-        /*questionCommentService.addCommentToQuestion(question_id, content, member);
-        
-        return "redirect:/question/viewQuestion?question_id=" + question_id;
-    }*/
-	
 	@PostMapping("/questionComment/deleteComment")
 	public String deleteComment(HttpServletRequest request, HttpSession session,
 	                            @RequestParam("qc_id") int qc_id,
@@ -78,8 +51,8 @@ public class QuestionCommentController {
 	                            Model model) {
 	    MemberSession ms = (MemberSession) session.getAttribute("ms");
 	    if (ms == null) {
-	        return "redirect:/login"; // 세션이 만료되었거나 없는 경우 로그인 페이지로 리다이렉트
-	    }
+        	return "redirect:/member/loginForm.do";
+        }
 	    Member member = ms.getMember();
 	    QuestionComment comment = questionCommentService.getQuestionComment(qc_id);
 
@@ -91,6 +64,7 @@ public class QuestionCommentController {
 	        System.out.println("Current member_id: " + member.getMember_id());
 	    }
 
+	    //댓글 작성자와 로그인 한 member가 동일해야 수정 가능함.
 	    if (comment != null && comment.getMember().getMember_id() == member.getMember_id()) {
 	        System.out.println("Attempting to delete comment with qc_id: " + qc_id);
 	        questionCommentService.deleteQuestionComment(comment);

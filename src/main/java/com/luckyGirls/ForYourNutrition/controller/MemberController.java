@@ -202,7 +202,7 @@ public class MemberController {
 		}
 	}
 	
-	@GetMapping("/main.do")
+	@GetMapping({"/main.do", "/"})
 	public String getMain(Model model, HttpSession session) {
 		try {
 			MemberSession ms = (MemberSession) session.getAttribute("ms");

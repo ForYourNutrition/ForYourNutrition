@@ -10,6 +10,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class ItemGetResponse {
+	private int item_id;
+	
 	private String name;
 
 	private int price;
@@ -30,6 +32,7 @@ public class ItemGetResponse {
 
 	public static ItemGetResponse from(Item item) {
 		return new ItemGetResponse(
+			item.getItem_id(),
 			item.getName(),
 			item.getPrice(),
 			item.getDetail(),

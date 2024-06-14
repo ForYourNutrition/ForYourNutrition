@@ -150,8 +150,16 @@
                 <input type="number" id="quantity" class="quantity" value="1" min="1">
                 <button onclick="increaseQuantity()">+</button>
             </div>
-            <button onclick="addToCart()">장바구니에 담기</button>
-            <button onclick="buyNow()">구매하기</button>
+			<form id="cartForm" method="post" action="/cart/addCartItem">
+                <input type="hidden" name="item_id" th:value="${item.item_id}">
+                <input type="hidden" id="quantity" name="quantity" th:value="1">
+                <button type="submit">장바구니에 담기</button>
+            </form>
+            <form id="buyForm" method="post" action="/buy/now">
+                <input type="hidden" name="item_id" th:value="${item.item_id}">
+                <input type="hidden" id="quantity" name="quantity" th:value="1">
+                <button type="submit">구매하기</button>
+            </form>
         </div>
     </div>
     <div class="product-info">

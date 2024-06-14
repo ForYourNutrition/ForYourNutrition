@@ -1,6 +1,7 @@
 package com.luckyGirls.ForYourNutrition.controller;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +66,8 @@ public class SurveyController {
             survey.setSurvey_id(member.getMember_id());
             survey.setMember(member);
             survey.setGender(member.getGender());
-            survey.setBirth_year(2024);  // Assuming birthYear is a field in Member
+            LocalDate localDate = member.getBirth().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            survey.setBirth_year(localDate.getYear());
             survey.setSmoking(surveyForm.getSmoking());
             survey.setDrinking(surveyForm.getDrinking());
             survey.setExercising(surveyForm.getExercising());

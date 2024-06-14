@@ -25,14 +25,13 @@ public class CartController {
     @Autowired
     private MemberService memberService;
     
-    
-
+ 
     @GetMapping("/cart/viewCart")
     public String viewCart(HttpSession session, Model model) {
         MemberSession ms = (MemberSession) session.getAttribute("ms");
         Member member = ms.getMember();
-        if (ms == null || member == null) {
-            return "redirect:/login";
+        if (ms == null) {
+        	return "redirect:/member/loginForm.do";
         }
         
         System.out.println("20");
@@ -44,14 +43,16 @@ public class CartController {
     }
 
     @PostMapping("/cart/addCartItem")
-    public String addCartItem(@RequestParam int itemId, @RequestParam int quantity, HttpSession session) {
+    public String addCartItem(@RequestParam int item_id, @RequestParam int quantity, HttpSession session) {
         MemberSession ms = (MemberSession) session.getAttribute("ms");
         if (ms == null) {
             return "redirect:/login";
         }
+        System.out.println("아이템아이디" + item_id);
+        System.out.println("수량" + quantity);
         Member member = ms.getMember();
         CartItem cartItem = new CartItem();
-        cartItem.setItem(itemService.getItemById(itemId));
+        cartItem.setItem(itemService.getItemById(item_id));
         cartItem.setQuantity(quantity);
         cartService.addCartItem(member, cartItem);
         return "redirect:/cart/viewCart";
@@ -61,7 +62,7 @@ public class CartController {
     public String removeCartItem(@RequestParam int cartItem_id, HttpSession session) {
         MemberSession ms = (MemberSession) session.getAttribute("ms");
         if (ms == null) {
-            return "redirect:/login";
+        	return "redirect:/member/loginForm.do";
         }
         Member member = ms.getMember();
         cartService.removeCartItem(member, cartItem_id);
@@ -72,7 +73,7 @@ public class CartController {
     public String addQuantity(@RequestParam int cartItem_id, @RequestParam int quantity, HttpSession session) {
         MemberSession ms = (MemberSession) session.getAttribute("ms");
         if (ms == null) {
-            return "redirect:/login";
+        	return "redirect:/member/loginForm.do";
         }
         Member member = ms.getMember();
         cartService.addQuantity(member, cartItem_id, quantity);
@@ -83,7 +84,7 @@ public class CartController {
     public String removeQuantity(@RequestParam int cartItem_id, @RequestParam int quantity, HttpSession session) {
         MemberSession ms = (MemberSession) session.getAttribute("ms");
         if (ms == null) {
-            return "redirect:/login";
+        	return "redirect:/member/loginForm.do";
         }
         Member member = ms.getMember();
         cartService.removeQuantity(member, cartItem_id, quantity);

@@ -67,7 +67,7 @@
         <form action="/submit-order" method="POST">
             <div class="form-group">
                 <label for="name">이름</label>
-                <input type="text" id="name" name="name" required>
+                <input th:value=${memberName} id="name" name="name"/>
             </div>
             <div class="form-group">
                 <label for="email">이메일</label>
@@ -79,15 +79,11 @@
             </div>
             <div class="form-group">
                 <label for="product">상품</label>
-                <select id="product" name="product" required>
-                    <option value="product1">상품 1</option>
-                    <option value="product2">상품 2</option>
-                    <option value="product3">상품 3</option>
-                </select>
+                <input th:value=${item.name} id="itemName" name="itemName" required/>
             </div>
             <div class="form-group">
-                <label for="quantity">수량</label>
-                <input type="number" id="quantity" name="quantity" required min="1" max="10">
+                <label for="count">수량</label>
+                <input th:value=${count} id="count" name=""/>
             </div>
             <button type="submit">주문하기</button>
         </form>

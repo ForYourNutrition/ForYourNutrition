@@ -155,7 +155,7 @@
                 <input type="hidden" id="quantity" name="quantity" th:value="1">
                 <button type="submit">장바구니에 담기</button>
             </form>
-            <form id="buyForm" method="post" action="/buy/now">
+            <form id="orderForm" method="post" action="/order/createOrder">
                 <input type="hidden" name="item_id" th:value="${item.item_id}">
                 <input type="hidden" id="quantity" name="quantity" th:value="1">
                 <button type="submit">구매하기</button>

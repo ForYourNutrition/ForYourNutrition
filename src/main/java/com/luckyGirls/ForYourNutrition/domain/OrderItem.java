@@ -3,30 +3,16 @@ package com.luckyGirls.ForYourNutrition.domain;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
-<<<<<<< HEAD
-=======
 
->>>>>>> 9c54a40b224c987d308b814212938df069de40d1
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
-<<<<<<< HEAD
+
 import lombok.Getter;
 import lombok.Setter;
 
-=======
-
-import lombok.Getter;
-
-import lombok.Setter;
-
-
-
-
-
->>>>>>> 9c54a40b224c987d308b814212938df069de40d1
 @Getter
 @Setter
 @Entity
@@ -35,7 +21,6 @@ public class OrderItem {
    @Id @GeneratedValue
    private int orderItem_id;
 
-<<<<<<< HEAD
    @ManyToOne
    @JoinColumn(name="member_id")
    private Member member;
@@ -67,46 +52,5 @@ public class OrderItem {
    public void cancel() {
       this.getItem().addStock(count);
    }
-=======
-
-   @ManyToOne
-   @JoinColumn(name="member_id")
-   private Member member;
-
-
-   @ManyToOne(fetch = FetchType.LAZY)
-   @JoinColumn(name = "item_id")
-   private Item item;
-
-
-   @ManyToOne
-   @JoinColumn(name = "order_id")
-   private Order orders;
-
-
-   private int orderPrice; //주문가격
-   private int count; //수량
-
-
-   public static OrderItem createOrderItem(Item item, int count){
-      OrderItem orderItem = new OrderItem();
-      orderItem.setItem(item);
-      orderItem.setCount(count);
-      orderItem.setOrderPrice(item.getPrice());
-      item.removeStock(count);
-      return orderItem;
-   }
-
-
-   public int getTotalPrice(){
-      return orderPrice*count;
-   }
-
-
-   public void cancel() {
-      this.getItem().addStock(count);
-   }
-
->>>>>>> 9c54a40b224c987d308b814212938df069de40d1
 
 }

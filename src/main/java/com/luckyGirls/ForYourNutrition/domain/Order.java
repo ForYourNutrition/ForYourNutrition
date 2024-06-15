@@ -32,16 +32,11 @@ public class Order {
    private LocalDateTime orderDate; //주문일
 
    private int orderStatus; //주문상태(주문:0 취소:1 배송중:2 환불3)
-<<<<<<< HEAD
+
    
    @OneToMany(mappedBy="orders", cascade=CascadeType.ALL)
    private List<OrderItem> orderItems = new ArrayList<>();
 
 }
-=======
 
-   @OneToMany(mappedBy="orders", cascade=CascadeType.ALL)
-   private List<OrderItem> orderItems = new ArrayList<>();
 
-}
->>>>>>> 9c54a40b224c987d308b814212938df069de40d1

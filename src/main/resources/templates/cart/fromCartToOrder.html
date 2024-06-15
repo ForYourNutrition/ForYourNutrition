@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>장바구니->주문</title>
+    <link rel="stylesheet" type="text/css" href="/css/cartStyle.css">
+</head>
+<body>
+	<div th:insert="~{header}"></div>
+    <h1>Order Form</h1>
+    <div th:if="${cart != null}">
+        <label>Cart ID:</label>
+        <span th:text="${cart.cart_id}"></span>
+        <h2>Cart Item List</h2>
+        <div th:each="cartItem : ${cart.cartItems}">
+            <div>
+                <label>Item Name:</label>
+                <span th:text="${cartItem.item.name}"></span>
+            </div>
+            <div>
+                <label>Quantity:</label>
+                <span th:text="${cartItem.quantity}"></span>
+            </div>
+        </div>
+    </div>
+    <div th:if="${cart == null}">
+        <p>No items in the cart.</p>
+    </div>
+</body>
+</html>

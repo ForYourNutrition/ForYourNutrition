@@ -27,22 +27,15 @@
                     <td th:text="${cartItem.item.name}">상품 이름</td>
                     <td th:text="${cartItem.quantity}">수량</td>
                      
-                    <td>
-                        <form th:action="@{/cart/addQuantity}" method="post" class="quantity-form">
-                            <input type="hidden" th:value="${cartItem.cartItem_id}" name="cartItem_id"/>
-                            <input type="number" name="quantity" min="1" value="1"/>
-                            <button type="submit">추가</button>
-                        </form>
-                        <form th:action="@{/cart/removeQuantity}" method="post" class="quantity-form">
-                            <input type="hidden" th:value="${cartItem.cartItem_id}" name="cartItem_id"/>
-                            <input type="number" name="quantity" min="1" value="1"/>
-                            <button type="submit">제거</button>
-                        </form>
-                        <form th:action="@{/cart/removeCartItem}" method="post" class="remove-form">
-                            <input type="hidden" th:value="${cartItem.cartItem_id}" name="cartItem_id"/>
-                            <button type="submit">삭제</button>
-                        </form>
-                    </td>
+                   <td>
+					    <form th:action="@{/cart/updateQuantity}" method="post" class="quantity-form">
+					        <input type="hidden" th:value="${cartItem.cartItem_id}" name="cartItem_id"/>
+					        <input type="number" name="quantity" min="1" value="1"/>
+					        <button type="submit" name="action" value="add">추가</button>
+					        <button type="submit" name="action" value="remove">제거</button>
+					        <button type="submit" name="action" value="delete">삭제</button>
+					    </form>
+					</td>
                     
                 </tr>
             </tbody>

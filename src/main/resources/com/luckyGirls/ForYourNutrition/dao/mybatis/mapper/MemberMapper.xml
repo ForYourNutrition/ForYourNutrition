@@ -37,6 +37,10 @@
   </update>
   
   <delete id="deleteMember" parameterType="String">
-    DELETE FROM MEMBER WHERE ID = #{param1}
+    UPDATE MEMBER SET
+      ID = null,	
+      NAME = '탈퇴회원',
+      NICKNAME = '탈퇴회원'
+    WHERE ID = #{param1}
   </delete>
 </mapper>

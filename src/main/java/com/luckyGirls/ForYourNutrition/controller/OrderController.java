@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.luckyGirls.ForYourNutrition.domain.Item;
 import com.luckyGirls.ForYourNutrition.domain.Member;
 import com.luckyGirls.ForYourNutrition.domain.Order;
+import com.luckyGirls.ForYourNutrition.domain.OrderItem;
 import com.luckyGirls.ForYourNutrition.service.ItemService;
 import com.luckyGirls.ForYourNutrition.service.OrderService;
 
@@ -53,8 +54,12 @@ public class OrderController {
 	}
 
 	@PostMapping("/order/Order")
-	public String saveOrder(HttpServletRequest request, HttpSession session,
-			@ModelAttribute("orderForm") OrderForm orderForm, BindingResult result, Model model) throws Exception {	
+	public String saveOrder(@RequestParam("name") String name,
+			@RequestParam("email") String email,
+			@RequestParam("address") String address,
+			@RequestParam("item_id") int item_id,
+			@RequestParam("count") int count,
+			Model model, HttpSession session) throws Exception {	
 		try {
 			MemberSession ms = (MemberSession) session.getAttribute("ms");
 
@@ -65,20 +70,30 @@ public class OrderController {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 			String formattedNow = now.format(formatter);
 
+			Item item = itemService.getItemById(item_id);
+			OrderItem orderItem = new OrderItem();
+			
+			orderItem.createOrderItem(item, count);
+			
 			Order order = new Order();
+			
 			order.setMember(member);
 			order.setOrderDate(now);
 			order.setOrderStatus(0);
 
+			orderItem.setOrders(order);
+			
 			model.addAttribute("memberName", member.getName());
 			model.addAttribute("order", order);
 			return "order/orderStatus";
 		} catch (NullPointerException ex) {
 			model.addAttribute("orderForm", new OrderForm());
-			return "order/orderForm";
+			return "order/createOrder";
 		}
 
 	}
+	
+	//삭제, 환불, 배송상태 + 결제구현
 
 
 }

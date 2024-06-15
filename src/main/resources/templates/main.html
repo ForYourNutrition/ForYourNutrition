@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -97,7 +97,7 @@
             <button>검색</button>
         </div>
         <!-- 로그인 정보 출력 -->
-        <div class="user-info" th:if="${isLoggedIn}">
+        <div class="user-info" th:if="${session.ms}">
             <p th:text="${member.name} + '님 반갑습니다.'"></p>
             <p th:text="'POINT: ' + ${member.point}"></p>
         </div>

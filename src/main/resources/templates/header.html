@@ -81,40 +81,26 @@
             <div class="menu-content">
                 <a href="/shop">Shop</a>
                 <a href="/member/memberInfo.do">Mypage</a>
-                <a href="/question/questionList">Q&A</a>
+                <a href="/question/questionList">Q&amp;A</a>
             </div>
         </div>
         <a href="/main.do" class="logo">FOR YOUR NUTRITION</a>
         <div class="right-buttons" id="right-buttons">
-            <!-- JavaScript로 동적으로 버튼을 추가할 부분 -->
+            <div th:unless="${session.ms}">
+            	<a href="/member/join.do">회원가입</a>
+				<a href="/member/loginForm.do">로그인</a>
+				<a href="/wishlist">찜</a>
+				<a href="/cart/viewCart">Cart</a>
+				<a href="/question/questionList">Question</a>
+            </div>
+            <div th:if="${session.ms}">
+				<a href="/member/logout.do">로그아웃</a>
+				<a href="/member/memberInfo.do">MY PAGE</a>
+				<a href="/wishlist">찜</a>
+				<a href="/cart/viewCart">Cart</a>
+				<a href="/question/questionList">Question</a>
+            </div>
         </div>
     </div>
-
-    <script th:inline="javascript">
-        document.addEventListener('DOMContentLoaded', function() {
-            const rightButtons = document.getElementById('right-buttons');
-            const isLoggedIn = /*[[${isLoggedIn}]]*/ false; // 서버에서 전달된 로그인 상태
-
-            if (isLoggedIn) {
-                // 로그인 상태
-                rightButtons.innerHTML = `
-                    <a href="/member/logout.do">로그아웃</a>
-                    <a href="/member/memberInfo.do">MY PAGE</a>
-                    <a href="/wishlist">찜</a>
-                    <a href="/cart/viewCart">장바구니</a>
-                    <a href="/question/questionList">question</a>
-                `;
-            } else {
-                // 비로그인 상태
-                rightButtons.innerHTML = `
-                    <a href="/member/join.do">회원가입</a>
-                    <a href="/member/loginForm.do">로그인</a>
-                    <a href="/wishlist">찜</a>
-                    <a href="/cart/viewCart">장바구니</a>
-                    <a href="/question/questionList">question</a>
-                `;
-            }
-        });
-    </script>
 </body>
 </html>

@@ -18,8 +18,8 @@ public class JpaItemDao implements ItemDao{
     @PersistenceContext
     private EntityManager em;
 
-    public Item findById(int id) {
-        return em.find(Item.class, id);
+    public Item findById(int item_id) {
+        return em.find(Item.class, item_id);
     }
 
     public List<Item> findAll() {

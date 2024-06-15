@@ -76,14 +76,7 @@ public class CartItem implements Serializable {
 	public CartItem() {
 		super();
 	}
-	public CartItem(int cartItem_id, Member member, Item item, int quantity) {
-		super();
-		this.cartItem_id = cartItem_id;
-		this.member = member;
-		this.item = item;
-		this.quantity = quantity;
-	}
-	
+
 	public CartItem(int cartItem_id, Cart cart, Member member, Item item, int quantity) {
 		super();
 		this.cartItem_id = cartItem_id;
@@ -93,10 +86,12 @@ public class CartItem implements Serializable {
 		this.quantity = quantity;
 	}
 	@Override
-	public String toString() {
-		return "CartItem [cartItem_id=" + cartItem_id + ", cart=" + cart + ", member=" + member + ", item=" + item
-				+ ", quantity=" + quantity + "]";
-	}
+    public String toString() {
+        return "CartItem{" +
+               "cartItem_id=" + cartItem_id +
+               ", cart=" + (cart != null ? cart.getCart_id() : null) + // 순환 참조를 방지하기 위해 cart의 id만 출력
+               '}';
+    }
 	
 	public void addQuantity(int quantity) {
 		this.quantity += quantity;

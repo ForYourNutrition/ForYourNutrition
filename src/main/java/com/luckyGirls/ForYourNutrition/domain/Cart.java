@@ -39,8 +39,8 @@ public class Cart implements Serializable{
 	
 	private int quantity;//카트에 담긴 총 개수
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private List<CartItem> cartItemList = new ArrayList<>();
+	@OneToMany(mappedBy="cart", cascade=CascadeType.REMOVE)
+	private List<CartItem> cartItemList= new ArrayList<>();
 
 	/* JavaBeans Properties */
 	
@@ -110,10 +110,13 @@ public class Cart implements Serializable{
         cartItemList.remove(cartItem);
         cartItem.setCart(null);
     }
-
     @Override
     public String toString() {
-        return "Cart [cart_id=" + cart_id + ", member=" + member + ", cartItems=" + cartItemList + "]";
+        return "Cart{" +
+               "cart_id=" + cart_id +
+               ", member=" + member +
+               ", cartItemList=" + cartItemList.size() + // 간단히 사이즈만 출력하도록 변경
+               '}';
     }
 	
 	

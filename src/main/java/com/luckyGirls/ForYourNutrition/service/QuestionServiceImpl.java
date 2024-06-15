@@ -8,61 +8,56 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.luckyGirls.ForYourNutrition.dao.QuestionDao;
 import com.luckyGirls.ForYourNutrition.domain.Question;
-import com.luckyGirls.ForYourNutrition.repository.QuestionRepository;
-
-import lombok.RequiredArgsConstructor;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
 	
-	  private final QuestionDao questionDao;
+	@Autowired
+	private QuestionDao questionDao;
 
-	    @Autowired
-	    public QuestionServiceImpl(QuestionDao questionDao) {
-	        this.questionDao = questionDao;
-	    }
+	public QuestionServiceImpl(QuestionDao questionDao) {
+        this.questionDao = questionDao;
+    }
 
-	    @Override
-	    @Transactional
-	    public List<Question> getQuestionListForMember(int memberId) {
-	        return questionDao.getQuestionListForMember(memberId);
-	    }
+    @Override
+    @Transactional
+    public List<Question> getQuestionListForMember(int memberId) {
+        return questionDao.getQuestionListForMember(memberId);
+    }
 
-	    @Override
-	    @Transactional
-	    public void insertQuestion(Question question) {
-	        questionDao.insertQuestion(question);
-	    }
+    @Override
+    @Transactional
+    public void insertQuestion(Question question) {
+        questionDao.insertQuestion(question);
+    }
 
-	    @Override
-	    @Transactional
-	    public Question getQuestion(int questionId){
-	        return questionDao.getQuestion(questionId);
-	    }
+    @Override
+    @Transactional
+    public Question getQuestion(int questionId){
+        return questionDao.getQuestion(questionId);
+    }
 
-	    @Override
-	    @Transactional
-	    public List<Question> getAllQuestionList() {
-	        return questionDao.getAllQuestionList();
-	    }
+    @Transactional
+    public List<Question> getQuestionList(String sort, int page, String keyword) {
+        return questionDao.getQuestionList(sort, page, keyword);
+    }
 
-	    @Override
-	    @Transactional
-	    public Question updateQuestion(Question question) {
-	        return questionDao.updateQuestion(question);
-	    }
+    @Transactional
+    public int getTotalPages(String keyword) {
+        long totalCount = questionDao.countQuestions(keyword);
+        return (int) Math.ceil((double) totalCount / 15);
+    }
+    
+    @Override
+    @Transactional
+    public Question updateQuestion(Question question) {
+        return questionDao.updateQuestion(question);
+    }
 
-	    @Override
-	    @Transactional
-	    public void deleteQuestion(int questionId) {
-	        questionDao.deleteQuestion(questionId);
-	    }
+    @Override
+    @Transactional
+    public void deleteQuestion(int questionId) {
+        questionDao.deleteQuestion(questionId);
+    }    
 
-		@Override
-		public Question getQuestionByTitle(String title) {
-			// TODO Auto-generated method stub
-			return questionDao.getQuestionByTitle(title);
-		}
-	    
-	
 }

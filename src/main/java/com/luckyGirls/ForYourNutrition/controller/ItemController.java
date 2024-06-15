@@ -29,8 +29,8 @@ public class ItemController {
 	private final ItemService itemService;
 
 	@GetMapping("/viewItem.do")
-	public String getItem(@RequestParam("id") int id, Model model) throws Exception {
-		ItemGetResponse itemGetResponse = itemService.getItem(id);
+	public String getItem(@RequestParam("item_id") int item_id, Model model) throws Exception {
+		ItemGetResponse itemGetResponse = itemService.getItem(item_id);
 		System.out.println(itemGetResponse.toString());
 		model.addAttribute("item", itemGetResponse);
 		return "item/viewItem"; // "item/viewItem" 뷰 이름 반환

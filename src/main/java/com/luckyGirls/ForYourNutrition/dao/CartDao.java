@@ -1,16 +1,26 @@
 package com.luckyGirls.ForYourNutrition.dao;
 
-import java.util.List;
-import org.springframework.dao.DataAccessException;
-import org.springframework.stereotype.Repository;
-import com.luckyGirls.ForYourNutrition.domain.Item;
+import com.luckyGirls.ForYourNutrition.domain.Cart;
+import com.luckyGirls.ForYourNutrition.domain.CartItem;
+import com.luckyGirls.ForYourNutrition.domain.Member;
 
 public interface CartDao {
-	List<Item> getCartList(int member_id) throws DataAccessException; //장바구니 조회
+	/*void insertCart(Cart cart) throws DataAccessException; //장바구니 추가
 	
-	void addItemToCart(int member_id, int item_id) throws DataAccessException; //장바구니에 상품 추가
+	void updateCart(Cart cart) throws DataAccessException; //장바구니 수정
 	
-	void deleteItemFromCart(int member_id, int item_id) throws DataAccessException; //장바구니에서 상품 삭제
+	void deleteCart(Cart cart) throws DataAccessException; //장바구니 삭제
 	
-	void updateQuantity(int cart_id, int quantity) throws DataAccessException; //수량 업데이트
+	Cart findById(int cart_id) throws DataAccessException; //장바구니 하나 
+	
+	List<Cart> findAll() throws DataAccessException; //장바구니 all*/
+	
+	/*cart*/
+	void saveCart(Cart cart);
+	Cart findCartByMember(Member member);
+	
+	/*cart item*/
+	void saveCartItem(CartItem cartItem);
+    void deleteCartItemById(int cartItem_id);
+    CartItem findCartItemById(int cartItem_id);
 }

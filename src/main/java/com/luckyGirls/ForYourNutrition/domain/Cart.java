@@ -1,88 +1,120 @@
 package com.luckyGirls.ForYourNutrition.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.support.PagedListHolder;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
+@Entity
 @Table(name = "Cart")
 @SuppressWarnings("serial")
 public class Cart implements Serializable{
 	
-/* jpet 코드 일단 복붙*/
+	/* Private Fields */
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cart_seq")
+    @SequenceGenerator(name = "cart_seq", sequenceName = "cart_seq", allocationSize = 1) 
+	private int cart_id;
 	
-	  /* Private Fields */
+	@ManyToOne
+	@JoinColumn(name="member_id")
+	private Member member;
+	
+	private int quantity;//카트에 담긴 총 개수
+	
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<CartItem> cartItemList = new ArrayList<>();
 
-	  private final Map<String, CartItem> itemMap = Collections.synchronizedMap(new HashMap<String, CartItem>());
-		
-	  private final PagedListHolder<CartItem> itemList = new PagedListHolder<CartItem>();
+	/* JavaBeans Properties */
+	
+	public Cart() {
+		super();
+	}
 
-	  /* JavaBeans Properties */
+	public Cart(int cart_id, Member member, List<CartItem> cartItemList) {
+		super();
+		this.cart_id = cart_id;
+		this.member = member;
+		this.cartItemList = cartItemList;
+	}
+	 // Parameterized constructor
+    public Cart(Member member) {
+        this.member = member;
+    }
 
-	  public Cart() {
-		this.itemList.setPageSize(4);
-	  }
+    // Getters and Setters
+    public int getCart_id() {
+        return cart_id;
+    }
 
-	  public Iterator<CartItem> getAllCartItems() { return itemList.getSource().iterator(); }
-	  public PagedListHolder<CartItem> getCartItemList() { return itemList; }
-	  public int getNumberOfItems() { return itemList.getSource().size(); }
+    public void setCart_id(int cart_id) {
+        this.cart_id = cart_id;
+    }
 
-	  /* Public Methods */
+    public Member getMember() {
+        return member;
+    }
 
-	  public boolean containsItemId(String itemId) {
-	    return itemMap.containsKey(itemId);
-	  }
+    public void setMember(Member member) {
+        this.member = member;
+    }
 
-	/*  public void addItem(Item item, boolean isInStock) {
-	    CartItem cartItem = itemMap.get(item.getItemId());
-	    if (cartItem == null) {
-	      cartItem = new CartItem();
-	      cartItem.setItem(item);
-	      cartItem.setQuantity(0);
-	      cartItem.set
-	      itemMap.put(item.getItemId(), cartItem);
-	      itemList.getSource().add(cartItem);
-	    }
-	    cartItem.incrementQuantity();
-	  }
+    public List<CartItem> getCartItems() {
+        return cartItemList;
+    }
 
+    public void setCartItems(List<CartItem> cartItems) {
+        this.cartItemList = cartItems;
+    }
 
-	  public Item removeItemById(String itemId) {
-	    CartItem cartItem = itemMap.remove(itemId);
-	    if (cartItem == null) {
-	      return null;
-	    }
-		else {
-	      itemList.getSource().remove(cartItem);
-	      return cartItem.getItem();
-	    }
-	  }
+    public int getQuantity() {
+		return quantity;
+	}
 
-	  public void incrementQuantityByItemId(String itemId) {
-	    CartItem cartItem = itemMap.get(itemId);
-	    cartItem.incrementQuantity();
-	  }
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
 
-	  public void setQuantityByItemId(String itemId, int quantity) {
-	    CartItem cartItem = itemMap.get(itemId);
-	    cartItem.setQuantity(quantity);
-	  }
+	public List<CartItem> getCartItemList() {
+		return cartItemList;
+	}
 
-	  public double getSubTotal() {
-	    double subTotal = 0;
-	    Iterator<CartItem> items = getAllCartItems();
-	    while (items.hasNext()) {
-	      CartItem cartItem = (CartItem) items.next();
-	      Item item = cartItem.getItem();
-	      double listPrice = item.getListPrice();
-	      int quantity = cartItem.getQuantity();
-	      subTotal += listPrice * quantity;
-	    }
-	    return subTotal;
-	  }	*/
+	public void setCartItemList(List<CartItem> cartItemList) {
+		this.cartItemList = cartItemList;
+	}
+
+	// Utility methods
+    public void addCartItem(CartItem cartItem) {
+        cartItemList.add(cartItem);
+        cartItem.setCart(this);
+    }
+
+    public void removeCartItem(CartItem cartItem) {
+        cartItemList.remove(cartItem);
+        cartItem.setCart(null);
+    }
+
+    @Override
+    public String toString() {
+        return "Cart [cart_id=" + cart_id + ", member=" + member + ", cartItems=" + cartItemList + "]";
+    }
+	
+	
 }

@@ -1,7 +1,9 @@
 package com.luckyGirls.ForYourNutrition.service;
 
-import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.luckyGirls.ForYourNutrition.repository.ItemJpaRepository;
+import com.luckyGirls.ForYourNutrition.dao.ItemDao;
 import com.luckyGirls.ForYourNutrition.domain.Item;
 import com.luckyGirls.ForYourNutrition.dto.response.ItemGetResponse;
 
@@ -21,8 +24,8 @@ import lombok.RequiredArgsConstructor;
 public class ItemService {
 	private final ItemJpaRepository itemJpaRepository;
 
-	public ItemGetResponse getItem(int id) throws Exception {
-		Item item = itemJpaRepository.findById(id);
+	public ItemGetResponse getItem(int item_id) throws Exception {
+		Item item = itemJpaRepository.findById(item_id);
 		System.out.println("item: " + item.toString());
 		return ItemGetResponse.from(item);
 	}
@@ -43,4 +46,17 @@ public class ItemService {
 		System.out.println("2 = " + items.getTotalPages());
 		return items;
 	}
+	
+	
+	//혜지 추가..
+	 @Autowired
+	 private ItemDao itemDao;
+
+	 public List<Item> getAllItems() {
+		 return itemDao.findAll();
+	 }
+
+	 public Item getItemById(int item_id) {
+		 return itemDao.findById(item_id);
+	 }
 }

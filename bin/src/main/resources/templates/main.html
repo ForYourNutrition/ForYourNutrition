@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+        }
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px;
+        }
+        .search-bar input[type="text"] {
+            width: 50%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px 0 0 5px;
+            outline: none;
+        }
+        .search-bar button {
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: navy;
+            color: white;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            outline: none;
+        }
+        .search-bar button:hover {
+            background-color: #001f4d;
+        }
+        .banner {
+            background-color: #f5f5f5;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #aaa;
+            font-size: 24px;
+            border: 1px solid #ddd;
+            margin: 20px;
+        }
+        .banner img {
+            max-height: 100%;
+            max-width: 100%;
+            cursor: pointer;
+        }
+        .product-section {
+            padding: 20px;
+        }
+        .product-section h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .tabs button {
+            background-color: transparent;
+            border: none;
+            color: navy;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .tabs button:hover {
+            text-decoration: underline;
+        }
+        .user-info {
+            position: fixed;
+            top: 0;
+            right: 0;
+            margin: 80px;
+            background-color: white;
+            color: navy;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid navy;
+        }
+    </style>
+</head>
+<body>
+    <div th:insert="~{header}"></div>
+    
+    <div class="search-bar-container">
+        <div class="search-bar">
+            <input type="text" placeholder="검색어를 입력하세요">
+            <button>검색</button>
+        </div>
+        <!-- 로그인 정보 출력 -->
+        <div class="user-info" th:if="${isLoggedIn}">
+            <p th:text="${member.name} + '님 반갑습니다.'"></p>
+            <p th:text="'POINT: ' + ${member.point}"></p>
+        </div>
+    </div>
+
+    <div class="banner">
+        <a href="survey/surveyForm.do">
+            <img src="path/to/your/image.jpg" alt="슬로건 이미지">
+        </a>
+    </div>
+</body>
+</html>

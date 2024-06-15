@@ -6,34 +6,54 @@
     <title>Item 상세보기</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
             margin: 0;
-            background-color: #f8f9fa;
+            background-color: #f9f9f9;
+        }
+        .header {
+            width: 100%;
+            background-color: #ffffff;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .container {
-            width: 80%;
             max-width: 1200px;
-            background-color: #fff;
+            width: 100%;
             padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .product-main {
             display: flex;
-            justify-content: space-between;
+            align-items: center;
+            width: 100%;
             margin-bottom: 20px;
         }
         .product-main img {
-            max-width: 200px;
+            width: 400px;
             border-radius: 10px;
+            align-content: center;
+            margin-left: 80px;
+        }
+        .product-main .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 500px;
+            margin-right: 20px;
         }
         .product-details {
             max-width: 50%;
             padding: 20px;
+            margin-left: 80px;
         }
         .product-details h1 {
             font-size: 24px;
@@ -86,6 +106,7 @@
             max-width: 200px;
         }
         .product-info {
+            width: 100%;
             margin-top: 20px;
         }
         .tabs {
@@ -111,7 +132,7 @@
             margin-right: 0;
         }
         .tabs button.active {
-            background-color: #007bff;
+            background-color: navy;
             color: white;
         }
         .tab-content {
@@ -123,9 +144,12 @@
     </style>
 </head>
 <body>
+<div th:replace="~{header}"></div>
 <div class="container">
     <div class="product-main">
-        <img th:src="@{images/img.png}" alt="img">
+        <div class="image-container">
+            <img border="0" src="/images/img.png" />
+        </div>
         <div class="product-details">
             <h1 th:text="${item.name}">Product Name</h1>
             <p>카테고리 > <span th:text="${item.category}"></span></p>

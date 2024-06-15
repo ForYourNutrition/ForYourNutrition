@@ -22,10 +22,6 @@ public class CartController {
     @Autowired
     private ItemService itemService;
 
-    //@Autowired
-    //private MemberService memberService;
-    
- 
     @GetMapping("/cart/viewCart")
     public String viewCart(HttpSession session, Model model) {
         MemberSession ms = (MemberSession) session.getAttribute("ms");
@@ -36,13 +32,11 @@ public class CartController {
         Cart cart = null;
         try {
             cart = cartService.getCartByMember(member);
-            System.out.println("8888");
             if (cart != null) {
                 System.out.println(cart.toString());
             } else {
                 System.out.println("Cart is null");
             }
-            System.out.println("888888");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -57,12 +51,9 @@ public class CartController {
         if (ms == null) {
             return "redirect:/member/loginForm.do";
         }
-        System.out.println("아이템아이디" + item_id);
-        System.out.println("수량" + quantity);
 
         Member member = ms.getMember();
         Item item = itemService.getItemById(item_id);
-        System.out.println("@@item 객체 : " + item.getName());
 
         CartItem cartItem = new CartItem();
         cartItem.setItem(item);
@@ -75,7 +66,6 @@ public class CartController {
         return "redirect:/cart/viewCart";
     }
 
-
     @PostMapping("/cart/removeCartItem")
     public String removeCartItem(@RequestParam int cartItem_id, HttpSession session) {
         MemberSession ms = (MemberSession) session.getAttribute("ms");
@@ -87,36 +77,43 @@ public class CartController {
         return "redirect:/cart/viewCart";
     }
 
-    @PostMapping("/cart/addQuantity")
-    public String addQuantity(@RequestParam int cartItem_id, @RequestParam int quantity, HttpSession session) {
+    @PostMapping("/cart/updateQuantity")
+    public String updateQuantity(@RequestParam int cartItem_id, @RequestParam int quantity, @RequestParam String action, HttpSession session) {
         MemberSession ms = (MemberSession) session.getAttribute("ms");
         if (ms == null) {
         	return "redirect:/member/loginForm.do";
         }
         Member member = ms.getMember();
-        cartService.addQuantity(member, cartItem_id, quantity);
-        return "redirect:/cart/viewCart";
-    }
-
-    @PostMapping("/cart/removeQuantity")
-    public String removeQuantity(@RequestParam int cartItem_id, @RequestParam int quantity, HttpSession session) {
-        MemberSession ms = (MemberSession) session.getAttribute("ms");
-        if (ms == null) {
-        	return "redirect:/member/loginForm.do";
+        if ("add".equals(action)) {
+            cartService.addQuantity(member, cartItem_id, quantity);
+        } else if ("remove".equals(action)) {
+            cartService.removeQuantity(member, cartItem_id, quantity);
+        } else if ("delete".equals(action)) {
+            cartService.removeCartItem(member, cartItem_id);
         }
-        Member member = ms.getMember();
-        cartService.removeQuantity(member, cartItem_id, quantity);
         return "redirect:/cart/viewCart";
     }
 
-  	@GetMapping("/order/createOrder")
+    @GetMapping("/order/createOrder")
     public String createOrderForm(HttpSession session, Model model) {
         MemberSession ms = (MemberSession) session.getAttribute("ms");
         if (ms == null) {
-            return "redirect:/login";
+        	return "redirect:/member/loginForm.do";
         }
         Member member = ms.getMember();
-        model.addAttribute("cart", cartService.getCartByMember(member));
-        return "order/createOrder";
+        Cart cart = cartService.getCartByMember(member);
+        
+        if(cart != null) {
+        	System.out.println("cartId : " + cart.getCart_id());
+        	System.out.println("CartItemList : ");
+            for (CartItem cartItem : cart.getCartItems()) {
+                System.out.println(" - Item: " + cartItem.getItem().getName() + ", Quantity: " + cartItem.getQuantity());
+            }
+        } else {
+            System.out.println("Cart is null");
+        }
+        model.addAttribute("cart", cart);
+        return "cart/fromCartToOrder";
     }
+ 
 }

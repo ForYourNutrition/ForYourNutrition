@@ -64,7 +64,7 @@
 <body>
     <div class="container">
         <h1>주문 작성</h1>
-        <form id="orderForm" method="post" action="/order/Order">
+        <form id="orderForm" method="post" action="/order/Order">        
             <div class="form-group">
                 <label for="name">이름</label>
                 <input th:value=${memberName} id="name" name="name"/>
@@ -88,6 +88,6 @@
              <input type="hidden" name="item_id" th:value="${item.item_id}">
             <button type="submit">주문하기</button>
         </form>
-    </div>
+    </div> 
 </body>
 </html>

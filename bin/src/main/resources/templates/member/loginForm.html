@@ -2,36 +2,95 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="|${pageName}|"></title>
+    <title th:text="|${pageName}|">로그인</title>
+    <style>
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .error-class {
+            color: blue;
+        }
+        .error-input {
+            border-color: blue;
+        }
+        input[type="text"],
+        input[type="password"],
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+        button {
+            background-color: navy;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #001f4d;
+        }
+        .link-buttons {
+            margin-top: 10px;
+            text-align: center;
+        }
+        .link-buttons button {
+            background-color: transparent;
+            border: none;
+            color: gray;
+            cursor: pointer;
+            margin: 0 5px;
+            padding: 0;
+        }
+        .link-buttons button:hover {
+            text-decoration: underline;
+        }
+        .signup-button {
+            color: navy;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
 <div>
-	<h2>로그인</h2>
-	<form action="#" th:action="@{login.do}" th:object="${member}" method="post">
-		<span th:each="err : ${#fields.globalErrors()}" th:text="${err}"></span>
-		<div>
-			<label th:for="id">아이디 : </label>
-			<input type="text" th:field="*{id}"/>
-		</div>
-		<br/>
-		<div>
-			<label th:for="password">비밀번호 : </label>
-			<input type="password" th:field="*{password}"/>
-		</div>
-		<button type="submit">로그인</button>
-		<button type="button" th:onclick="|location.href='@{member/joinForm.do}'|">회원 가입</button> <br/>
-		<button type="button" th:onclick="|location.href='@{member/searchIdForm.do}'|">아이디 찾기</button> 
-		<button type="button" th:onclick="|location.href='@{member/searchPwdForm.do}'|">비밀번호 찾기</button>
-	</form>
+<div th:insert="~{header}"></div>
+<div class="container">
+    <h2>로그인</h2>
+    <form action="#" th:action="@{login.do}" th:object="${loginForm}" method="post">
+        <!-- 전역 오류 메시지 -->
+        <div th:if="${#fields.hasGlobalErrors()}">
+            <span th:each="err : ${#fields.globalErrors()}" th:text="${err}" class="error-class"></span><br>
+        </div>
+        <div>
+            <label th:for="id">아이디 : </label>
+            <input type="text" th:field="*{id}" class="error-input"/>
+            <!-- 아이디 필드 오류 메시지 -->
+            <div th:if="${#fields.hasErrors('id')}">
+                <span th:each="err : ${#fields.errors('id')}" th:text="${err}" class="error-class"></span><br>
+            </div>
+        </div>
+        <div>
+            <label th:for="password">비밀번호 : </label>
+            <input type="password" th:field="*{password}" class="error-input"/>
+            <!-- 비밀번호 필드 오류 메시지 -->
+            <div th:if="${#fields.hasErrors('password')}">
+                <span th:each="err : ${#fields.errors('password')}" th:text="${err}" class="error-class"></span><br>
+            </div>
+        </div>
+        <button type="submit">로그인</button>
+        <div class="link-buttons">
+            <button type="button" th:onclick="|location.href='@{searchIdForm.do}'|">아이디 찾기</button> 
+            <button type="button" th:onclick="|location.href='@{searchPwdForm.do}'|">비밀번호 찾기</button>
+        </div>
+        <div class="link-buttons">
+            <button type="button" th:onclick="|location.href='@{join.do}'|" class="signup-button">회원 가입</button>
+        </div>
+    </form>
+</div>
 </div>
 </body>
 </html>
-
-<style>
-.error-class {
-    color: blue;
-}
-.error-input {
-    border-color: blue;
-}
-</style>

@@ -14,21 +14,33 @@ import jakarta.transaction.Transactional;
 public class JpaOrderDao implements OrderDao {
 	@PersistenceContext
 	private EntityManager em;
+<<<<<<< HEAD
+	
+=======
 
+>>>>>>> 9c54a40b224c987d308b814212938df069de40d1
 	@Transactional
 	@Override
 	public Order getOrder(int order_id) throws DataAccessException {
 		// TODO Auto-generated method stub
 		return em.find(Order.class, order_id);
 	}
+<<<<<<< HEAD
+	
+=======
 
+>>>>>>> 9c54a40b224c987d308b814212938df069de40d1
 	@Transactional
 	@Override
 	public void insertOrder(Order order) throws DataAccessException {
 		// TODO Auto-generated method stub
 		em.persist(order);
 	}
+<<<<<<< HEAD
+	
+=======
 
+>>>>>>> 9c54a40b224c987d308b814212938df069de40d1
 	@Transactional
 	@Override
 	public void deleteOrder(int order_id) throws DataAccessException {
@@ -40,4 +52,8 @@ public class JpaOrderDao implements OrderDao {
 
 	}
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 9c54a40b224c987d308b814212938df069de40d1

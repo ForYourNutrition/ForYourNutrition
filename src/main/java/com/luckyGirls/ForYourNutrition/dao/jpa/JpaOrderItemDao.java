@@ -16,7 +16,11 @@ import jakarta.transaction.Transactional;
 public class JpaOrderItemDao implements OrderItemDao{
 	@PersistenceContext
 	private EntityManager em;
+<<<<<<< HEAD
+	
+=======
 
+>>>>>>> 9c54a40b224c987d308b814212938df069de40d1
 	@Transactional
 	@Override
 	public void insertOrderItem(int member_id, int item_id, int count) throws DataAccessException {
@@ -30,4 +34,8 @@ public class JpaOrderItemDao implements OrderItemDao{
 		orderItem.setOrderPrice(item.getPrice());
 		em.persist(orderItem);
 	}
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 9c54a40b224c987d308b814212938df069de40d1

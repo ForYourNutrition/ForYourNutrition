@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>QnA 수정하기</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/qFormStyle.css}">
+</head>
+<body>
+    <div>
+        <div th:insert="~{header}"></div>
+        <div class="container">
+            <h2>Q&A 수정하기</h2>
+            <form th:action="@{/question/updateQuestion}" th:object="${questionForm}" method="post">
+                <input type="hidden" th:field="*{question_id}" />
+                <label for="title">제목 :</label>
+                <input type="text" th:field="*{title}" id="title" />
+                <br>
+                <label for="content">내용 :</label>
+                <textarea th:field="*{content}" id="content"></textarea>
+                <br>
+                <button type="submit">저장</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

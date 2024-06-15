@@ -39,6 +39,40 @@ public class OrderController {
 
 		model.addAttribute("memberName", memberName);
 		return "order/orderForm";
+<<<<<<< HEAD
+	}
+	
+	@PostMapping("/order/Order")
+	public String saveQuestion(HttpServletRequest request, HttpSession session,
+			@ModelAttribute("orderForm") QuestionForm questionForm, BindingResult result, Model model) throws Exception {
+		
+		try {
+			MemberSession ms = (MemberSession) session.getAttribute("ms");
+ 
+	        Member member = ms.getMember();	
+
+	        // 현재 시간 받아오기
+	        LocalDateTime now = LocalDateTime.now();
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	        String formattedNow = now.format(formatter);
+	        
+	        Order order = new Order();
+	        order.setMember(member);
+	        order.setOrderDate(now);
+	        order.setOrderStatus(0);
+	        
+	        model.addAttribute("memberName", member.getName());
+	        model.addAttribute("order", order);
+	        return "order/orderStatus";
+		} catch (NullPointerException ex) {
+            model.addAttribute("orderForm", new OrderForm());
+            return "order/orderForm";
+        }
+	}
+	
+
+}
+=======
 	}
 
 	@PostMapping("/order/Order")
@@ -71,3 +105,4 @@ public class OrderController {
 
 
 }
+>>>>>>> 9c54a40b224c987d308b814212938df069de40d1

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>배송 상태 조회</title>
+    <style>
+    /* 기존 스타일 유지 */
+
+	.status-result {
+   		margin-top: 20px;
+    	padding: 10px;
+   		border: 1px solid #ddd;
+    	background-color: #f8f9fa;
+	}
+
+	.status-result p {
+    	margin: 0;
+    	font-size: 16px;
+	}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>배송 상태 조회</h1>
+        <form action="/check-delivery-status" method="GET">
+            <div class="form-group">
+                <label for="tracking-id">운송장 번호</label>
+                <input type="text" id="tracking-id" name="tracking-id" required>
+            </div>
+            <button type="submit">조회하기</button>
+        </form>
+        
+        <!-- 배송 상태 결과를 표시할 섹션 -->
+        <div id="delivery-status-result" class="status-result">
+            <!-- 서버에서 배송 상태를 반환하여 이곳에 표시할 수 있습니다. -->
+        </div>
+    </div>
+</body>
+</html>

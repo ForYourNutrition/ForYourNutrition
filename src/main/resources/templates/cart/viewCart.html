@@ -9,7 +9,7 @@
 
 <div class="container">
     <h1>장바구니 항목</h1>
-    <div th:if="${cart == null or cart.cartItemList == null or cart.cartItemList.size() == 0}">
+    <div th:if="${cart == null or cart.cartItemList == null or cart.cartItemList.size() == 0}" class="empty-cart-message">
         <p>장바구니가 비어 있습니다.</p>
     </div>
 
@@ -26,24 +26,15 @@
                 <tr th:each="cartItem : ${cart.cartItemList}">
                     <td th:text="${cartItem.item.name}">상품 이름</td>
                     <td th:text="${cartItem.quantity}">수량</td>
-                     
                     <td>
-                        <form th:action="@{/cart/addQuantity}" method="post" class="quantity-form">
+                        <form th:action="@{/cart/updateQuantity}" method="post" class="quantity-form">
                             <input type="hidden" th:value="${cartItem.cartItem_id}" name="cartItem_id"/>
-                            <input type="number" name="quantity" min="1" value="1"/>
-                            <button type="submit">추가</button>
-                        </form>
-                        <form th:action="@{/cart/removeQuantity}" method="post" class="quantity-form">
-                            <input type="hidden" th:value="${cartItem.cartItem_id}" name="cartItem_id"/>
-                            <input type="number" name="quantity" min="1" value="1"/>
-                            <button type="submit">제거</button>
-                        </form>
-                        <form th:action="@{/cart/removeCartItem}" method="post" class="remove-form">
-                            <input type="hidden" th:value="${cartItem.cartItem_id}" name="cartItem_id"/>
-                            <button type="submit">삭제</button>
+                            <input type="number" name="quantity" min="1" th:value="${cartItem.quantity}"/>
+                            <button type="submit" name="action" value="add" class="add">추가</button>
+                            <button type="submit" name="action" value="remove" class="remove">제거</button>
+                            <button type="submit" name="action" value="delete" class="delete">삭제</button>
                         </form>
                     </td>
-                    
                 </tr>
             </tbody>
         </table>

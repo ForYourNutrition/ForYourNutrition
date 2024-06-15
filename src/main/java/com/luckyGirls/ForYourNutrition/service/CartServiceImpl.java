@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.luckyGirls.ForYourNutrition.dao.CartDao;
 import com.luckyGirls.ForYourNutrition.domain.Cart;
 import com.luckyGirls.ForYourNutrition.domain.CartItem;
+import com.luckyGirls.ForYourNutrition.domain.Item;
 import com.luckyGirls.ForYourNutrition.domain.Member;
 
 import jakarta.transaction.Transactional;
@@ -25,7 +26,6 @@ public class CartServiceImpl implements CartService {
 		// TODO Auto-generated method stub
 		Cart cart = new Cart(member);
 		cartDao.saveCart(cart);
-		System.out.println(cart.toString());
 	}
 
 	@Override
@@ -55,34 +55,36 @@ public class CartServiceImpl implements CartService {
 	            cartDao.saveCart(cart);
 	        }
 
-	        // 동일한 아이템이 있는지 확인
-	        List<CartItem> existingCartItems = cartDao.findCartItemsByCartAndItem(cart, cartItem.getItem());
+	        Item item = cartItem.getItem();
+	        int availableStock = item.getStock();
+	        int requestedQuantity = Math.min(cartItem.getQuantity(), availableStock);
+
+	        if (requestedQuantity < 1) {
+	            requestedQuantity = 1;
+	        }
+
+	        cartItem.setQuantity(requestedQuantity);
+
+	        List<CartItem> existingCartItems = cartDao.findCartItemsByCartAndItem(cart, item);
 	        if (!existingCartItems.isEmpty()) {
-	            // 동일한 아이템이 있을 경우 첫 번째 항목의 수량만 증가
 	            CartItem existingCartItem = existingCartItems.get(0);
-	            existingCartItem.addQuantity(cartItem.getQuantity());
+	            int newQuantity = Math.min(existingCartItem.getQuantity() + requestedQuantity, availableStock);
+	            existingCartItem.setQuantity(newQuantity);
 	            cartDao.saveCartItem(existingCartItem);
 
-	            // 중복된 항목 제거
 	            for (int i = 1; i < existingCartItems.size(); i++) {
 	                cartDao.deleteCartItemById(existingCartItems.get(i).getCartItem_id());
 	            }
 	        } else {
-	            // 동일한 아이템이 없을 경우 새로운 항목 추가
 	            cartItem.setCart(cart);
 	            cart.addCartItem(cartItem);
 	            cartDao.saveCartItem(cartItem);
 	        }
-	        System.out.println("!!Done!!");
 	    } catch (Exception e) {
-	        // 예외 발생 시 로그 출력
 	        e.printStackTrace();
 	        throw e;
 	    }
 	}
-
-
-
 
 	@Override
 	@Transactional
@@ -97,8 +99,10 @@ public class CartServiceImpl implements CartService {
 		// TODO Auto-generated method stub
 		CartItem cartItem = cartDao.findCartItemById(cartItemId);
         if (cartItem != null) {
-            cartItem.addQuantity(quantity);
-            cartDao.saveCartItem(cartItem);
+        	 int availableStock = cartItem.getItem().getStock();
+             int newQuantity = Math.min(cartItem.getQuantity() + quantity, availableStock);
+             cartItem.setQuantity(newQuantity);
+             cartDao.saveCartItem(cartItem);
         }
 	}
 
@@ -107,8 +111,9 @@ public class CartServiceImpl implements CartService {
 	public void removeQuantity(Member member, int cartItemId, int quantity) {
 		// TODO Auto-generated method stub
 		CartItem cartItem = cartDao.findCartItemById(cartItemId);
-        if (cartItem != null) {
-            cartItem.removeQuantity(quantity);
+		if (cartItem != null) {
+            int newQuantity = Math.max(cartItem.getQuantity() - quantity, 1);
+            cartItem.setQuantity(newQuantity);
             cartDao.saveCartItem(cartItem);
         }
 	}

@@ -8,9 +8,11 @@ import org.springframework.stereotype.Repository;
 import com.luckyGirls.ForYourNutrition.dao.CartDao;
 import com.luckyGirls.ForYourNutrition.domain.Cart;
 import com.luckyGirls.ForYourNutrition.domain.CartItem;
+import com.luckyGirls.ForYourNutrition.domain.Item;
 import com.luckyGirls.ForYourNutrition.domain.Member;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
@@ -37,16 +39,28 @@ public class JpaCartDao implements CartDao{
 	@Override
 	public Cart findCartByMember(Member member) {
 		// TODO Auto-generated method stub
-		 String jpql = "SELECT c FROM Cart c WHERE c.member = :member";
-		 TypedQuery<Cart> query = em.createQuery(jpql, Cart.class);
-		 query.setParameter("member", member);
-		 try {
-			 return query.getSingleResult();
-		 } catch (Exception e) {
-			 return null;
-		 }
+		try {
+            TypedQuery<Cart> query = em.createQuery("SELECT c FROM Cart c WHERE c.member = :member", Cart.class);
+            query.setParameter("member", member);
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
 	}
 	
+	@Transactional
+	@Override
+	public List<CartItem> findCartItemsByCartAndItem(Cart cart, Item item) {
+	    TypedQuery<CartItem> query = em.createQuery(
+	        "SELECT ci FROM CartItem ci WHERE ci.cart = :cart AND ci.item = :item", CartItem.class);
+	    query.setParameter("cart", cart);
+	    query.setParameter("item", item);
+	    return query.getResultList();
+	}
+
 	@Transactional
 	@Override
 	public void saveCartItem(CartItem cartItem) {

@@ -26,6 +26,7 @@
                 <tr th:each="cartItem : ${cart.cartItemList}">
                     <td th:text="${cartItem.item.name}">상품 이름</td>
                     <td th:text="${cartItem.quantity}">수량</td>
+                     
                     <td>
                         <form th:action="@{/cart/addQuantity}" method="post" class="quantity-form">
                             <input type="hidden" th:value="${cartItem.cartItem_id}" name="cartItem_id"/>
@@ -42,6 +43,7 @@
                             <button type="submit">삭제</button>
                         </form>
                     </td>
+                    
                 </tr>
             </tbody>
         </table>

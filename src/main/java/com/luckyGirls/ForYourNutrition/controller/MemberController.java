@@ -1,7 +1,9 @@
 package com.luckyGirls.ForYourNutrition.controller;
 
+import com.luckyGirls.ForYourNutrition.domain.Address;
 import com.luckyGirls.ForYourNutrition.domain.Cart;
 import com.luckyGirls.ForYourNutrition.domain.Member;
+import com.luckyGirls.ForYourNutrition.service.AddressService;
 import com.luckyGirls.ForYourNutrition.service.CartService;
 import com.luckyGirls.ForYourNutrition.service.MemberService;
 import com.luckyGirls.ForYourNutrition.validator.LoginFormValidator;
@@ -33,6 +35,9 @@ public class MemberController {
 	
 	@Autowired
 	private CartService cartService;
+	
+	@Autowired
+	private AddressService addressService;
 
 	@ModelAttribute("loginForm")
 	public LoginForm formBacking(HttpServletRequest request) throws Exception {
@@ -40,13 +45,13 @@ public class MemberController {
 	}
 	
 	//로그인 폼
-	@GetMapping("/member/loginForm.do")
+	@GetMapping("/member/loginForm")
 	public String loginForm(Model model){
 		return "member/loginForm";
 	}
 
 	//로그인
-	@PostMapping("/member/login.do")
+	@PostMapping("/member/login")
 	public ModelAndView handleRequest(HttpServletRequest request, HttpSession session,
 			@ModelAttribute("loginForm") LoginForm loginForm, Model model, BindingResult bindingResult) throws Exception {
 		
@@ -63,7 +68,7 @@ public class MemberController {
 			authenticator.authenticate(loginForm); // id과 password가 맞는지 검증
 			MemberSession memberSession = new MemberSession(m);
 			session.setAttribute("ms", memberSession);
-			return new ModelAndView("redirect:/main.do");
+			return new ModelAndView("redirect:/main");
 		} catch (AuthenticationException e) { // 검증 실패 시
 			bindingResult.reject(e.getMessage()); // error message
 			return new ModelAndView("member/loginForm");
@@ -106,22 +111,22 @@ public class MemberController {
 	 */
 
 	//로그아웃
-	@RequestMapping("/member/logout.do")
+	@RequestMapping("/member/logout")
 	public String handleRequest(HttpSession session, Model model) throws Exception {
 		session.removeAttribute("ms");
 		session.invalidate();
-		return "redirect:/main.do";
+		return "redirect:/main";
 	}
 	
 	//회원가입 폼
-	@GetMapping("member/join.do")
+	@GetMapping("member/join")
 	public String joinForm(Model model, HttpSession session) {
 		model.addAttribute("memberForm", new MemberForm());
 		return "member/joinForm";
 	}
 	
 	//회원가입
-	@PostMapping("member/join.do")
+	@PostMapping("member/join")
 	public String join(HttpServletRequest request, HttpSession session,
 			@ModelAttribute("memberForm") MemberForm memberForm, BindingResult result, Model model) throws Exception {
 		new MemberFormValidator().validate(memberForm, result);
@@ -135,10 +140,15 @@ public class MemberController {
 			return "member/joinForm";
 		} else {
 			memberService.insertMember(memberForm.getMember());
+			
+			Member new_m = memberService.getMember(memberForm.getMember().getId());
+			
+			Address address = memberForm.getAddress();
+			address.setMember(new_m);
+			addressService.insertAddress(address);
 
 			//회원가입 시 자동으로 cart 생성
 			Cart cart = new Cart();
-			Member new_m = memberService.getMember(memberForm.getMember().getId());
 			cart.setMember(new_m);;
 			cartService.createCart(new_m);
 			model.addAttribute("loginForm", new LoginForm());
@@ -148,7 +158,7 @@ public class MemberController {
 	}
 
 	//회원 수정 폼
-	@GetMapping("member/modifyMember.do")
+	@GetMapping("member/modifyMember")
 	public String updateForm(Model model, HttpSession session) {
 		try {
 			MemberSession ms = (MemberSession)session.getAttribute("ms");
@@ -165,7 +175,7 @@ public class MemberController {
 	}
 	
 	//회원 수정
-	@PostMapping("member/modifyMember.do")
+	@PostMapping("member/modifyMember")
 	public String modifyMember(HttpServletRequest request, HttpSession session,
 			@ModelAttribute("memberForm") MemberForm memberForm, BindingResult result, Model model) throws Exception {
 		new MemberFormValidator().validate(memberForm, result);
@@ -179,28 +189,28 @@ public class MemberController {
 			session.setAttribute("ms", memberSession);
 			System.out.println(memberSession.getMember().getId());
 			
-			return "redirect:/member/memberInfo.do";
+			return "redirect:/member/memberDetail";
 		}
 	}
 	
 	//회원 삭제
-	@GetMapping("member/delete.do")
+	@GetMapping("member/delete")
 	public String deleteMember(HttpSession session) throws Exception {
 		MemberSession memberSession = (MemberSession) session.getAttribute("ms");
 		memberService.deleteMember(memberSession.getMember().getId());
 		session.removeAttribute("memberSession");
 		session.invalidate();
-		return "redirect:/member/loginForm.do";
+		return "redirect:/member/loginForm";
 	}
 	
 	//회원 정보 조회
-	@GetMapping("/member/memberInfo.do")
-	public ModelAndView memberInfo(HttpSession session, Model model) throws Exception {
+	@GetMapping("/member/memberDetail")
+	public ModelAndView memberDetail(HttpSession session, Model model) throws Exception {
 		try {
 			MemberSession ms = (MemberSession)session.getAttribute("ms");
 			Member member = ms.getMember();
 			model.addAttribute("member", member);
-			return new ModelAndView("/member/memberInfo");
+			return new ModelAndView("/member/memberDetail");
 		}
 		catch (NullPointerException ex) {
 			model.addAttribute("member", new Member());
@@ -208,35 +218,25 @@ public class MemberController {
 		}
 	}
 	
-	@GetMapping("/header")
-	public String getHeader(Model model, HttpSession session) {
-		try {
-			MemberSession memberSession = (MemberSession) session.getAttribute("ms");
-			System.out.println(memberSession.getMember().getId());
-			System.out.println(memberSession != null);
-			model.addAttribute("isLoggedIn", true);
-			return "header";
-		}
-		catch (NullPointerException ex) {
-			model.addAttribute("isLoggedIn", false);
-			return "header";
-		}
+	//마이페이지(상세)
+	@GetMapping("/member/memberInfo")
+	public String memberInfo(HttpSession session, Model model){
+		return "member/memberInfo";
 	}
 	
-	@GetMapping({"/main.do", "/"})
+	//마이페이지
+	@GetMapping("/member/myPage")
+	public String myPage(HttpSession session, Model model){
+		return "member/myPage";
+	}
+	
+	@GetMapping("/header")
+	public String getHeader(Model model, HttpSession session) {
+		return "header";
+	}
+	
+	@GetMapping({"/main", "/"})
 	public String getMain(Model model, HttpSession session) {
-		try {
-			MemberSession ms = (MemberSession) session.getAttribute("ms");
-			Member member = ms.getMember();
-			System.out.println(ms.getMember().getId());
-			System.out.println(ms != null);
-			model.addAttribute("isLoggedIn", true);
-			model.addAttribute("member", member);
-			return "main";
-		}
-		catch (NullPointerException ex) {
-			model.addAttribute("isLoggedIn", false);
-			return "main";
-		}
+		return "main";
 	}
 }

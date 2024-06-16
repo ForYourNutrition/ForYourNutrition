@@ -1,5 +1,7 @@
 package com.luckyGirls.ForYourNutrition.dao;
 
+import java.util.List;
+
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
@@ -23,4 +25,6 @@ public interface MemberDao {
 	String findId(String email, String name) throws DataAccessException; //아이디 찾기
 	
 	String findPassword(String id, String email) throws DataAccessException; //비밀번호 찾기
+	
+	List<Member> getMembers(int taking_time) throws DataAccessException; //섭취시간으로 회원들 가져오기
 }

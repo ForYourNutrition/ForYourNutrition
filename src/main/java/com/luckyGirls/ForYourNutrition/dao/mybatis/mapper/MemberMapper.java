@@ -26,4 +26,6 @@ public interface MemberMapper {
   String findId(String email, String name);
   
   String findPassword(String id, String email);
+  
+  List<Member> getMembers(int taking_time);
 }

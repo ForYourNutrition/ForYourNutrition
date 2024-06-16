@@ -6,6 +6,7 @@ import com.luckyGirls.ForYourNutrition.service.CartService;
 import com.luckyGirls.ForYourNutrition.service.MemberService;
 import com.luckyGirls.ForYourNutrition.validator.LoginFormValidator;
 import com.luckyGirls.ForYourNutrition.validator.MemberFormValidator;
+import com.luckyGirls.ForYourNutrition.validator.SearchIdFormValidator;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -69,17 +70,25 @@ public class MemberController {
 		}
 	}
     
-	/*
-	@RequestMapping(value = "/searchId.do", method = RequestMethod.GET)
-	public ModelAndView viewSerchIdForm(HttpServletRequest request) throws Exception {
-		//추후 구현
+/*	
+	@GetMapping("/searchIdForm")
+	public String viewSerchIdForm(Model model){
+		return "member/searchIdForm";
 	}
 
-	@RequestMapping(value = "/searchId.do", method = RequestMethod.POST)
-	public ModelAndView searchId(HttpServletRequest request,
-			@RequestParam("name") String name,
-			@RequestParam("email") String email) throws Exception {
-		//추후 구현
+	@PostMapping("/searchId")
+	public ModelAndView handleRequest(HttpServletRequest request, HttpSession session,
+			@ModelAttribute("searchIdForm") SearchIdForm searchIdForm, Model model, BindingResult bindingResult) throws Exception {
+		new SearchIdFormValidator().validate(searchIdForm, bindingResult);
+		
+		if (bindingResult.hasErrors()) {
+			System.out.println(bindingResult);
+			return new ModelAndView("member/searchIdForm");
+		}
+		
+		String id = memberService.findId(searchIdForm.getEmail(), searchIdForm.getName());
+		
+		return new ModelAndView("member/searchIdForm");
 	}
 
 	@RequestMapping(value = "/searchPwd.do", method = RequestMethod.GET)

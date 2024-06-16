@@ -226,8 +226,17 @@ public class MemberController {
 	
 	//마이페이지
 	@GetMapping("/member/myPage")
-	public String myPage(HttpSession session, Model model){
-		return "member/myPage";
+	public ModelAndView myPage(HttpSession session, Model model){
+		try {
+			MemberSession ms = (MemberSession)session.getAttribute("ms");
+			Member member = ms.getMember();
+			model.addAttribute("member", member);
+			return new ModelAndView("/member/myPage");
+		}
+		catch (NullPointerException ex) {
+			model.addAttribute("member", new Member());
+			return new ModelAndView("member/loginForm");
+		}
 	}
 	
 	@GetMapping("/header")

@@ -31,7 +31,8 @@ public class AddressServiceImpl implements AddressService {
 	// 배송지 정보 조회
 	@Override
 	public Address getAddress(int address_id) {
-		return addressRepository.getReferenceById(address_id);
+		return addressRepository.findById(address_id)
+                .orElseThrow(() -> new RuntimeException("Address not found"));
 	}
 	
 	// 배송지 삭제

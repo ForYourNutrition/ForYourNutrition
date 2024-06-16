@@ -26,6 +26,9 @@ public class MemberFormValidator implements Validator {
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "member.nickname", "required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "member.email", "required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "member.birth", "required");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "address.zipCode", "required");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "address.streetAddress", "required");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "address.detailAddress", "required");
 		
 		Member member = regReq.getMember();
 		

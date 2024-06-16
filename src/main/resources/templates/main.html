@@ -98,14 +98,14 @@
         </div>
         <!-- 로그인 정보 출력 -->
         <div class="user-info" th:if="${session.ms}">
-            <p th:text="${member.name} + '님 반갑습니다.'"></p>
-            <p th:text="'POINT: ' + ${member.point}"></p>
+            <p th:text="${session.ms.member.name} + '님 반갑습니다.'"></p>
+            <p th:text="'POINT: ' + ${session.ms.member.point}"></p>
         </div>
     </div>
 
     <div class="banner">
-        <a href="survey/surveyForm.do">
-            <img src="path/to/your/image.jpg" alt="슬로건 이미지">
+        <a href="survey/surveyForm">
+            <img src="/images/surveyBanner.png" alt="슬로건 이미지">
         </a>
     </div>
     <script>

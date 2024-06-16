@@ -80,22 +80,22 @@
             <button>Menu</button>
             <div class="menu-content">
                 <a href="/shop">Shop</a>
-                <a href="/member/memberInfo.do">Mypage</a>
+                <a href="/member/myPage">Mypage</a>
                 <a href="/question/questionList">Q&amp;A</a>
             </div>
         </div>
-        <a href="/main.do" class="logo">FOR YOUR NUTRITION</a>
+        <a href="/main" class="logo">FOR YOUR NUTRITION</a>
         <div class="right-buttons" id="right-buttons">
             <div th:unless="${session.ms}">
-            	<a href="/member/join.do">회원가입</a>
-				<a href="/member/loginForm.do">로그인</a>
+            	<a href="/member/join">회원가입</a>
+				<a href="/member/loginForm">로그인</a>
 				<a href="/wishlist">찜</a>
 				<a href="/cart/viewCart">Cart</a>
 				<a href="/question/questionList">Question</a>
             </div>
             <div th:if="${session.ms}">
-				<a href="/member/logout.do">로그아웃</a>
-				<a href="/member/memberInfo.do">MY PAGE</a>
+				<a href="/member/logout">로그아웃</a>
+				<a href="/member/myPage">MY PAGE</a>
 				<a href="/wishlist">찜</a>
 				<a href="/cart/viewCart">Cart</a>
 				<a href="/question/questionList">Question</a>

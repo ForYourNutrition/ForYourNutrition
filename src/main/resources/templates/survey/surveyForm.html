@@ -74,7 +74,7 @@
 <div th:insert="~{header}"></div>
 <div class="container">
     <h2>문진표</h2>
-    <form action="#" method="post" th:action="@{saveSurvey.do}" th:object="${surveyForm}" onsubmit="return validateForm()">
+    <form action="#" method="post" th:action="@{saveSurvey}" th:object="${surveyForm}" onsubmit="return validateForm()">
         <div class="radio-group">
             <label>흡연 빈도</label><br>
             <label><input type="radio" th:field="*{smoking}" name="smoking" value="1"/> 하루에 한 번</label>

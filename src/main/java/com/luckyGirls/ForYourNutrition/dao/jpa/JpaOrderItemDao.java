@@ -19,15 +19,8 @@ public class JpaOrderItemDao implements OrderItemDao{
 
 	@Transactional
 	@Override
-	public void insertOrderItem(int member_id, int item_id, int count) throws DataAccessException {
+	public void insertOrderItem(OrderItem orderItem) throws DataAccessException {
 		// TODO Auto-generated method stub
-		Member member = em.find(Member.class, member_id);
-		Item item = em.find(Item.class, item_id);
-		OrderItem orderItem = new OrderItem();
-		orderItem.setMember(member);
-		orderItem.setItem(item);
-		orderItem.setCount(count);
-		orderItem.setOrderPrice(item.getPrice());
 		em.persist(orderItem);
 	}
 

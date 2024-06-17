@@ -11,4 +11,6 @@ public interface MemberService {
 	String findId(String email, String name); //아이디 찾기
 	String findPassword(String id, String email); //비밀번호 찾기
 	void sendEmail(int taking_time); //섭취시간에 메일 발송
+	void sendIdEmail(String email, String id); //아이디 찾기 메일 발송
+	void sendPasswordEmail(String email, String password); //아이디 찾기 메일 발송
 }

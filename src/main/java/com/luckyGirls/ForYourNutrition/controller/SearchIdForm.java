@@ -1,8 +1,9 @@
 package com.luckyGirls.ForYourNutrition.controller;
 
 public class SearchIdForm {
-	private String email;
-	private String name;
+    private String email;
+    private String name;
+    
 	public String getEmail() {
 		return email;
 	}

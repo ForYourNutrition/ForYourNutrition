@@ -2,6 +2,7 @@ package com.luckyGirls.ForYourNutrition.controller;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,11 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.luckyGirls.ForYourNutrition.domain.Address;
 import com.luckyGirls.ForYourNutrition.domain.Item;
 import com.luckyGirls.ForYourNutrition.domain.Member;
 import com.luckyGirls.ForYourNutrition.domain.Order;
 import com.luckyGirls.ForYourNutrition.domain.OrderItem;
+import com.luckyGirls.ForYourNutrition.service.AddressService;
 import com.luckyGirls.ForYourNutrition.service.ItemService;
+import com.luckyGirls.ForYourNutrition.service.OrderItemService;
 import com.luckyGirls.ForYourNutrition.service.OrderService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,6 +35,10 @@ public class OrderController {
 	private OrderService orderService;	
 	@Autowired
 	private ItemService itemService;
+	@Autowired
+	private AddressService addressService;
+	@Autowired
+	private OrderItemService orderItemService;
 
 	//주문서 작성 폼 띄우기
 	@PostMapping("/order/createOrder")
@@ -42,13 +50,17 @@ public class OrderController {
 			return "redirect:/login"; // 세션이 만료되었거나 없는 경우 로그인 페이지로 리다이렉트
 		}
 		Member member = ms.getMember();		
-		String memberName = member.getName();
 
 		Item item = itemService.getItemById(item_id);
+		List<Address> addressList = addressService.getAddressList(member.getMember_id());
+		
+		int totalPrice = item.getPrice()*count;
 
-		model.addAttribute("memberName", memberName);
+		model.addAttribute("member", member);
 		model.addAttribute("item", item);
 		model.addAttribute("count", count);
+		model.addAttribute("address", addressList.get(0));
+		model.addAttribute("totalPrice", totalPrice);
 		return "order/orderForm";
 
 	}
@@ -56,9 +68,12 @@ public class OrderController {
 	@PostMapping("/order/Order")
 	public String saveOrder(@RequestParam("name") String name,
 			@RequestParam("email") String email,
-			@RequestParam("address") String address,
+			@RequestParam("zipCode") String zipCode,
+			@RequestParam("streetAddress") String streetAddress,
+			@RequestParam("detailAddress") String detailAddress,
 			@RequestParam("item_id") int item_id,
 			@RequestParam("count") int count,
+			@RequestParam("payment-method") String paymentType,
 			Model model, HttpSession session) throws Exception {	
 		try {
 			MemberSession ms = (MemberSession) session.getAttribute("ms");
@@ -70,26 +85,66 @@ public class OrderController {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 			String formattedNow = now.format(formatter);
 
+			Address address = new Address();
+			address.setZipCode(zipCode);
+			address.setStreetAddress(streetAddress);
+			address.setDetailAddress(detailAddress);
+			address.setMember(member);
+			
 			Item item = itemService.getItemById(item_id);
 			OrderItem orderItem = new OrderItem();
 			
-			orderItem.createOrderItem(item, count);
-			
+			orderItem.setMember(member);
+			orderItem.setOrderPrice(item.getPrice());
+			orderItem.setCount(count);
+			orderItem.setItem(item);
 			Order order = new Order();
 			
 			order.setMember(member);
-			order.setOrderDate(now);
-			order.setOrderStatus(0);
-
-			orderItem.setOrders(order);
+			order.setOrderDate(formattedNow);
+			order.setOrderStatus(0);//무통장 입금인 경우 입금 확인 중
+			order.setTotalPrice(item.getPrice()*count);
 			
 			model.addAttribute("memberName", member.getName());
 			model.addAttribute("order", order);
-			return "order/orderStatus";
+			
+			int order_Id = orderService.insertOrder(order);
+			orderItem.setOrders(orderService.getOrder(order_Id));
+			
+			orderItemService.insertOrderItem(orderItem);
+			
+			if(paymentType.equals("bank-transfer")) {
+				List<Order> orderList = orderService.getOrderList(member.getMember_id());
+				model.addAttribute("orderList", orderList);
+				return "order/orderStatus";
+				}
+			else
+				return "order/cardForm";
 		} catch (NullPointerException ex) {
 			model.addAttribute("orderForm", new OrderForm());
 			return "order/createOrder";
 		}
+
+	}
+	
+	@PostMapping("/order/orderByCard")
+	public String createForm(@RequestParam("order_id") int order_id,
+			Model model, HttpSession session) {
+		MemberSession ms = (MemberSession) session.getAttribute("ms");
+		if (ms == null) {
+			return "redirect:/login"; // 세션이 만료되었거나 없는 경우 로그인 페이지로 리다이렉트
+		}
+		Member member = ms.getMember();		
+		
+		Order order = orderService.getOrder(order_id);
+		
+		order.setOrderStatus(1);
+		orderService.updateOrder(order);
+		
+		List<Order> orderList = orderService.getOrderList(member.getMember_id());
+		model.addAttribute("orderList", orderList);
+		
+		return "order/orderStatus";
 
 	}
 	

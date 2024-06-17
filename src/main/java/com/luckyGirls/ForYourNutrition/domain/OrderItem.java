@@ -1,5 +1,6 @@
 package com.luckyGirls.ForYourNutrition.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -29,7 +30,7 @@ public class OrderItem {
    @JoinColumn(name = "item_id")
    private Item item;
    
-   @ManyToOne
+   @ManyToOne(cascade=CascadeType.ALL)
    @JoinColumn(name = "order_id")
    private Order orders;
    

@@ -9,9 +9,11 @@ import com.luckyGirls.ForYourNutrition.service.MemberService;
 import com.luckyGirls.ForYourNutrition.validator.LoginFormValidator;
 import com.luckyGirls.ForYourNutrition.validator.MemberFormValidator;
 import com.luckyGirls.ForYourNutrition.validator.SearchIdFormValidator;
+import com.luckyGirls.ForYourNutrition.validator.SearchPasswordFormValidator;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -75,14 +77,16 @@ public class MemberController {
 		}
 	}
     
-/*	
-	@GetMapping("/searchIdForm")
+	//아이디 찾기 폼
+	@GetMapping("member/searchIdForm")
 	public String viewSerchIdForm(Model model){
+		model.addAttribute("searchIdForm", new SearchIdForm());
 		return "member/searchIdForm";
 	}
 
-	@PostMapping("/searchId")
-	public ModelAndView handleRequest(HttpServletRequest request, HttpSession session,
+	//아이디 찾기
+	@PostMapping("member/searchId")
+	public ModelAndView searchId(HttpServletRequest request, HttpSession session,
 			@ModelAttribute("searchIdForm") SearchIdForm searchIdForm, Model model, BindingResult bindingResult) throws Exception {
 		new SearchIdFormValidator().validate(searchIdForm, bindingResult);
 		
@@ -92,26 +96,49 @@ public class MemberController {
 		}
 		
 		String id = memberService.findId(searchIdForm.getEmail(), searchIdForm.getName());
+        if (id != null) {
+            memberService.sendIdEmail(searchIdForm.getEmail(), id);
+            model.addAttribute("type", "아이디");
+            model.addAttribute("message", "회원님의 이메일로 아이디가 전송되었습니다.");
+        } else {
+        	model.addAttribute("type", "아이디");
+            model.addAttribute("message", "존재하지 않는 회원입니다.");
+        }
+        return new ModelAndView("member/searchResult");
+	}
+	
+	//비밀번호 찾기 폼
+	@GetMapping("member/searchPasswordForm")
+	public String viewSerchPasswordForm(Model model){
+		model.addAttribute("searchPasswordForm", new SearchPasswordForm());
+		return "member/searchPasswordForm";
+	}
+
+	//비밀번호 찾기
+	@PostMapping("member/searchPassword")
+	public ModelAndView searchPassword(HttpServletRequest request, HttpSession session,
+			@ModelAttribute("searchPasswordForm") SearchPasswordForm searchPasswordForm, Model model, BindingResult bindingResult) throws Exception {
+		new SearchPasswordFormValidator().validate(searchPasswordForm, bindingResult);
 		
-		return new ModelAndView("member/searchIdForm");
+		if (bindingResult.hasErrors()) {
+			System.out.println(bindingResult);
+			return new ModelAndView("member/searchIdForm");
+		}
+		
+		String pw = memberService.findPassword(searchPasswordForm.getId(), searchPasswordForm.getEmail());
+        if (pw != null) {
+            memberService.sendPasswordEmail(searchPasswordForm.getEmail(), pw);
+            model.addAttribute("type", "비밀번호");
+            model.addAttribute("message", "회원님의 이메일로 비밀번호가 전송되었습니다.");
+        } else {
+        	model.addAttribute("type", "비밀번호");
+            model.addAttribute("message", "존재하지 않는 회원입니다.");
+        }
+        return new ModelAndView("member/searchResult");
 	}
-
-	@RequestMapping(value = "/searchPwd.do", method = RequestMethod.GET)
-	public ModelAndView viewSearchPwdForm(HttpServletRequest request) throws Exception {
-		//추후 구현
-	}
-
-	@RequestMapping(value = "/searchPwd.do", method = RequestMethod.POST)
-	public ModelAndView searchPwd(HttpServletRequest request,
-			@RequestParam("id") String id,
-			@RequestParam("email") String email) throws Exception {
-		//추후 구현
-	}
-
-	 */
 
 	//로그아웃
-	@RequestMapping("/member/logout")
+	@GetMapping("/member/logout")
 	public String handleRequest(HttpSession session, Model model) throws Exception {
 		session.removeAttribute("ms");
 		session.invalidate();

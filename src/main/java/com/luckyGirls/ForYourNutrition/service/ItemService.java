@@ -42,7 +42,7 @@ public class ItemService {
 		}
 		Pageable pageable = PageRequest.of(page, pageSize, sort);
 
-		Page<Item> items = itemJpaRepository.findByNameContaining(text, pageable);
+		Page<Item> items = itemJpaRepository.findByNameContainingIgnoreCase(text, pageable);
 		System.out.println("2 = " + items.getTotalPages());
 		return items;
 	}

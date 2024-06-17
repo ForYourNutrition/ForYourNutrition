@@ -108,8 +108,8 @@ public class OrderController {
 			model.addAttribute("memberName", member.getName());
 			model.addAttribute("order", order);
 			
-			int order_Id = orderService.insertOrder(order);
-			orderItem.setOrders(orderService.getOrder(order_Id));
+			int order_id = orderService.insertOrder(order);
+			orderItem.setOrders(orderService.getOrder(order_id));
 			
 			orderItemService.insertOrderItem(orderItem);
 			
@@ -118,8 +118,10 @@ public class OrderController {
 				model.addAttribute("orderList", orderList);
 				return "order/orderStatus";
 				}
-			else
+			else {
+				model.addAttribute("order_id", order_id);
 				return "order/cardForm";
+			}
 		} catch (NullPointerException ex) {
 			model.addAttribute("orderForm", new OrderForm());
 			return "order/createOrder";
@@ -128,7 +130,7 @@ public class OrderController {
 	}
 	
 	@PostMapping("/order/orderByCard")
-	public String createForm(@RequestParam("order_id") int order_id,
+	public String orderByCardForm(@RequestParam("order_id") int order_id,
 			Model model, HttpSession session) {
 		MemberSession ms = (MemberSession) session.getAttribute("ms");
 		if (ms == null) {
@@ -139,6 +141,48 @@ public class OrderController {
 		Order order = orderService.getOrder(order_id);
 		
 		order.setOrderStatus(1);
+		orderService.updateOrder(order);
+		
+		List<Order> orderList = orderService.getOrderList(member.getMember_id());
+		model.addAttribute("orderList", orderList);
+		
+		return "order/orderStatus";
+
+	}
+	
+	@PostMapping("/order/cancleOrder")
+	public String cancleOrder(@RequestParam("order_id") int order_id,
+			Model model, HttpSession session) {
+		MemberSession ms = (MemberSession) session.getAttribute("ms");
+		if (ms == null) {
+			return "redirect:/login"; // 세션이 만료되었거나 없는 경우 로그인 페이지로 리다이렉트
+		}
+		Member member = ms.getMember();		
+		
+		Order order = orderService.getOrder(order_id);
+		
+		order.setOrderStatus(3);
+		orderService.updateOrder(order);
+		
+		List<Order> orderList = orderService.getOrderList(member.getMember_id());
+		model.addAttribute("orderList", orderList);
+		
+		return "order/orderStatus";
+
+	}
+	
+	@PostMapping("/order/refundOrder")
+	public String refundOrder(@RequestParam("order_id") int order_id,
+			Model model, HttpSession session) {
+		MemberSession ms = (MemberSession) session.getAttribute("ms");
+		if (ms == null) {
+			return "redirect:/login"; // 세션이 만료되었거나 없는 경우 로그인 페이지로 리다이렉트
+		}
+		Member member = ms.getMember();		
+		
+		Order order = orderService.getOrder(order_id);
+		
+		order.setOrderStatus(4);
 		orderService.updateOrder(order);
 		
 		List<Order> orderList = orderService.getOrderList(member.getMember_id());

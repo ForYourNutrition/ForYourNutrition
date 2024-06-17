@@ -37,14 +37,6 @@ public class MemberServiceImpl implements MemberService {
 	@Transactional
 	public void insertMember(Member member) {
 		memberDao.insertMember(member);
-		
-		/* 회원 가입 시, 자동으로 장바구니 생성
-        Cart cart = new Cart();
-        System.out.println("999");
-        cart.setMember(member);
-        System.out.println("9999");
-        cartDao.saveCart(cart);
-        System.out.println("999999");*/
 	}
 	
 	//회원 정보 수정

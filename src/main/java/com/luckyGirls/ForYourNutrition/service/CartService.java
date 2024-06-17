@@ -1,7 +1,5 @@
 package com.luckyGirls.ForYourNutrition.service;
 
-import java.util.List;
-
 import com.luckyGirls.ForYourNutrition.domain.Cart;
 import com.luckyGirls.ForYourNutrition.domain.CartItem;
 import com.luckyGirls.ForYourNutrition.domain.Member;

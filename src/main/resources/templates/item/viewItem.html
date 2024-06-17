@@ -75,14 +75,13 @@
             margin-top: 20px;
         }
         .info {
-            background-color: #f1f1f1;
+            background-color: #ffffff;
             padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
+            border-radius: 30px;
             text-align: center;
             flex: 1;
             margin: 0 10px;
-            box-sizing: border-box;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .info:first-child {
             margin-left: 0;
@@ -158,17 +157,31 @@
             <div class="infos">
                 <div class="info">
                     <div>섭취대상</div>
-                    <p><span th:text="${item.target}"></span></p>
+                    <p><span th:if="${item.target == 0}">어린이</span>
+                        <span th:if="${item.target == 1}">청소년</span>
+                        <span th:if="${item.target == 2}">성인</span>
+                        <span th:if="${item.target == 3}">시니어</span>
+                        <span th:if="${item.target == 4}">여성</span>
+                        <span th:if="${item.target == 5}">남성</span>
+                        <span th:if="${item.target == 6}">임산부</span></p>
                 </div>
                 <div class="info">
                     <div>효과</div>
-                    <p><span th:text="${item.effect}"></span></p>
-                </div>
-                <div class="info">
-                    <div>카테고리</div>
-                    <p><span th:text="${item.category}"></span></p>
+                    <p><span th:if="${item.effect == 0}">면역력</span>
+                        <span th:if="${item.effect == 1}">다이어트</span>
+                        <span th:if="${item.effect == 2}">피로회복</span>
+                        <span th:if="${item.effect == 3}">눈건강</span>
+                        <span th:if="${item.effect == 4}">간건강</span>
+                        <span th:if="${item.effect == 5}">장건강</span>
+                        <span th:if="${item.effect == 6}">피부건강</span>
+                        <span th:if="${item.effect == 7}">관절&뼈</span>
+                        <span th:if="${item.effect == 8}">숙취해소</span>
+                        <span th:if="${item.effect == 9}">혈행개선</span>
+                        <span th:if="${item.effect == 10}">항산화</span></p>
                 </div>
             </div>
+            <p></p>
+            <p></p>
             <div>
                 <button onclick="decreaseQuantity()">-</button>
                 <input type="number" id="quantity" class="quantity" value="1" min="1">

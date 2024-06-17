@@ -184,6 +184,10 @@
                 <input type="hidden" id="quantity" name="quantity" th:value="1">
                 <button type="submit">구매하기</button>
             </form>
+            <form id="wishForm" method="post" action="/wish/addWishItem">
+                <input type="hidden" name="item_id" th:value="${item.item_id}">
+                <button type="submit">찜하기</button>
+            </form>
         </div>
     </div>
     <div class="product-info">

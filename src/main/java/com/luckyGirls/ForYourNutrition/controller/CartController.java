@@ -4,8 +4,13 @@ import com.luckyGirls.ForYourNutrition.domain.Cart;
 import com.luckyGirls.ForYourNutrition.domain.CartItem;
 import com.luckyGirls.ForYourNutrition.domain.Item;
 import com.luckyGirls.ForYourNutrition.domain.Member;
+import com.luckyGirls.ForYourNutrition.domain.WishItem;
 import com.luckyGirls.ForYourNutrition.service.CartService;
 import com.luckyGirls.ForYourNutrition.service.ItemService;
+import com.luckyGirls.ForYourNutrition.service.WishService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,12 +26,15 @@ public class CartController {
     
     @Autowired
     private ItemService itemService;
+    
+    @Autowired
+    private WishService wishService;
 
     @GetMapping("/cart/viewCart")
     public String viewCart(HttpSession session, Model model) {
         MemberSession ms = (MemberSession) session.getAttribute("ms");
         if (ms == null) {
-        	return "redirect:/member/loginForm.do";
+        	return "redirect:/member/loginForm";
         }
         Member member = ms.getMember();
         Cart cart = null;
@@ -49,7 +57,7 @@ public class CartController {
     public String addCartItem(@RequestParam int item_id, @RequestParam int quantity, HttpSession session, Model model) {
         MemberSession ms = (MemberSession) session.getAttribute("ms");
         if (ms == null) {
-            return "redirect:/member/loginForm.do";
+            return "redirect:/member/loginForm";
         }
 
         Member member = ms.getMember();
@@ -70,7 +78,7 @@ public class CartController {
     public String removeCartItem(@RequestParam int cartItem_id, HttpSession session) {
         MemberSession ms = (MemberSession) session.getAttribute("ms");
         if (ms == null) {
-        	return "redirect:/member/loginForm.do";
+        	return "redirect:/member/loginForm";
         }
         Member member = ms.getMember();
         cartService.removeCartItem(member, cartItem_id);
@@ -81,7 +89,7 @@ public class CartController {
     public String updateQuantity(@RequestParam int cartItem_id, @RequestParam int quantity, @RequestParam String action, HttpSession session) {
         MemberSession ms = (MemberSession) session.getAttribute("ms");
         if (ms == null) {
-        	return "redirect:/member/loginForm.do";
+        	return "redirect:/member/loginForm";
         }
         Member member = ms.getMember();
         if ("add".equals(action)) {
@@ -98,7 +106,7 @@ public class CartController {
     public String createOrderForm(HttpSession session, Model model) {
         MemberSession ms = (MemberSession) session.getAttribute("ms");
         if (ms == null) {
-        	return "redirect:/member/loginForm.do";
+        	return "redirect:/member/loginForm";
         }
         Member member = ms.getMember();
         Cart cart = cartService.getCartByMember(member);
@@ -115,5 +123,49 @@ public class CartController {
         model.addAttribute("cart", cart);
         return "cart/fromCartToOrder";
     }
- 
+    
+    // 위시리스트에서 아이템을 카트로 이동하는 기능 추가
+    @PostMapping("/wish/addToCart")
+    public String addToCartFromWish(@RequestParam int wishItemId, HttpSession session) {
+        MemberSession ms = (MemberSession) session.getAttribute("ms");
+        if (ms == null) {
+            return "redirect:/member/loginForm";
+        }
+        Member member = ms.getMember();
+        WishItem wishItem = wishService.findWishItemById(wishItemId);
+
+        CartItem cartItem = new CartItem();
+        cartItem.setItem(wishItem.getItem());
+        cartItem.setMember(member);
+        cartItem.setQuantity(1); // 기본 수량을 1로 설정
+
+        cartService.addCartItem(member, cartItem);
+        wishService.removeWishItem(member, wishItemId);
+
+        return "redirect:/cart/viewCart";
+    }
+
+    @PostMapping("/wish/addAllToCart")
+    public String addAllToCartFromWish(HttpSession session) {
+        MemberSession ms = (MemberSession) session.getAttribute("ms");
+        if (ms == null) {
+            return "redirect:/member/loginForm";
+        }
+        Member member = ms.getMember();
+        List<WishItem> wishItems = wishService.getWishItemsByMember(member);
+
+        if (wishItems != null) {
+            for (WishItem wishItem : wishItems) {
+                CartItem cartItem = new CartItem();
+                cartItem.setItem(wishItem.getItem());
+                cartItem.setMember(member);
+                cartItem.setQuantity(1); // 기본 수량을 1로 설정
+
+                cartService.addCartItem(member, cartItem);
+                wishService.removeWishItem(member, wishItem.getWishItem_id());
+            }
+        }
+
+        return "redirect:/cart/viewCart";
+    }
 }

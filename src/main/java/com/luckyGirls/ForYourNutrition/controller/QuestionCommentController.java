@@ -51,7 +51,7 @@ public class QuestionCommentController {
 	                            Model model) {
 	    MemberSession ms = (MemberSession) session.getAttribute("ms");
 	    if (ms == null) {
-        	return "redirect:/member/loginForm.do";
+        	return "redirect:/member/loginForm";
         }
 	    Member member = ms.getMember();
 	    QuestionComment comment = questionCommentService.getQuestionComment(qc_id);

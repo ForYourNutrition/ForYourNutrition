@@ -3,9 +3,11 @@ package com.luckyGirls.ForYourNutrition.controller;
 import com.luckyGirls.ForYourNutrition.domain.Address;
 import com.luckyGirls.ForYourNutrition.domain.Cart;
 import com.luckyGirls.ForYourNutrition.domain.Member;
+import com.luckyGirls.ForYourNutrition.domain.Wish;
 import com.luckyGirls.ForYourNutrition.service.AddressService;
 import com.luckyGirls.ForYourNutrition.service.CartService;
 import com.luckyGirls.ForYourNutrition.service.MemberService;
+import com.luckyGirls.ForYourNutrition.service.WishService;
 import com.luckyGirls.ForYourNutrition.validator.LoginFormValidator;
 import com.luckyGirls.ForYourNutrition.validator.MemberFormValidator;
 import com.luckyGirls.ForYourNutrition.validator.SearchIdFormValidator;
@@ -35,6 +37,9 @@ public class MemberController {
 	
 	@Autowired
 	private CartService cartService;
+	
+	@Autowired
+	private WishService wishService;
 	
 	@Autowired
 	private AddressService addressService;
@@ -151,6 +156,12 @@ public class MemberController {
 			Cart cart = new Cart();
 			cart.setMember(new_m);;
 			cartService.createCart(new_m);
+			
+			//회원가입 시 자동으로 wish 생성
+			Wish wish = new Wish();
+			wish.setMember(new_m);
+			wishService.createWish(new_m);
+			
 			model.addAttribute("loginForm", new LoginForm());
 			
 			return "member/loginForm";

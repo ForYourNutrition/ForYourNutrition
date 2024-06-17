@@ -89,14 +89,14 @@
             <div th:unless="${session.ms}">
             	<a href="/member/join">회원가입</a>
 				<a href="/member/loginForm">로그인</a>
-				<a href="/wishlist">찜</a>
+				<a href="/wish/viewWish">Wish</a>
 				<a href="/cart/viewCart">Cart</a>
 				<a href="/question/questionList">Question</a>
             </div>
             <div th:if="${session.ms}">
 				<a href="/member/logout">로그아웃</a>
 				<a href="/member/myPage">MY PAGE</a>
-				<a href="/wishlist">찜</a>
+				<a href="/wish/viewWish">Wish</a>
 				<a href="/cart/viewCart">Cart</a>
 				<a href="/question/questionList">Question</a>
             </div>

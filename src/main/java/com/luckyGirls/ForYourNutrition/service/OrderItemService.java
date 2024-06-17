@@ -1,5 +1,7 @@
 package com.luckyGirls.ForYourNutrition.service;
 
+import com.luckyGirls.ForYourNutrition.domain.OrderItem;
+
 public interface OrderItemService {
-	void insertOrderItem(int member_id, int item_id, int count);
+	void insertOrderItem(OrderItem orderItem);
 }

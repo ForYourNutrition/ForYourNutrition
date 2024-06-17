@@ -1,5 +1,7 @@
 package com.luckyGirls.ForYourNutrition.dao.jpa;
 
+import java.util.List;
+
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
@@ -8,6 +10,7 @@ import com.luckyGirls.ForYourNutrition.domain.Order;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
 @Repository
@@ -23,9 +26,11 @@ public class JpaOrderDao implements OrderDao {
 	}
 
 	@Override
-	public void insertOrder(Order order) throws DataAccessException {
+	public int insertOrder(Order order) throws DataAccessException {
 		// TODO Auto-generated method stub
 		em.persist(order);
+		em.flush();
+		return order.getOrder_id();
 	}
 
 	@Transactional
@@ -37,6 +42,25 @@ public class JpaOrderDao implements OrderDao {
 			em.remove(cancelOrder);
 		}
 
+	}
+	
+	@Transactional
+	@Override
+	public void updateOrder(Order order) throws DataAccessException {
+		// TODO Auto-generated method stub
+		em.merge(order);
+	}
+	
+	@Transactional
+	@Override
+	public List<Order> getOrderList(int member_id) throws DataAccessException {
+		// TODO Auto-generated method stub
+		TypedQuery<Order> query = em.createQuery(
+				"SELECT o FROM Orders o JOIN o.member m"
+				+ "WHERE m.member_id=?1", Order.class);
+		query.setParameter(1, member_id);
+		List<Order> orderList = query.getResultList();
+		return orderList;
 	}
 
 }

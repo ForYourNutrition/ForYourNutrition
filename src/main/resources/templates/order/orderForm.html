@@ -1,93 +1,183 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>주문 작성 페이지</title>
-    <style>
-    body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    margin: 0;
-    padding: 0;
-	}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>주문 작성 페이지</title>
+<style>
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f8f9fa;
+	margin: 0;
+	padding: 0;
+}
 
-	.container {
-   	 max-width: 600px;
-   	 margin: 50px auto;
-     padding: 20px;
-   	 background-color: #fff;
-	 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-	}
+.container {
+	max-width: 600px;
+	margin: 50px auto;
+	padding: 20px;
+	background-color: #fff;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
-	h1 {
-    text-align: center;
-    margin-bottom: 20px;
-	}
+h1 {
+	text-align: center;
+	margin-bottom: 20px;
+}
 
-	.form-group {
-    margin-bottom: 15px;
-	}
+.form-group {
+	margin-bottom: 15px;
+}
 
-	label {
-   	 display: block;
-   	 margin-bottom: 5px;
-	}
+label {
+	display: block;
+	margin-bottom: 5px;
+}
 
-	input[type="text"],
-	input[type="email"],
-	input[type="number"],
-	select {
-   	 width: 100%;
-   	 padding: 10px;
-   	 border: 1px solid #ddd;
-   	 border-radius: 4px;
-   	 box-sizing: border-box;
-	}
+input[type="text"], input[type="email"], input[type="number"], select {
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
 
-	button {
-   	 width: 100%;
-   	 padding: 10px;
-   	 background-color: #007bff;
-  	 color: white;
-   	 border: none;
-   	 border-radius: 4px;
-     cursor: pointer;
-     font-size: 16px;
-	}
+button {
+	width: 100%;
+	padding: 10px;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 16px;
+}
 
-	button:hover {
-    	background-color: #0056b3;
-	}
-  
-    </style>
+button:hover {
+	background-color: #0056b3;
+}
+  body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .payment-form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .payment-form h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        .form-group .half-width {
+            width: 48%;
+            display: inline-block;
+        }
+        .form-group .half-width:first-child {
+            margin-right: 4%;
+        }
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .hidden {
+            display: none;
+        }
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>주문 작성</h1>
-        <form id="orderForm" method="post" action="/order/Order">        
-            <div class="form-group">
-                <label for="name">이름</label>
-                <input th:value=${memberName} id="name" name="name"/>
-            </div>
-            <div class="form-group">
-                <label for="email">이메일</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="address">주소</label>
-                <input type="text" id="address" name="address" required>
-            </div>
-            <div class="form-group">
-                <label for="product">상품</label>
-                <input th:value=${item.name} id="itemName" name="itemName" required/>
-            </div>
-            <div class="form-group">
-                <label for="count">수량</label>
-                <input th:value=${count} id="count" name="count"/>
-            </div>
-             <input type="hidden" name="item_id" th:value="${item.item_id}">
-            <button type="submit">주문하기</button>
-        </form>
-    </div> 
+	<div class="container">
+		<h1>주문 작성</h1>
+		<form id="orderForm" method="post" action="/order/Order">
+			<div class="form-group">
+				<label for="name">이름</label> <input th:value=${member.name} id="name" name="name" />
+			</div>
+			<div class="form-group">
+				<label for="email">이메일</label> <input th:value=${member.email} id="email" name="email" required>
+			</div>
+			<div class="form-group">
+				<label for="address">주소</label> 
+				<input th:value=${address.zipCode} id="zipCode" name="zipCode"/>
+				<input th:value=${address.streetAddress} id="streetAddress" name="streetAddress"/>
+				<input th:value=${address.detailAddress} id="detailAddress" name="detailAddress"/>
+			</div>
+			 <tbody>
+                <tr>
+                    <td th:text="${item.name}">상품 이름</td>
+                    <td th:text="${count}">수량</td>
+                    <td th:text="${totalPrice}"></td>
+                </tr>
+            </tbody>
+				<div class="form-group">
+					<input type="radio" id="bank-transfer" name="payment-method" value="bank-transfer" onclick="togglePaymentMethod()" required>
+					<label for="bank-transfer">무통장 입금</label> 
+					<input type="radio" id="card-payment" name="payment-method" value="card-payment" onclick="togglePaymentMethod()">
+					<label for="card-payment">신용카드</label>
+				</div>
+				<div id="bank-transfer-info" class="hidden">
+					<div class="form-group">
+						<label for="account-number">3333-12-804-6482</label>
+						<input type="text" id="account-number" name="account-number" placeholder="Account Number">
+					</div>
+					<div class="form-group">
+						<label for="bank-name">카카오뱅크</label> <input type="text" id="bank-name" name="bank-name" placeholder="Bank Name">
+					</div>
+				</div>
+				<input type="hidden" name="item_id" th:value="${item.item_id}">
+				 <input type="hidden" th:value="${count}" name="totalPrice"/>
+				  <input type="hidden" th:value="${totalPrice}" name="count"/>
+				<button type="submit">주문하기</button>
+			</form>
+	</div>
+	
+	<script>
+    function togglePaymentMethod() {
+        const bankTransferInfo = document.getElementById('bank-transfer-info');
+        const cardPaymentInfo = document.getElementById('card-payment-info');
+        const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+
+        if (paymentMethod === 'bank-transfer') {
+            bankTransferInfo.classList.remove('hidden');
+            cardPaymentInfo.classList.add('hidden');
+        }
+    }
+</script>
 </body>
 </html>

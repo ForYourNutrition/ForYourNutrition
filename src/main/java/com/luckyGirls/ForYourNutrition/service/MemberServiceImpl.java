@@ -105,4 +105,80 @@ public class MemberServiceImpl implements MemberService {
             }
         }
 	}
+	
+	@Override
+	public void sendIdEmail(String email, String id) {
+        // 이메일 설정
+        String host = "smtp.gmail.com";
+        final String user = "foryournutrition20@gmail.com";
+        final String password = "iogq cdqd iirt vylp";
+
+        Properties props = new Properties();
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true"); // TLS 사용 설정
+        props.put("mail.smtp.port", "587"); // TLS 포트
+
+        Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(user, password);
+            }
+        });
+
+        try {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(user));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
+
+            // 이메일 제목과 내용 설정
+            message.setSubject("[For Your Nutrition]아이디 찾기 결과");
+            message.setText("For Your Nutrition에서\n아이디 찾기 결과 알려드립니다.\n회원님의 아이디는 <" + id + "> 입니다.\n감사합니다.");
+
+            // 이메일 보내기
+            Transport.send(message);
+
+            System.out.println("Email sent successfully to " + email);
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+	
+	@Override
+	public void sendPasswordEmail(String email, String pw) {
+        // 이메일 설정
+        String host = "smtp.gmail.com";
+        final String user = "foryournutrition20@gmail.com";
+        final String password = "iogq cdqd iirt vylp";
+
+        Properties props = new Properties();
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true"); // TLS 사용 설정
+        props.put("mail.smtp.port", "587"); // TLS 포트
+
+        Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(user, password);
+            }
+        });
+
+        try {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(user));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
+
+            // 이메일 제목과 내용 설정
+            message.setSubject("[For Your Nutrition]비밀번호 찾기 결과");
+            message.setText("For Your Nutrition에서\n비밀번호 찾기 결과 알려드립니다.\n회원님의 비밀번호는 <" + pw + "> 입니다.\n감사합니다.");
+
+            // 이메일 보내기
+            Transport.send(message);
+
+            System.out.println("Email sent successfully to " + email);
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
 }

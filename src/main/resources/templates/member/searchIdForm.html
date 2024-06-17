@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="|${pageName}|">로그인</title>
+    <title>아이디 찾기</title>
     <style>
         .container {
             background-color: white;
@@ -59,36 +59,23 @@
 <div>
 <div th:insert="~{header}"></div>
 <div class="container">
-    <h2>로그인</h2>
-    <form action="#" th:action="@{login}" th:object="${loginForm}" method="post">
-        <!-- 전역 오류 메시지 -->
-        <div th:if="${#fields.hasGlobalErrors()}">
-            <span th:each="err : ${#fields.globalErrors()}" th:text="${err}" class="error-class"></span><br>
-        </div>
+    <h2>아이디 찾기</h2>
+    <form action="#" th:action="@{searchId}" th:object="${searchIdForm}" method="post">
         <div>
-            <label th:for="id">아이디 : </label>
-            <input type="text" th:field="*{id}" class="error-input"/>
-            <!-- 아이디 필드 오류 메시지 -->
-            <div th:if="${#fields.hasErrors('id')}">
-                <span th:each="err : ${#fields.errors('id')}" th:text="${err}" class="error-class"></span><br>
+            <label th:for="email">이메일 : </label>
+            <input type="text" th:field="*{email}" class="error-input"/>
+            <div th:if="${#fields.hasErrors('email')}">
+                <span th:each="err : ${#fields.errors('email')}" th:text="${err}" class="error-class"></span><br>
             </div>
         </div>
         <div>
-            <label th:for="password">비밀번호 : </label>
-            <input type="password" th:field="*{password}" class="error-input"/>
-            <!-- 비밀번호 필드 오류 메시지 -->
-            <div th:if="${#fields.hasErrors('password')}">
-                <span th:each="err : ${#fields.errors('password')}" th:text="${err}" class="error-class"></span><br>
+            <label th:for="name">이름 : </label>
+            <input type="text" th:field="*{name}" class="error-input"/>
+            <div th:if="${#fields.hasErrors('name')}">
+                <span th:each="err : ${#fields.errors('name')}" th:text="${err}" class="error-class"></span><br>
             </div>
         </div>
-        <button type="submit">로그인</button>
-        <div class="link-buttons">
-            <button type="button" th:onclick="|location.href='@{searchIdForm.do}'|">아이디 찾기</button> 
-            <button type="button" th:onclick="|location.href='@{searchPwdForm.do}'|">비밀번호 찾기</button>
-        </div>
-        <div class="link-buttons">
-            <button type="button" th:onclick="|location.href='@{join}'|" class="signup-button">회원 가입</button>
-        </div>
+        <button type="submit">찾기</button>
     </form>
 </div>
 </div>

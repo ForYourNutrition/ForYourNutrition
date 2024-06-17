@@ -18,7 +18,6 @@ import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
 @Repository
-
 public class JpaCartDao implements CartDao{
 
 	@PersistenceContext

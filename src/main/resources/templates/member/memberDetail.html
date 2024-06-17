@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 정보</title>
+    <style>
+        .container {
+		    background-color: white;
+		    padding: 20px;
+		    border-radius: 10px;
+		    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+		    text-align: center; /* 텍스트를 가운데로 정렬합니다. */
+		    align-items: center;
+		    justify-content: center;
+		}
+        .user-info p {
+            margin: 15px 0;
+            font-size: 18px;
+        }
+        .user-info strong {
+            font-weight: bold;
+        }
+        button {
+            margin-top: 30px;
+            padding: 15px 30px;
+            border-radius: 5px;
+            border: 1px solid navy;
+            background-color: navy;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #001f4d;
+        }
+        h2 {
+			color: navy;
+		}
+    </style>
+</head>
+<body>
+<div>
+<div th:insert="~{header}"></div>
+<div class="container">
+    <h2>사용자 정보</h2>
+    <div class="user-info">
+        <p><strong>아이디</strong><br>
+        <span th:text="${member.id}"></span></p>
+       
+        <p><strong>이름</strong><br>
+        <span th:text="${member.name}"></span></p>
+        
+        <p><strong>닉네임</strong><br>
+        <span th:text="${member.nickname}"></span></p>
+        
+        <p><strong>생년월일</strong><br>
+        <span th:text="${#dates.format(member.birth, 'yyyy-MM-dd')}"></span></p>
+        
+        <p><strong>성별</strong><br>
+        <span th:text="${member.gender == 1 ? '남성' : '여성'}"></span></p>
+        
+        <p><strong>연락처</strong><br>
+        <span th:text="${member.phone_number}"></span></p>
+        
+        <p><strong>이메일</strong><br>
+        <span th:text="${member.email}"></span></p>
+        
+        <p><strong>영양제 섭취 시간</strong><br>
+		<span th:text="${member.taking_time + ':00'}"></span></p>
+
+        <button type="button" th:onclick="|location.href='@{modifyMember}'|">회원 수정</button> 
+    </div>
+</div>
+</div>
+</body>
+</html>

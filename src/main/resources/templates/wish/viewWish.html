@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Wish 보기</title>
+    <link rel="stylesheet" type="text/css" href="/css/wishStyle.css">
+</head>
+<body>
+<div th:insert="~{header}"></div>
+    <h1>Wish 항목</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>상품</th>
+                <th>작업</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="wishItem : ${wish.wishItemList}">
+                <td th:text="${wishItem.item.name}">상품 이름</td>
+                <td>
+                    <form th:action="@{/wish/addToCart}" method="post">
+                        <input type="hidden" name="wishItemId" th:value="${wishItem.wishItem_id}">
+                        <button type="submit">Cart로 이동하기</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="add-all-to-cart">
+        <form th:action="@{/wish/addAllToCart}" method="post">
+            <button type="submit">모두 Cart로 이동하기</button>
+        </form>
+    </div>
+</body>
+</html>

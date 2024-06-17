@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>주소 추가</title>
+    <style>
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            box-sizing: border-box;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        input {
+            width: calc(30% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid navy;
+            box-sizing: border-box;
+        }
+        .error-class {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+            text-align: center;
+        }
+        button {
+            width: 10%;
+            padding: 8px;
+            border-radius: 5px;
+            border: none;
+            background-color: navy;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #001f4d;
+        }
+    </style>
+</head>
+<body>
+	<div th:insert="~{header}"></div>
+    <div class="container">
+        <h2 style="color: darkblue">배송지 입력</h2>
+        <form th:action="@{addAddress}" method="post" th:object="${address}">
+            <div>
+                <label for="zipCode">우편번호</label>
+                <input type="text" style="width: 20%" id="zipCode" name="zipCode" th:field="*{zipCode}" readonly="readonly" class="error-input"/>
+                <button type="button" style="width: 9%; background-color: gray; color: white;" class="btn btn-default" onclick="execPostCode();">우편번호 찾기</button>
+                <div th:each="err : ${#fields.errors('zipCode')}" class="error-class" th:text="${err}"></div>
+            </div>
+            <div>
+                <label for="streetAddress">도로명 주소</label>
+                <input type="text" id="streetAddress" name="streetAddress" th:field="*{streetAddress}" readonly="readonly" class="error-input"/>
+                <div th:each="err : ${#fields.errors('streetAddress')}" class="error-class" th:text="${err}"></div>
+            </div>
+            <div>
+                <label for="detailAddress">상세 주소</label>
+                <input type="text" id="detailAddress" name="detailAddress" th:field="*{detailAddress}" class="error-input"/>
+                <div th:each="err : ${#fields.errors('detailAddress')}" class="error-class" th:text="${err}"></div>
+            </div>
+            <button type="submit">저장</button>
+        </form>
+    </div>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    function execPostCode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+               var fullRoadAddr = data.roadAddress;
+               var extraRoadAddr = '';
+
+               if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                   extraRoadAddr += data.bname;
+               }
+               if(data.buildingName !== '' && data.apartment === 'Y'){
+                  extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+               }
+               if(extraRoadAddr !== ''){
+                   extraRoadAddr = ' (' + extraRoadAddr + ')';
+               }
+               if(fullRoadAddr !== ''){
+                   fullRoadAddr += extraRoadAddr;
+               }
+
+               $("#zipCode").val(data.zonecode);
+               $("#streetAddress").val(fullRoadAddr);
+           }
+        }).open();
+    }
+    </script>
+</body>
+</html>

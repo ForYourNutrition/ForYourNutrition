@@ -30,7 +30,7 @@ public class OrderItem {
    @JoinColumn(name = "item_id")
    private Item item;
    
-   @ManyToOne(cascade=CascadeType.ALL)
+   @ManyToOne
    @JoinColumn(name = "order_id")
    private Order orders;
    

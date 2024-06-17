@@ -29,7 +29,6 @@ public class JpaOrderDao implements OrderDao {
 	public int insertOrder(Order order) throws DataAccessException {
 		// TODO Auto-generated method stub
 		em.persist(order);
-		em.flush();
 		return order.getOrder_id();
 	}
 

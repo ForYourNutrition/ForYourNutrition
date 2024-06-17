@@ -27,19 +27,18 @@ import lombok.Setter;
 @Table(name="orders")
 public class Order {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orders_seq")
-    @SequenceGenerator(name = "orders_seq", sequenceName = "orders_seq", allocationSize = 1) 
-   private int order_id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int order_id;
 
-   @ManyToOne
-   @JoinColumn(name="member_id")
-   private Member member;
+	@ManyToOne
+	@JoinColumn(name="member_id")
+	private Member member;
 
-   private String orderDate; //주문일
+	private String orderDate; //주문일
 
-   private int orderStatus; //주문상태(주문_무통장입금:0 주문:1 배송중:2 취소:3 환불:4)
-   
-   private int totalPrice;
+	private int orderStatus; //주문상태(주문_무통장입금:0 주문:1 배송중:2 취소:3 환불:4)
+
+	private int totalPrice;
 
 }
 

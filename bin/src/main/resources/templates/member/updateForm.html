@@ -5,13 +5,14 @@
     <title>회원 수정</title>
     <style>
         .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            box-sizing: border-box;
-        }
+		    width: 60%;
+		    margin: 50px auto;
+		    background-color: #ffffff;
+		    padding: 30px;
+		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		    border-radius: 10px;
+		    text-align: center;
+		}
         label {
             display: block;
             font-weight: bold;
@@ -19,7 +20,7 @@
             text-align: center;
         }
         input {
-            width: calc(30% - 22px);
+            width: calc(45% - 22px);
             padding: 10px;
             margin-bottom: 10px;
             border-radius: 5px;
@@ -67,18 +68,25 @@
             margin-right: 5px;
         }
         select {
-		    width: calc(30% - 22px); /* 이전에 50%로 설정되어 있던 부분을 100%로 변경 */
+		    width: calc(20% - 22px); /* 이전에 50%로 설정되어 있던 부분을 100%로 변경 */
 		    padding: 10px;
 		    margin-bottom: 10px;
 		    border-radius: 5px;
 		    border: 1px solid navy;
 		    box-sizing: border-box;
 		}
-		h2 {
+		h1 {
 			color: navy;
 		}
 		.error-class {
 			text-align: center;
+		}
+		.update-form {
+		    padding: 20px;
+		    background-color: #f9f9f9;
+		    border: 1px solid #e0e0e0;
+		    border-radius: 10px;
+		    margin-bottom: 30px;
 		}
     </style>
 </head>
@@ -86,8 +94,9 @@
 <div>
 <div th:insert="~{header}"></div>
 <div class="container">
-    <h2>회원 수정</h2>
-    <form action="#" method="post" th:action="@{modifyMember.do}" th:object="${memberForm}">
+    <h1>회원 수정</h1>
+    <div class="update-form">
+    <form action="#" method="post" th:action="@{modifyMember}" th:object="${memberForm}">
         <div>
             <label for="id">아이디 (수정 불가)</label>
             <input type="text" id="id" name="id" th:field="*{member.id}" class="error-input" readonly/>
@@ -120,8 +129,8 @@
         </div>
         <div>
             <label>성별</label>
-            <input type="radio" th:field="*{member.gender}" name="gender" value="1"/><label>남성</label>
-            <input type="radio" th:field="*{member.gender}" name="gender" value="2"/><label>여성</label><br>
+            남성<input type="radio" style="width: 5%" th:field="*{member.gender}" name="gender" value="1"/>
+            여성<input type="radio" style="width: 5%" th:field="*{member.gender}" name="gender" value="2"/><br>
             <div th:each="err : ${#fields.errors('member.gender')}" class="error-class" th:text="${err}"></div>
         </div>
         <div>
@@ -166,7 +175,9 @@
         </div>
         <button type="submit">저장</button>
     </form>
+    </div>
 </div>
 </div>
+<div th:insert="~{footer}"></div>
 </body>
 </html>

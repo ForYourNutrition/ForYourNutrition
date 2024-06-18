@@ -1,77 +1,103 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>회원 정보</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Page</title>
     <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+        }
+
         .container {
-		    background-color: white;
-		    padding: 20px;
-		    border-radius: 10px;
-		    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-		    text-align: center; /* 텍스트를 가운데로 정렬합니다. */
-		    align-items: center;
-		    justify-content: center;
-		}
-        .user-info p {
-            margin: 15px 0;
-            font-size: 18px;
+            width: 80%;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
         }
-        .user-info strong {
-            font-weight: bold;
+
+        .hello {
+            font-size: 30px;
+            color: darkblue;
+            margin-bottom: 20px;
         }
-        button {
-            margin-top: 30px;
-            padding: 15px 30px;
+
+        .points {
+            font-size: 24px;
+            color: #666666;
+            margin-bottom: 20px;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .nav a {
+            background-color: #f0f0f0;
+            color: #333333;
+            padding: 10px 15px;
+            border: 1px solid #cccccc;
             border-radius: 5px;
-            border: 1px solid navy;
-            background-color: navy;
-            color: white;
-            cursor: pointer;
+            text-decoration: none;
             font-size: 16px;
+            width: 300px; /* 버튼의 가로 길이 설정 */
+            margin: 0 auto; /* 버튼을 가운데 정렬 */
+            transition: background-color 0.3s;
         }
+
+        .nav a:hover {
+            background-color: #002366;
+            color: #ffffff;
+        }
+
+        button {
+            background-color: #f0f0f0;
+            color: #333333;
+            padding: 10px 15px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            width: 330px; /* 버튼의 가로 길이 설정 */
+            margin: 0 auto; /* 버튼을 가운데 정렬 */
+            transition: background-color 0.3s;
+        }
+
         button:hover {
-            background-color: #001f4d;
+            background-color: #002366;
+            color: #ffffff;
         }
-        h2 {
-			color: navy;
-		}
     </style>
+    <script>
+        function confirmDeletion() {
+            if (confirm("회원 탈퇴를 진행하시겠습니까?")) {
+                window.location.href = "/member/delete";
+            }
+        }
+    </script>
 </head>
 <body>
-<div>
-<div th:insert="~{header}"></div>
-<div class="container">
-    <h2>사용자 정보</h2>
-    <div class="user-info">
-        <p><strong>아이디</strong><br>
-        <span th:text="${member.id}"></span></p>
-       
-        <p><strong>이름</strong><br>
-        <span th:text="${member.name}"></span></p>
-        
-        <p><strong>닉네임</strong><br>
-        <span th:text="${member.nickname}"></span></p>
-        
-        <p><strong>생년월일</strong><br>
-        <span th:text="${#dates.format(member.birth, 'yyyy-MM-dd')}"></span></p>
-        
-        <p><strong>성별</strong><br>
-        <span th:text="${member.gender == 1 ? '남성' : '여성'}"></span></p>
-        
-        <p><strong>연락처</strong><br>
-        <span th:text="${member.phone_number}"></span></p>
-        
-        <p><strong>이메일</strong><br>
-        <span th:text="${member.email}"></span></p>
-        
-        <p><strong>영양제 섭취 시간</strong><br>
-		<span th:text="${member.taking_time + ':00'}"></span></p>
-
-        <button type="button" th:onclick="|location.href='@{modifyMember.do}'|">회원 수정</button> 
-		<button type="button" th:onclick="|location.href='@{delete.do}'|">회원 탈퇴</button>
+	<div th:insert="~{header}"></div>
+    <div class="container">
+        <div class="hello">
+            <span th:text="${session.ms.member.name}"></span>님
+        </div>
+        <div class="nav">
+            <a href="memberDetail">회원정보 수정</a>
+            <a href="/survey/surveyInfo">문진표 정보 관리</a>
+            <a href="/member/viewAddressList">배송지 관리</a>
+            <a href="logout">로그아웃</a>
+            <button type="button" onclick="confirmDeletion()">회원 탈퇴</button>
+        </div>
     </div>
-</div>
-</div>
+    <div th:insert="~{footer}"></div>
 </body>
 </html>

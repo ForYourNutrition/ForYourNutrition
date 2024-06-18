@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 정보</title>
+    <style>
+    	.container {
+		    width: 60%;
+		    margin: 50px auto;
+		    background-color: #ffffff;
+		    padding: 30px;
+		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		    border-radius: 10px;
+		    text-align: center;
+		}
+    	.user-info {
+		    padding: 20px;
+		    background-color: #f9f9f9;
+		    border: 1px solid #e0e0e0;
+		    border-radius: 10px;
+		    margin-bottom: 30px;
+		}
+		 button {
+            width: 30%;
+            padding: 15px;
+            border-radius: 5px;
+            border: none;
+            background-color: navy;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #001f4d;
+        }
+		h1 {
+			color: navy;
+		}
+    </style>
+</head>
+<body>
+<div>
+<div th:insert="~{header}"></div>
+<div class="container">
+    <h1>회원 정보</h1>
+    <div class="user-info">
+        <p><strong>[아이디]</strong><br>
+        <span th:text="${member.id}"></span></p>
+       
+        <p><strong>[이름]</strong><br>
+        <span th:text="${member.name}"></span></p>
+        
+        <p><strong>[닉네임]</strong><br>
+        <span th:text="${member.nickname}"></span></p>
+        
+        <p><strong>[생년월일]</strong><br>
+        <span th:text="${#dates.format(member.birth, 'yyyy-MM-dd')}"></span></p>
+        
+        <p><strong>[성별]</strong><br>
+        <span th:text="${member.gender == 1 ? '남성' : '여성'}"></span></p>
+        
+        <p><strong>[연락처]</strong><br>
+        <span th:text="${member.phone_number}"></span></p>
+        
+        <p><strong>[이메일]</strong><br>
+        <span th:text="${member.email}"></span></p>
+        
+        <p><strong>[영양제 섭취 시간]</strong><br>
+		<span th:text="${member.taking_time + ':00'}"></span></p>
+
+        <button type="button" th:onclick="|location.href='@{modifyMember}'|">회원 수정</button> 
+    </div>
+</div>
+</div>
+<div th:insert="~{footer}"></div>
+</body>
+</html>

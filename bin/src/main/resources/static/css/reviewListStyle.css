@@ -1,0 +1,75 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+    border-radius: 8px;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+.button-container {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.button-container form {
+    display: inline-block;
+}
+
+.button-container button {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.button-container button:hover {
+    background-color: #218838;
+}
+
+.empty-reviews-message {
+    text-align: center;
+    color: #666;
+    font-size: 18px;
+}
+
+.reviews-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.reviews-table thead {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.reviews-table th, .reviews-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.reviews-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.reviews-table tr:hover {
+    background-color: #f1f1f1;
+}

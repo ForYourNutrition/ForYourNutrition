@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>주소 추가</title>
+    <style>
+        .container {
+		    width: 60%;
+		    margin: 50px auto;
+		    background-color: #ffffff;
+		    padding: 30px;
+		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		    border-radius: 10px;
+		    text-align: center;
+		}
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        input {
+            width: calc(50% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid navy;
+            box-sizing: border-box;
+        }
+        .error-class {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+            text-align: center;
+        }
+         button {
+            width: 30%;
+            padding: 15px;
+            border-radius: 5px;
+            border: none;
+            background-color: navy;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #001f4d;
+        }
+        .address-form {
+		    padding: 20px;
+		    background-color: #f9f9f9;
+		    border: 1px solid #e0e0e0;
+		    border-radius: 10px;
+		    margin-bottom: 30px;
+		}
+    </style>
+</head>
+<body>
+	<div th:insert="~{header}"></div>
+    <div class="container">
+        <h1 style="color: darkblue">배송지 추가</h1>
+        <div class="address-form">
+        <form th:action="@{addAddress}" method="post" th:object="${address}">
+            <div>
+                <label for="zipCode">우편번호</label>
+                <input type="text" style="width: 32%" id="zipCode" name="zipCode" th:field="*{zipCode}" readonly="readonly" class="error-input"/>
+                <button type="button" style="width: 15%; background-color: gray; color: white;" class="btn btn-default" onclick="execPostCode();">우편번호 찾기</button>
+                <div th:each="err : ${#fields.errors('zipCode')}" class="error-class" th:text="${err}"></div>
+            </div>
+            <div>
+                <label for="streetAddress">도로명 주소</label>
+                <input type="text" id="streetAddress" name="streetAddress" th:field="*{streetAddress}" readonly="readonly" class="error-input"/>
+                <div th:each="err : ${#fields.errors('streetAddress')}" class="error-class" th:text="${err}"></div>
+            </div>
+            <div>
+                <label for="detailAddress">상세 주소</label>
+                <input type="text" id="detailAddress" name="detailAddress" th:field="*{detailAddress}" class="error-input"/>
+                <div th:each="err : ${#fields.errors('detailAddress')}" class="error-class" th:text="${err}"></div>
+            </div>
+            <button type="submit">저장</button>
+        </form>
+        </div>
+    </div>
+    <div th:insert="~{footer}"></div>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    function execPostCode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+               var fullRoadAddr = data.roadAddress;
+               var extraRoadAddr = '';
+
+               if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                   extraRoadAddr += data.bname;
+               }
+               if(data.buildingName !== '' && data.apartment === 'Y'){
+                  extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+               }
+               if(extraRoadAddr !== ''){
+                   extraRoadAddr = ' (' + extraRoadAddr + ')';
+               }
+               if(fullRoadAddr !== ''){
+                   fullRoadAddr += extraRoadAddr;
+               }
+
+               $("#zipCode").val(data.zonecode);
+               $("#streetAddress").val(fullRoadAddr);
+           }
+        }).open();
+    }
+    </script>
+</body>
+</html>

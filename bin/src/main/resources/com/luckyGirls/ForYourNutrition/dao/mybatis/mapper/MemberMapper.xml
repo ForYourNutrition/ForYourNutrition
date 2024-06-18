@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
 <mapper namespace="com.luckyGirls.ForYourNutrition.dao.mybatis.mapper.MemberMapper">
   <cache />
   
@@ -35,8 +34,31 @@
       TAKING_TIME = #{taking_time}
     WHERE ID = #{id}
   </update>
-  
+
   <delete id="deleteMember" parameterType="String">
-    DELETE FROM MEMBER WHERE ID = #{param1}
+    UPDATE MEMBER SET
+      ID = null,	
+      NAME = '탈퇴회원',
+      NICKNAME = '탈퇴회원',
+      TAKING_TIME = -1
+    WHERE ID = #{param1}
   </delete>
+  
+  <select id="getMembers" resultType="Member">
+    SELECT MEMBER_ID, ID, PASSWORD, NAME, NICKNAME, BIRTH, GENDER, PHONE_NUMBER, EMAIL, POINT, TAKING_TIME 
+    FROM MEMBER 
+    WHERE TAKING_TIME = #{param1} 
+  </select>
+  
+  <select id="findId" resultType="String">
+    SELECT ID 
+    FROM MEMBER 
+    WHERE EMAIL = #{param1} AND NAME = #{param2}
+  </select>
+  
+  <select id="findPassword" resultType="String">
+    SELECT PASSWORD 
+    FROM MEMBER 
+    WHERE ID = #{param1} AND EMAIL = #{param2}
+  </select>
 </mapper>

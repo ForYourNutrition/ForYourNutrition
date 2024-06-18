@@ -8,20 +8,17 @@ import com.luckyGirls.ForYourNutrition.service.CartService;
 import com.luckyGirls.ForYourNutrition.service.MemberService;
 import com.luckyGirls.ForYourNutrition.validator.LoginFormValidator;
 import com.luckyGirls.ForYourNutrition.validator.MemberFormValidator;
+import com.luckyGirls.ForYourNutrition.validator.MemberUpdateFormValidator;
 import com.luckyGirls.ForYourNutrition.validator.SearchIdFormValidator;
 import com.luckyGirls.ForYourNutrition.validator.SearchPasswordFormValidator;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -205,7 +202,7 @@ public class MemberController {
 	@PostMapping("member/modifyMember")
 	public String modifyMember(HttpServletRequest request, HttpSession session,
 			@ModelAttribute("memberForm") MemberForm memberForm, BindingResult result, Model model) throws Exception {
-		new MemberFormValidator().validate(memberForm, result);
+		new MemberUpdateFormValidator().validate(memberForm, result);
 		
 		if (result.hasErrors()) {
 			return "member/updateForm";

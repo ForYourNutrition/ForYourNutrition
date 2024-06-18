@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Questions</title>
+    <!-- Include your CSS and JS dependencies -->
+</head>
+<body>
+    <h1>My Questions</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Content</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Iterate over user's questions -->
+            <tr th:each="question : ${myQuestions}">
+                <td th:text="${question.title}"></td>
+                <td th:text="${question.content}"></td>
+                <td th:text="${question.qdate}"></td>
+                <td>
+                    <a th:href="@{/question/viewQuestion(question_id=${question.question_id})}">View</a>
+                    <a th:href="@{/question/updateQuestionForm(question_id=${question.question_id})}">Edit</a>
+                    <form th:action="@{/question/deleteQuestion}" method="post">
+                        <input type="hidden" name="question_id" th:value="${question.question_id}">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

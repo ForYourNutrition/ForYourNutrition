@@ -243,4 +243,19 @@ public class QuestionController {
 		
 		return "question/viewQuestion";
 	}
+    @GetMapping("/question/myQuestionList")
+    public String listMyQuestions(Model model, HttpSession session) {
+        MemberSession ms = (MemberSession) session.getAttribute("ms");
+
+        if (ms == null) {
+            // Redirect to login page if session does not exist
+            return "redirect:/member/loginForm";
+        }
+
+        int memberId = ms.getMember().getMember_id();
+        List<Question> myQuestions = questionService.getQuestionListForMember(memberId);
+
+        model.addAttribute("myQuestions", myQuestions);
+        return "question/myQuestionList";
+    }
 }

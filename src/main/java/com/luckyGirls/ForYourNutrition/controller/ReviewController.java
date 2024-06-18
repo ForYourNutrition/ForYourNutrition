@@ -9,6 +9,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -321,7 +324,7 @@ public class ReviewController {
 		return "review/viewReview";
 	}	
 	//리뷰 list view
-	@GetMapping("/review/reviewList")
+	/*@GetMapping("/review/reviewList")
 	public String listReviews(@RequestParam("item_id") int item_id, Model model) {
 	    Item item = itemService.getItemById(item_id);
 	    
@@ -345,6 +348,29 @@ public class ReviewController {
 	    model.addAttribute("reviews", reviews);
 
 	    return "review/reviewList";
-	}
+	}*/
+	//리뷰 list view
+    @GetMapping("/review/reviewList")
+    public String listReviews(@RequestParam("item_id") int item_id,
+                              @RequestParam(value = "page", defaultValue = "1") int page,
+                              Model model, HttpSession session) {
+        Item item = itemService.getItemById(item_id);
+        
+        int pageSize = 10; // 한 페이지에 표시할 리뷰 수
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        Page<Review> reviewPage = reviewService.getReviewListForItem(item_id, pageable);
+        
+        int totalPages = reviewPage.getTotalPages();
+        int startPage = Math.max(1, page - 2);
+        int endPage = Math.min(totalPages, page + 2);
 
+        model.addAttribute("item", item);
+        model.addAttribute("reviews", reviewPage.getContent());
+        model.addAttribute("nowPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        
+        return "review/reviewList";
+    }
 }

@@ -5,13 +5,14 @@
     <title>주소 추가</title>
     <style>
         .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            box-sizing: border-box;
-        }
+		    width: 60%;
+		    margin: 50px auto;
+		    background-color: #ffffff;
+		    padding: 30px;
+		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		    border-radius: 10px;
+		    text-align: center;
+		}
         label {
             display: block;
             font-weight: bold;
@@ -19,7 +20,7 @@
             text-align: center;
         }
         input {
-            width: calc(30% - 22px);
+            width: calc(50% - 22px);
             padding: 10px;
             margin-bottom: 10px;
             border-radius: 5px;
@@ -32,9 +33,9 @@
             margin-top: 5px;
             text-align: center;
         }
-        button {
-            width: 10%;
-            padding: 8px;
+         button {
+            width: 30%;
+            padding: 15px;
             border-radius: 5px;
             border: none;
             background-color: navy;
@@ -47,17 +48,25 @@
         button:hover {
             background-color: #001f4d;
         }
+        .address-form {
+		    padding: 20px;
+		    background-color: #f9f9f9;
+		    border: 1px solid #e0e0e0;
+		    border-radius: 10px;
+		    margin-bottom: 30px;
+		}
     </style>
 </head>
 <body>
 	<div th:insert="~{header}"></div>
     <div class="container">
-        <h2 style="color: darkblue">배송지 입력</h2>
+        <h1 style="color: darkblue">배송지 추가</h1>
+        <div class="address-form">
         <form th:action="@{addAddress}" method="post" th:object="${address}">
             <div>
                 <label for="zipCode">우편번호</label>
-                <input type="text" style="width: 20%" id="zipCode" name="zipCode" th:field="*{zipCode}" readonly="readonly" class="error-input"/>
-                <button type="button" style="width: 9%; background-color: gray; color: white;" class="btn btn-default" onclick="execPostCode();">우편번호 찾기</button>
+                <input type="text" style="width: 32%" id="zipCode" name="zipCode" th:field="*{zipCode}" readonly="readonly" class="error-input"/>
+                <button type="button" style="width: 15%; background-color: gray; color: white;" class="btn btn-default" onclick="execPostCode();">우편번호 찾기</button>
                 <div th:each="err : ${#fields.errors('zipCode')}" class="error-class" th:text="${err}"></div>
             </div>
             <div>
@@ -72,7 +81,9 @@
             </div>
             <button type="submit">저장</button>
         </form>
+        </div>
     </div>
+    <div th:insert="~{footer}"></div>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>

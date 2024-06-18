@@ -3,6 +3,9 @@ package com.luckyGirls.ForYourNutrition.dao.jpa;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import com.luckyGirls.ForYourNutrition.dao.ReviewDao;
@@ -46,8 +49,23 @@ public class JpaReviewDao implements ReviewDao {
 		Review managedReview = em.merge(review);
 		em.remove(managedReview);
 	}
+	
+    @Transactional
+    @Override
+    public Page<Review> getReviewListForItem(int item_id, Pageable pageable) throws DataAccessException {
+        TypedQuery<Review> query = em.createQuery(
+                "SELECT r FROM Review r JOIN r.item i WHERE i.item_id = :item_id", Review.class);
+        query.setParameter("item_id", item_id);
 
-	@Transactional
+        int totalRows = query.getResultList().size();
+        List<Review> reviewList = query.setFirstResult((int) pageable.getOffset())
+                                        .setMaxResults(pageable.getPageSize())
+                                        .getResultList();
+
+        return new PageImpl<>(reviewList, pageable, totalRows);
+    }
+
+	/*@Transactional
 	@Override
 	public List<Review> getReviewListForItem(int item_id) throws DataAccessException {
 		// TODO Auto-generated method stub
@@ -56,7 +74,7 @@ public class JpaReviewDao implements ReviewDao {
 		query.setParameter(1, item_id);
 		//List<Review> reviewList = query.getResultList();
 		return query.getResultList();
-	}
+	}*/
 
 	@Transactional
 	@Override

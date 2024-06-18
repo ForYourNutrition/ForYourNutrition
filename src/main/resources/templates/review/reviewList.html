@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>ITEM's Review</title>
+    <title>Review List</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/reviewListStyle.css}">
 </head>
 <body>
     <div th:insert="~{header}"></div>
     <div class="container" th:fragment="review">
-        <h2>ITEM's Review</h2>
+        <h2>Reviews for Item</h2>
         
         <!-- Form to create a new review -->
         <div class="button-container">
             <form action="/review/createReview" method="get">
                 <input type="hidden" name="item_id" th:value="${item.item_id}" />
-                <button type="submit">작성하기</button>
+                <button type="submit">리뷰 작성하기</button>
             </form>
         </div>
         
@@ -27,15 +27,17 @@
             <table class="reviews-table">
                 <thead>
                     <tr>
-                        <th>작성자</th>
-                        <th>평점</th>
-                        <th>제목</th>
-                        <th>날짜</th>                        
-                        <th>내용</th>
+                        <th>INDEX</th>
+                        <th>Author</th>
+                        <th>Rating</th>
+                        <th>Title</th>
+                        <th>Date</th>                        
+                        <th>Content</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="review : ${reviews}">
+                    <tr th:each="review, iterStat : ${reviews}">
+                        <td th:text="${iterStat.index + 1}"></td>
                         <td th:text="${review.member.name}">작성자</td>
                         <td th:text="${review.rating}">평점</td>
                         <td><a th:href="@{/review/viewReview(review_id=${review.review_id})}" th:text="${review.title}">제목</a></td>
@@ -44,6 +46,15 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+        
+        <div class="pagination">
+            <a th:if="${nowPage > 1}" th:href="@{/review/reviewList(item_id=${item.item_id}, page=${nowPage - 1}, sort=${sort})}">이전</a>
+            <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+                <a th:if="${page != nowPage}" th:href="@{/review/reviewList(item_id=${item.item_id}, page=${page}, sort=${sort})}" th:text="${page}"></a>
+                <strong th:if="${page == nowPage}" th:text="${page}" style="color:red"></strong>
+            </th:block>
+            <a th:if="${nowPage < totalPages}" th:href="@{/review/reviewList(item_id=${item.item_id}, page=${nowPage + 1}, sort=${sort})}">다음</a>
         </div>
     </div>
 </body>

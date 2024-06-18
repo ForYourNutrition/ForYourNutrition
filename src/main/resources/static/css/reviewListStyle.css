@@ -3,6 +3,7 @@ body {
     background-color: #f4f4f9;
     margin: 0;
     padding: 0;
+    text-align: center; /* 중앙 정렬 */
 }
 
 .container {
@@ -16,7 +17,6 @@ body {
 }
 
 h2 {
-    text-align: center;
     color: #333;
 }
 
@@ -30,17 +30,17 @@ h2 {
 }
 
 .button-container button {
-    background-color: #28a745;
-    color: #fff;
-    border: none;
+    background-color: #002366; /* 수정된 색깔 */
+    color: #ffffff;
     padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    border-radius: 5px;
 }
 
 .button-container button:hover {
-    background-color: #218838;
+    background-color: #001a4d; /* 수정된 호버 색깔 */
 }
 
 .empty-reviews-message {
@@ -62,14 +62,41 @@ h2 {
 
 .reviews-table th, .reviews-table td {
     padding: 12px 15px;
-    text-align: left;
+    text-align: center; /* 중앙 정렬 */
     border: 1px solid #ddd;
 }
-
+.reviews-table th {
+    background-color: #4da6ff; /* 기본 색상 */
+    color: #fff; /* 글자색 */
+}
 .reviews-table tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
+/* 마우스 움직일 때 색 변화 제거 */
 .reviews-table tr:hover {
+    background-color: initial;
+}
+
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.pagination a, .pagination span {
+    margin: 0 5px;
+    padding: 5px 10px;
+    color: #007bff;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.pagination a:hover {
     background-color: #f1f1f1;
+}
+
+.pagination .current {
+    background-color: #007bff;
+    color: #fff;
 }

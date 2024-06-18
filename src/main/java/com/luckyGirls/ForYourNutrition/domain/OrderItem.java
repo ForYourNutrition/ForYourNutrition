@@ -1,5 +1,6 @@
 package com.luckyGirls.ForYourNutrition.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -11,12 +12,7 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 
 import lombok.Getter;
-
 import lombok.Setter;
-
-
-
-
 
 @Getter
 @Setter
@@ -26,25 +22,20 @@ public class OrderItem {
    @Id @GeneratedValue
    private int orderItem_id;
 
-
    @ManyToOne
    @JoinColumn(name="member_id")
    private Member member;
-
-
+   
    @ManyToOne(fetch = FetchType.LAZY)
    @JoinColumn(name = "item_id")
    private Item item;
-
-
+   
    @ManyToOne
    @JoinColumn(name = "order_id")
    private Order orders;
-
-
+   
    private int orderPrice; //주문가격
    private int count; //수량
-
 
    public static OrderItem createOrderItem(Item item, int count){
       OrderItem orderItem = new OrderItem();
@@ -55,15 +46,12 @@ public class OrderItem {
       return orderItem;
    }
 
-
    public int getTotalPrice(){
       return orderPrice*count;
    }
 
-
    public void cancel() {
       this.getItem().addStock(count);
    }
-
 
 }

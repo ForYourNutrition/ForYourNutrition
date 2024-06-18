@@ -2,19 +2,22 @@ package com.luckyGirls.ForYourNutrition.controller;
 
 import java.io.Serializable;
 
+import com.luckyGirls.ForYourNutrition.domain.Address;
 import com.luckyGirls.ForYourNutrition.domain.Member;
 
 
 @SuppressWarnings("serial")
 public class MemberForm implements Serializable {
 	private Member member;
+	
+	private Address address;
 
 	private boolean newMember;
 
 	private String repeatedPassword;
 
-	public MemberForm(Member account) {
-		this.member = account;
+	public MemberForm(Member member) {
+		this.member = member;
 		this.newMember = false;
 	}
 
@@ -30,7 +33,15 @@ public class MemberForm implements Serializable {
 	public void setMember(Member member) {
 		this.member = member;
 	}
+	
+	public Address getAddress() {
+		return address;
+	}
 
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+	
 	public boolean isNewMember() {
 		return newMember;
 	}

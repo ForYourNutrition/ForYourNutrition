@@ -12,7 +12,7 @@ public interface ReviewDao {
 	
 	void insertReview(Review review) throws DataAccessException; //후기 추가
 	
-	void updateReview(Review review) throws DataAccessException; //후기 수정
+	Review updateReview(Review review) throws DataAccessException; //후기 수정
 	
 	void deleteReview(Review review) throws DataAccessException; //후기 삭제
 	

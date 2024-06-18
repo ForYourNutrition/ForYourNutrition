@@ -1,17 +1,80 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>View Question</title>
+    <meta charset="UTF-8">
+    <title>QnA question view</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/viewStyle.css}">
 </head>
 <body>
-    <h1>Question Details</h1>
-    <div>
-        <h2 th:text="${question.title}">Title</h2>
-        <p th:text="${question.content}">Content</p>
-        <p th:text="${#dates.format(question.qdate, 'yyyy-MM-dd HH:mm')}">Date</p>
-    </div>
-    <a th:href="@{/question/edit/{id}(id=${question.question_id})}">Edit</a>
-    <a th:href="@{/question/delete/{id}(id=${question.question_id})}">Delete</a>
-    <a href="/question">Back to List</a>
+    <div th:insert="~{header}"></div>
+    
+    <div class="container">
+        <div class="question-section">
+            <h2>Question</h2>
+
+            <div class="question-details">
+                <div class="detail-item">
+                    <label for="name">작성자 :</label>
+                    <span th:text="${memberName}"></span>
+                </div>
+                <div class="detail-item">
+                    <label for="writtenTime">작성시간 :</label>
+                    <span th:text="${question.qdate}"></span>
+                </div>
+                <div class="detail-item">
+                    <label for="title">제목 :</label>
+                    <span th:text="${question.title}"></span>
+                </div>
+                <div class="detail-item">
+                    <label for="content">내용 :</label>
+                    <span th:text="${question.content}"></span>
+                </div>
+            </div>
+
+            <!-- <div class="button-group" th:if="${question.member.member_id == member.member_id}"> -->
+            <div class="button-group">
+                <form th:action="@{/question/updateQuestionForm}" method="get" class="inline-form">
+                    <input type="hidden" name="question_id" th:value="${questionForm.question_id}" />
+                    <button type="submit">Question 수정</button>
+                </form>
+
+                <form th:action="@{/question/deleteQuestion}" method="post" class="inline-form" onsubmit="return confirm('정말로 이 게시글을 삭제하시겠습니까?');">
+                    <input type="hidden" name="question_id" th:value="${questionForm.question_id}" />
+                    <button type="submit">Question 삭제</button>
+                </form>
+            </div>
+            
+            
+            
+        </div>
+
+	<div class="comment-section">
+	    <h3>댓글</h3>
+	    <form th:action="@{/questionComment/addComment}" method="post">
+	        <input type="hidden" name="question_id" th:value="${question.question_id}" />
+	        <div class="form-group">
+	            <label for="content">댓글 작성:</label>
+	            <textarea id="content" name="content" rows="4"></textarea>
+	        </div>
+	        <button type="submit">댓글 작성하기</button>
+	    </form>
+	    
+	    <h3>댓글 목록</h3>
+		<div th:each="comment : ${comments}" class="comment">
+		    <div class="comment-info">
+		        <div>
+		            <span class="comment-author" th:text="${comment.member.name}">Author Name</span>
+		            <span class="comment-date" th:text="${comment.qcdate}">Comment Date</span>
+		        </div>
+		        <form th:action="@{/questionComment/deleteComment}" method="post">
+		            <input type="hidden" name="qc_id" th:value="${comment.qc_id}" />
+		            <input type="hidden" name="question_id" th:value="${question.question_id}" /> 
+		            <button type="submit" class="delete-button">삭제</button>
+		        </form>
+		    </div>
+		    <div class="comment-content" th:text="${comment.content}">Comment Content</div>
+		</div>
+		</div>
+	</div>
 </body>
 </html>

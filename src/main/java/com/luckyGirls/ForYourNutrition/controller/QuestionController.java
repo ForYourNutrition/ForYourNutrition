@@ -45,6 +45,7 @@ public class QuestionController {
             	//questionForm.setQuestion_id(question.getQuestion_id());
             	questionForm.setTitle(question.getTitle());
             	questionForm.setContent(question.getContent());
+            	
                 return questionForm;
             }
         }
@@ -56,7 +57,7 @@ public class QuestionController {
 	public String createForm(Model model, HttpSession session) {
 		MemberSession ms = (MemberSession) session.getAttribute("ms");
         if (ms == null) {
-        	return "redirect:/member/loginForm.do";
+        	return "redirect:/member/loginForm";
         }
 		Member member = ms.getMember();		
 		String memberName = member.getName();
@@ -75,13 +76,13 @@ public class QuestionController {
 	        MemberSession ms = (MemberSession) session.getAttribute("ms");
 
 	        if (ms == null) {
-	            return "redirect:/member/loginForm.do";
+	            return "redirect:/member/loginForm";
 	        }
 	        Member member = ms.getMember();
 
 	        // 현재 시간 받아오기
 	        LocalDateTime now = LocalDateTime.now();
-	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 	        String formattedNow = now.format(formatter);
 
 	        Question question = new Question();
@@ -170,7 +171,7 @@ public class QuestionController {
 	    try {
 	        MemberSession ms = (MemberSession) session.getAttribute("ms");
 	        if (ms == null) {
-	            return "redirect:/member/loginForm.do";
+	            return "redirect:/member/loginForm";
 	        }
 	        Member member = ms.getMember();
 	        int question_id = questionForm.getQuestion_id();
@@ -220,7 +221,7 @@ public class QuestionController {
 	public String viewQuestion(@RequestParam("question_id") int question_id, Model model, HttpSession session) {
 		MemberSession ms = (MemberSession) session.getAttribute("ms");
 		 if (ms == null) {
-	        	return "redirect:/member/loginForm.do";
+	        	return "redirect:/member/loginForm";
 	        }
 		Question question = questionService.getQuestion(question_id);
 			

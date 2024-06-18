@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>위시리스트</title>
+    <link rel="stylesheet" type="text/css" href="/css/wishStyle.css">
+    <script th:inline="javascript">
+        function confirmAction(event, actionType) {
+            var message = '';
+            switch(actionType) {
+                case 'move':
+                    message = '이 항목은 Cart로!';
+                    break;
+                case 'remove':
+                    message = '이 항목은 삭제됩니다.';
+                    break;
+                case 'allMove':
+                    message = 'WishList의 모든 항목을 Cart로 이동하시겠습니까?';
+                    break;
+                default:
+                    message = '작업이 완료되었습니다!';
+            }
+            if (!confirm(message)) {
+                event.preventDefault();
+            }
+        }
+    </script>
+</head>
+<body>
+<div th:insert="~{header}"></div>
+
+<div class="container">
+    <h1>Wish - List</h1>
+    
+    <div th:if="${error}" class="error-message">
+        <p th:text="${error}"></p>
+    </div>
+    
+    <div th:if="${wish == null or wish.wishItemList == null or wish.wishItemList.size() == 0}" class="empty-wish-message">
+        <p>WishList가 비어 있습니다.</p>
+    </div>
+    
+    <div th:if="${wish != null and wish.wishItemList != null and wish.wishItemList.size() > 0}">
+        <table class="wish-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Category</th>
+                    <th>Effect</th>
+                    <th>Detail</th>
+                    <th>Price</th>
+                    <th>Work</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="wishItem : ${wish.wishItemList}">
+                    <td th:text="${wishItem.item.name}">상품 이름</td>
+					<td th:text="${wishItem.item.category}">카테고리</td>
+		        	<td th:text="${wishItem.item.effect}">효과</td>
+                    <td th:text="${wishItem.item.detail}">details</td>
+                    <td th:text="${wishItem.item.price} + ' 원'">가격</td>
+                    <td>
+                        <form th:action="@{/wish/addToCart}" method="post" class="wish-action-form">
+                            <input type="hidden" name="wishItem_id" th:value="${wishItem.wishItem_id}">
+                            <button type="submit" class="add-to-cart" onclick="return confirmAction(event, 'move')">Cart로 이동하기</button>
+                        </form>
+                        <form th:action="@{/wish/removeWishItem}" method="post" class="wish-action-form">
+                            <input type="hidden" name="wishItem_id" th:value="${wishItem.wishItem_id}">
+                            <button type="submit" class="remove-from-wish" onclick="return confirmAction(event, 'remove')">Wish에서 제거</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="add-all-to-cart">
+            <form th:action="@{/wish/addAllToCart}" method="post" onsubmit="confirmAction(event, 'allMove')">
+                <button type="submit">모두 Cart로 이동하기</button>
+            </form>
+        </div>
+    </div>	    
+</div>    
+</body>
+</html>

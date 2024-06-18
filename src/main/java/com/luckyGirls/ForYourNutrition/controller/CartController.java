@@ -2,10 +2,15 @@ package com.luckyGirls.ForYourNutrition.controller;
 
 import com.luckyGirls.ForYourNutrition.domain.Cart;
 import com.luckyGirls.ForYourNutrition.domain.CartItem;
+import com.luckyGirls.ForYourNutrition.domain.Item;
 import com.luckyGirls.ForYourNutrition.domain.Member;
+import com.luckyGirls.ForYourNutrition.domain.WishItem;
 import com.luckyGirls.ForYourNutrition.service.CartService;
 import com.luckyGirls.ForYourNutrition.service.ItemService;
-import com.luckyGirls.ForYourNutrition.service.MemberService;
+import com.luckyGirls.ForYourNutrition.service.WishService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,40 +26,51 @@ public class CartController {
     
     @Autowired
     private ItemService itemService;
-
-    @Autowired
-    private MemberService memberService;
     
- 
+    @Autowired
+    private WishService wishService;
+
     @GetMapping("/cart/viewCart")
     public String viewCart(HttpSession session, Model model) {
         MemberSession ms = (MemberSession) session.getAttribute("ms");
-        Member member = ms.getMember();
         if (ms == null) {
-        	return "redirect:/member/loginForm.do";
+        	return "redirect:/member/loginForm";
         }
-        
-        System.out.println("20");
-        Cart cart = cartService.getCartByMember(member);
-        System.out.println("21");
+        Member member = ms.getMember();
+        Cart cart = null;
+        try {
+            cart = cartService.getCartByMember(member);
+            if (cart != null) {
+                System.out.println(cart.toString());
+            } else {
+                System.out.println("Cart is null");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         model.addAttribute("cart", cart);
-        System.out.println("22");
         return "cart/viewCart";
     }
 
     @PostMapping("/cart/addCartItem")
-    public String addCartItem(@RequestParam int item_id, @RequestParam int quantity, HttpSession session) {
+    public String addCartItem(@RequestParam int item_id, @RequestParam int quantity, HttpSession session, Model model) {
         MemberSession ms = (MemberSession) session.getAttribute("ms");
         if (ms == null) {
-            return "redirect:/login";
+            return "redirect:/member/loginForm";
         }
-        System.out.println("아이템아이디" + item_id);
-        System.out.println("수량" + quantity);
+
         Member member = ms.getMember();
+        Item item = itemService.getItemById(item_id);
+
         CartItem cartItem = new CartItem();
-        cartItem.setItem(itemService.getItemById(item_id));
+        cartItem.setItem(item);
+        cartItem.setMember(member);
         cartItem.setQuantity(quantity);
         cartService.addCartItem(member, cartItem);
+
+        Cart cart = cartService.getCartByMember(member);
+        model.addAttribute("cart", cart);
         return "redirect:/cart/viewCart";
     }
 
@@ -62,43 +78,94 @@ public class CartController {
     public String removeCartItem(@RequestParam int cartItem_id, HttpSession session) {
         MemberSession ms = (MemberSession) session.getAttribute("ms");
         if (ms == null) {
-        	return "redirect:/member/loginForm.do";
+        	return "redirect:/member/loginForm";
         }
         Member member = ms.getMember();
         cartService.removeCartItem(member, cartItem_id);
         return "redirect:/cart/viewCart";
     }
 
-    @PostMapping("/cart/addQuantity")
-    public String addQuantity(@RequestParam int cartItem_id, @RequestParam int quantity, HttpSession session) {
+    @PostMapping("/cart/updateQuantity")
+    public String updateQuantity(@RequestParam int cartItem_id, @RequestParam int quantity, @RequestParam String action, HttpSession session) {
         MemberSession ms = (MemberSession) session.getAttribute("ms");
         if (ms == null) {
-        	return "redirect:/member/loginForm.do";
+        	return "redirect:/member/loginForm";
         }
         Member member = ms.getMember();
-        cartService.addQuantity(member, cartItem_id, quantity);
+        if ("add".equals(action)) {
+            cartService.addQuantity(member, cartItem_id, quantity);
+        } else if ("remove".equals(action)) {
+            cartService.removeQuantity(member, cartItem_id, quantity);
+        } else if ("delete".equals(action)) {
+            cartService.removeCartItem(member, cartItem_id);
+        }
         return "redirect:/cart/viewCart";
     }
 
-    @PostMapping("/cart/removeQuantity")
-    public String removeQuantity(@RequestParam int cartItem_id, @RequestParam int quantity, HttpSession session) {
-        MemberSession ms = (MemberSession) session.getAttribute("ms");
-        if (ms == null) {
-        	return "redirect:/member/loginForm.do";
-        }
-        Member member = ms.getMember();
-        cartService.removeQuantity(member, cartItem_id, quantity);
-        return "redirect:/cart/viewCart";
-    }
-
-  	/*@GetMapping("/order/createOrder")
+    @GetMapping("/order/createOrder")
     public String createOrderForm(HttpSession session, Model model) {
         MemberSession ms = (MemberSession) session.getAttribute("ms");
         if (ms == null) {
-            return "redirect:/login";
+        	return "redirect:/member/loginForm";
         }
         Member member = ms.getMember();
-        model.addAttribute("cart", cartService.getCartByMember(member));
-        return "order/createOrder";
-    }*/
+        Cart cart = cartService.getCartByMember(member);
+        
+        if(cart != null) {
+        	System.out.println("cartId : " + cart.getCart_id());
+        	System.out.println("CartItemList : ");
+            for (CartItem cartItem : cart.getCartItems()) {
+                System.out.println(" - Item: " + cartItem.getItem().getName() + ", Quantity: " + cartItem.getQuantity());
+            }
+        } else {
+            System.out.println("Cart is null");
+        }
+        model.addAttribute("cart", cart);
+        return "cart/fromCartToOrder";
+    }
+    
+    // 위시리스트에서 아이템을 카트로 이동하는 기능 추가
+    @PostMapping("/wish/addToCart")
+    public String addToCartFromWish(@RequestParam int wishItem_id, HttpSession session) {
+        MemberSession ms = (MemberSession) session.getAttribute("ms");
+        if (ms == null) {
+            return "redirect:/member/loginForm";
+        }
+        Member member = ms.getMember();
+        WishItem wishItem = wishService.findWishItemById(wishItem_id);
+
+        CartItem cartItem = new CartItem();
+        cartItem.setItem(wishItem.getItem());
+        cartItem.setMember(member);
+        cartItem.setQuantity(1); // 기본 수량을 1로 설정
+
+        cartService.addCartItem(member, cartItem);
+        wishService.removeWishItem(member, wishItem_id);
+
+        return "redirect:/cart/viewCart";
+    }
+
+    @PostMapping("/wish/addAllToCart")
+    public String addAllToCartFromWish(HttpSession session) {
+        MemberSession ms = (MemberSession) session.getAttribute("ms");
+        if (ms == null) {
+            return "redirect:/member/loginForm";
+        }
+        Member member = ms.getMember();
+        List<WishItem> wishItems = wishService.getWishItemsByMember(member);
+
+        if (wishItems != null) {
+            for (WishItem wishItem : wishItems) {
+                CartItem cartItem = new CartItem();
+                cartItem.setItem(wishItem.getItem());
+                cartItem.setMember(member);
+                cartItem.setQuantity(1); // 기본 수량을 1로 설정
+
+                cartService.addCartItem(member, cartItem);
+                wishService.removeWishItem(member, wishItem.getWishItem_id());
+            }
+        }
+
+        return "redirect:/cart/viewCart";
+    }
 }

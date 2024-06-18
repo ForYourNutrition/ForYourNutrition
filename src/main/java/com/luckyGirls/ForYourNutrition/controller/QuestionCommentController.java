@@ -1,5 +1,7 @@
 package com.luckyGirls.ForYourNutrition.controller;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +38,17 @@ public class QuestionCommentController {
 		
 	    MemberSession ms = (MemberSession) session.getAttribute("ms");
 	    if (ms != null) {
+	    	
+	    	// 현재 시간 받아오기
+	        LocalDateTime now = LocalDateTime.now();
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+	        String formattedNow = now.format(formatter);
+	    	
 	    	Question question = questionService.getQuestion(question_id);
 	    	comment.setQuestion(question);
 	        comment.setMember(ms.getMember());
-	        questionCommentService.addCommentToQuestion(comment.getQuestion().getQuestion_id(), comment.getContent(), comment.getMember());
+	        comment.setQcdate(formattedNow);
+	        questionCommentService.addCommentToQuestion(comment.getQuestion().getQuestion_id(), comment.getContent(), comment.getMember(), comment.getQcdate());
 	    }
 	    return "redirect:/question/viewQuestion?question_id=" + question_id;
 	}
@@ -51,7 +60,7 @@ public class QuestionCommentController {
 	                            Model model) {
 	    MemberSession ms = (MemberSession) session.getAttribute("ms");
 	    if (ms == null) {
-        	return "redirect:/member/loginForm.do";
+        	return "redirect:/member/loginForm";
         }
 	    Member member = ms.getMember();
 	    QuestionComment comment = questionCommentService.getQuestionComment(qc_id);

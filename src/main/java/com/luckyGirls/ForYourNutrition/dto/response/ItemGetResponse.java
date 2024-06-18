@@ -20,7 +20,7 @@ public class ItemGetResponse {
 
 	private int stock;
 
-	private int category;
+	private String category;
 
 	private int target;
 

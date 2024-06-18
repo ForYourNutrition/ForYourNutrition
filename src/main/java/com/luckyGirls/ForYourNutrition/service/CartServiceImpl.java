@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.luckyGirls.ForYourNutrition.dao.CartDao;
 import com.luckyGirls.ForYourNutrition.domain.Cart;
 import com.luckyGirls.ForYourNutrition.domain.CartItem;
+import com.luckyGirls.ForYourNutrition.domain.Item;
 import com.luckyGirls.ForYourNutrition.domain.Member;
 
 import jakarta.transaction.Transactional;
@@ -25,27 +26,64 @@ public class CartServiceImpl implements CartService {
 		// TODO Auto-generated method stub
 		Cart cart = new Cart(member);
 		cartDao.saveCart(cart);
-		System.out.println("ㅅㅂ" + cart.toString());
 	}
 
 	@Override
 	@Transactional
 	public Cart getCartByMember(Member member) {
 		// TODO Auto-generated method stub
-		return cartDao.findCartByMember(member);
+		try {
+	        Cart cart = cartDao.findCartByMember(member);
+	        if (cart != null) {
+	            // Lazy loading 문제 방지를 위해 cartItems를 강제 초기화
+	            cart.getCartItems().size();
+	        }
+	        return cart;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw e;
+	    }
 	}
 
 	@Override
 	@Transactional
 	public void addCartItem(Member member, CartItem cartItem) {
-		// TODO Auto-generated method stub
-		Cart cart = cartDao.findCartByMember(member);
-		if (cart == null) {
-            cart = new Cart(member);
-            cartDao.saveCart(cart);
-        }
-        cartItem.setCart(cart);
-        cartDao.saveCartItem(cartItem);
+	    try {
+	        Cart cart = cartDao.findCartByMember(member);
+	        if (cart == null) {
+	            cart = new Cart(member);
+	            cartDao.saveCart(cart);
+	        }
+
+	        Item item = cartItem.getItem();
+	        int availableStock = item.getStock();
+	        int requestedQuantity = Math.min(cartItem.getQuantity(), availableStock);
+
+	        if (requestedQuantity < 1) {
+	            requestedQuantity = 1;
+	        }
+
+	        cartItem.setQuantity(requestedQuantity);
+
+	        List<CartItem> existingCartItems = cartDao.findCartItemsByCartAndItem(cart, item);
+	        if (!existingCartItems.isEmpty()) {
+	            CartItem existingCartItem = existingCartItems.get(0);
+	            int newQuantity = Math.min(existingCartItem.getQuantity() + requestedQuantity, availableStock);
+	            existingCartItem.setQuantity(newQuantity);
+	            cartDao.saveCartItem(existingCartItem);
+
+	            for (int i = 1; i < existingCartItems.size(); i++) {
+	                cartDao.deleteCartItemById(existingCartItems.get(i).getCartItem_id());
+	            }
+	        } else {
+	            cartItem.setCart(cart);
+	            cart.addCartItem(cartItem);
+	            cartDao.saveCartItem(cartItem);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw e;
+	    }
 	}
 
 	@Override
@@ -61,8 +99,10 @@ public class CartServiceImpl implements CartService {
 		// TODO Auto-generated method stub
 		CartItem cartItem = cartDao.findCartItemById(cartItemId);
         if (cartItem != null) {
-            cartItem.addQuantity(quantity);
-            cartDao.saveCartItem(cartItem);
+        	 int availableStock = cartItem.getItem().getStock();
+             int newQuantity = Math.min(cartItem.getQuantity() + quantity, availableStock);
+             cartItem.setQuantity(newQuantity);
+             cartDao.saveCartItem(cartItem);
         }
 	}
 
@@ -71,8 +111,9 @@ public class CartServiceImpl implements CartService {
 	public void removeQuantity(Member member, int cartItemId, int quantity) {
 		// TODO Auto-generated method stub
 		CartItem cartItem = cartDao.findCartItemById(cartItemId);
-        if (cartItem != null) {
-            cartItem.removeQuantity(quantity);
+		if (cartItem != null) {
+            int newQuantity = Math.max(cartItem.getQuantity() - quantity, 1);
+            cartItem.setQuantity(newQuantity);
             cartDao.saveCartItem(cartItem);
         }
 	}

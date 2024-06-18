@@ -1,0 +1,161 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    margin: 20px auto;
+    background-color: #ffffff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 36px;
+    color: #333333;
+    margin-bottom: 20px;
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.sort-container, .search-container, .button-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sort-container {
+    justify-content: flex-start;
+}
+
+.search-container {
+    justify-content: center;
+}
+
+.button-container {
+    justify-content: flex-end;
+}
+
+.sort-button {
+    background-color: #f0f0f0;
+    color: #333333;
+    padding: 10px 20px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+    text-decoration: none;
+}
+
+.sort-button.active, .sort-button:hover {
+    background-color: #002366;
+    color: #ffffff;
+}
+
+input[type="text"] {
+    width: 200px;
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #002366;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #001a4d;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #cccccc;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+/* 테이블 레이아웃 조정을 위한 CSS 추가 */
+table {
+	width: 100%;
+}
+th, td {
+	padding: 8px;
+	text-align: center;
+}
+th.title {
+	width: 50%;
+	text-align: center;
+}
+th.date {
+	width: 20%;
+	text-align: center;
+}
+th.author {
+	width: 20%;
+	text-align: center;            
+}
+a {
+    color: #002366;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.pagination a, .pagination span {
+    margin: 0 5px;
+    padding: 5px 10px;
+    color: #002366;
+    text-decoration: none;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+}
+
+.pagination a:hover {
+    background-color: #f2f2f2;
+}
+
+.pagination .current {
+    background-color: #002366;
+    color: #ffffff;
+}
+    

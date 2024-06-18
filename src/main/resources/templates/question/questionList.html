@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Q&A Board</title>
+    <title>QnA</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/questionStyle.css}">
 </head>
 <body>
     <div th:insert="~{header}"></div>
     <div class="container">
-        <h2>Q&A</h2>
+        <h2>Q&A List</h2>
         
         <div class="controls">
             <div class="sort-container">
@@ -21,22 +21,22 @@
                 </form>
             </div>
             <div class="button-container">
-                <button onclick="location.href='/question/createQuestion'">작성하기</button>
+                <button onclick="location.href='/question/createQuestion'">문의글 작성하기</button>
             </div>
         </div>
         
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>INDEX</th>
                     <th class="title">Title</th>
                     <th class="author">Author</th>
                     <th class="date">Date</th>
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="question : ${questions}">
-                    <td th:text="${question.question_id}"></td>
+                <tr th:each="question, iterStat : ${questions}">
+                    <td th:text="${iterStat.index + 1}"></td>
                     <td><a th:href="@{/question/viewQuestion(question_id=${question.question_id})}" th:text="${question.title}"></a></td>
                     <td th:text="${question.member.name}"></td>
                     <td th:text="${question.qdate}"></td>
@@ -45,12 +45,12 @@
         </table>
         
         <div class="pagination">
-            <a th:if="${nowPage > 1}" th:href="@{/question/questionList(page=${nowPage - 2}, sort=${sort}, keyword=${keyword})}">이전</a> <!-- 페이지 번호는 1부터 시작하므로 -2 -->
+            <a th:if="${nowPage > 1}" th:href="@{/question/questionList(page=${nowPage - 2}, sort=${sort}, keyword=${keyword})}">이전</a>
             <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
-                <a th:if="${page != nowPage}" th:href="@{/question/questionList(page=${page - 1}, sort=${sort}, keyword=${keyword})}" th:text="${page}"></a> <!-- 페이지 번호는 1부터 시작하므로 -1 -->
+                <a th:if="${page != nowPage}" th:href="@{/question/questionList(page=${page - 1}, sort=${sort}, keyword=${keyword})}" th:text="${page}"></a>
                 <strong th:if="${page == nowPage}" th:text="${page}" style="color:red"></strong>
             </th:block>
-            <a th:if="${nowPage < totalPages}" th:href="@{/question/questionList(page=${nowPage}, sort=${sort}, keyword=${keyword})}">다음</a> <!-- 페이지 번호는 1부터 시작하므로 그대로 -->
+            <a th:if="${nowPage < totalPages}" th:href="@{/question/questionList(page=${nowPage}, sort=${sort}, keyword=${keyword})}">다음</a>
         </div>
     </div>
 </body>

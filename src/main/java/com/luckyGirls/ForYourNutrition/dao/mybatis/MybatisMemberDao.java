@@ -1,5 +1,7 @@
 package com.luckyGirls.ForYourNutrition.dao.mybatis;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
@@ -46,4 +48,7 @@ public class MybatisMemberDao implements MemberDao{
 		return memberMapper.findPassword(id, email);
 	} //비밀번호 찾기
 
+	public List<Member> getMembers(int taking_time) throws DataAccessException{
+		return memberMapper.getMembers(taking_time);
+	} //섭취시간으로 회원들 가져오기
 }

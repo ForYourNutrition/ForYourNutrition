@@ -90,23 +90,33 @@
 </head>
 <body>
     <div th:insert="~{header}"></div>
-    
+
     <div class="search-bar-container">
         <div class="search-bar">
-            <input type="text" placeholder="검색어를 입력하세요">
-            <button>검색</button>
+            <input type="text" id="searchInput" placeholder="검색어를 입력하세요">
+            <button th:onclick="|searchItems()|">검색</button>
         </div>
         <!-- 로그인 정보 출력 -->
         <div class="user-info" th:if="${session.ms}">
-            <p th:text="${member.name} + '님 반갑습니다.'"></p>
-            <p th:text="'POINT: ' + ${member.point}"></p>
+            <p th:text="${session.ms.member.name} + '님 반갑습니다.'"></p>
+            <p th:text="'POINT: ' + ${session.ms.member.point}"></p>
         </div>
     </div>
 
     <div class="banner">
-        <a href="survey/surveyForm.do">
-            <img src="path/to/your/image.jpg" alt="슬로건 이미지">
+        <a href="survey/surveyForm">
+            <img src="/images/surveyBanner.png" alt="슬로건 이미지">
         </a>
     </div>
+    <script>
+        function searchItems() {
+            var text = document.getElementById('searchInput').value;
+            if (text) {
+                window.location.href = '/item/searchItemList.do?text=' + encodeURIComponent(text);
+            } else {
+                alert('검색어를 입력하세요.');
+            }
+        }
+    </script>
 </body>
 </html>

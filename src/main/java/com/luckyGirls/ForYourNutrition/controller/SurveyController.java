@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -45,17 +44,17 @@ public class SurveyController {
     }
 
     // 문진표 폼
-    @GetMapping("survey/surveyForm.do")
+    @GetMapping("survey/surveyForm")
     public String joinForm(Model model, HttpSession session) {
     	MemberSession ms = (MemberSession) session.getAttribute("ms");
         if (ms == null) {
-        	return "redirect:/member/loginForm.do";
+        	return "redirect:/member/loginForm";
         }
         return "survey/surveyForm";
     }
 
     // 문진표 add, update
-    @PostMapping("survey/saveSurvey.do")
+    @PostMapping("survey/saveSurvey")
     public String join(HttpServletRequest request, HttpSession session,
                        @ModelAttribute("surveyForm") SurveyForm surveyForm, BindingResult result, Model model) throws Exception {
         try {
@@ -83,7 +82,7 @@ public class SurveyController {
     }
     
     // 문진표 정보 조회
-    @GetMapping("survey/surveyInfo.do")
+    @GetMapping("survey/surveyInfo")
     public String showSurveyInfo(HttpSession session, Model model) {
         MemberSession ms = (MemberSession) session.getAttribute("ms");
         if (ms != null) {
@@ -99,7 +98,7 @@ public class SurveyController {
                 return "survey/surveyInfo";
             }
         }
-        return "redirect:/survey/surveyForm.do";
+        return "redirect:/survey/surveyForm";
     }
 
     private String convertEffectListToString(List<Integer> effectList) {

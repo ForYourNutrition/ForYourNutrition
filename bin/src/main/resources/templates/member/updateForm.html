@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 수정</title>
+    <style>
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            box-sizing: border-box;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        input {
+            width: calc(30% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid navy;
+            box-sizing: border-box;
+        }
+        input.error-input {
+            border-color: navy;
+        }
+        .error-class {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+            text-align: left;
+        }
+        button {
+            width: 30%;
+            padding: 15px;
+            border-radius: 5px;
+            border: none;
+            background-color: navy;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #001f4d;
+        }
+        /* Gender Radio Button */
+        .gender-input-container {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .gender-label {
+            display: inline-block;
+            margin-right: 20px;
+        }
+        .gender-label input {
+            display: inline-block;
+            width: auto;
+            margin-right: 5px;
+        }
+        select {
+		    width: calc(30% - 22px); /* 이전에 50%로 설정되어 있던 부분을 100%로 변경 */
+		    padding: 10px;
+		    margin-bottom: 10px;
+		    border-radius: 5px;
+		    border: 1px solid navy;
+		    box-sizing: border-box;
+		}
+		h2 {
+			color: navy;
+		}
+		.error-class {
+			text-align: center;
+		}
+    </style>
+</head>
+<body>
+<div>
+<div th:insert="~{header}"></div>
+<div class="container">
+    <h2>회원 수정</h2>
+    <form action="#" method="post" th:action="@{modifyMember.do}" th:object="${memberForm}">
+        <div>
+            <label for="id">아이디 (수정 불가)</label>
+            <input type="text" id="id" name="id" th:field="*{member.id}" class="error-input" readonly/>
+            <div th:each="err : ${#fields.errors('member.id')}" class="error-class" th:text="${err}"></div>
+        </div>
+        <div>
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" name="password" th:field="*{member.password}" class="error-input"/>
+            <div th:each="err : ${#fields.errors('member.password')}" class="error-class" th:text="${err}"></div>
+        </div>
+        <div>
+            <label for="repeatedPassword">비밀번호 확인</label>
+            <input type="password" id="repeatedPassword" name="repeatedPassword" th:field="*{repeatedPassword}" class="error-input"/>
+            <div th:each="err : ${#fields.errors('repeatedPassword')}" class="error-class" th:text="${err}"></div>
+        </div>
+        <div>
+            <label for="name">이름</label>
+            <input type="text" id="name" name="name" th:field="*{member.name}" class="error-input"/>
+            <div th:each="err : ${#fields.errors('member.name')}" class="error-class" th:text="${err}"></div>
+        </div>
+        <div>
+            <label for="nickname">닉네임</label>
+            <input type="text" id="nickname" name="nickname" th:field="*{member.nickname}" class="error-input"/>
+            <div th:each="err : ${#fields.errors('member.nickname')}" class="error-class" th:text="${err}"></div>
+        </div>
+        <div>
+            <label for="birth">생년월일</label>
+            <input type="date" id="birth" name="birth" th:field="*{member.birth}" class="error-input"/>
+            <div th:each="err : ${#fields.errors('member.birth')}" class="error-class" th:text="${err}"></div>
+        </div>
+        <div>
+            <label>성별</label>
+            <input type="radio" th:field="*{member.gender}" name="gender" value="1"/><label>남성</label>
+            <input type="radio" th:field="*{member.gender}" name="gender" value="2"/><label>여성</label><br>
+            <div th:each="err : ${#fields.errors('member.gender')}" class="error-class" th:text="${err}"></div>
+        </div>
+        <div>
+            <label for="phone_number">연락처</label>
+            <input type="text" id="phone_number" name="phone_number" th:field="*{member.phone_number}" class="error-input" placeholder="ex)010-0000-0000"/>
+            <div th:each="err : ${#fields.errors('member.phone_number')}" class="error-class" th:text="${err}"></div>
+        </div>
+        <div>
+            <label for="email">이메일</label>
+            <input type="email" id="email" name="email" th:field="*{member.email}" class="error-input"placeholder="ex)example@example.com"/>
+            <div th:each="err : ${#fields.errors('member.email')}" class="error-class" th:text="${err}"></div>
+        </div>
+        <div>
+            <label for="taking_time">영양제 섭취 시간</label>
+            <select id="taking_time" name="taking_time" th:field="*{member.taking_time}" class="error-input">
+                <option value="00">00:00</option>
+                <option value="01">01:00</option>
+                <option value="02">02:00</option>
+                <option value="03">03:00</option>
+                <option value="04">04:00</option>
+                <option value="05">05:00</option>
+                <option value="06">06:00</option>
+                <option value="07">07:00</option>
+                <option value="08">08:00</option>
+                <option value="09">09:00</option>
+                <option value="10">10:00</option>
+                <option value="11">11:00</option>
+                <option value="12">12:00</option>
+                <option value="13">13:00</option>
+                <option value="14">14:00</option>
+                <option value="15">15:00</option>
+                <option value="16">16:00</option>
+                <option value="17">17:00</option>
+                <option value="18">18:00</option>
+                <option value="19">19:00</option>
+                <option value="20">20:00</option>
+                <option value="21">21:00</option>
+                <option value="22">22:00</option>
+                <option value="23">23:00</option>
+            </select>
+            <div th:each="err : ${#fields.errors('member.taking_time')}" class="error-class" th:text="${err}"></div>
+        </div>
+        <button type="submit">저장</button>
+    </form>
+</div>
+</div>
+</body>
+</html>

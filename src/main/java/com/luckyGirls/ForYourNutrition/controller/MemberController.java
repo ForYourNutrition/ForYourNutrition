@@ -1,22 +1,26 @@
 package com.luckyGirls.ForYourNutrition.controller;
 
+import com.luckyGirls.ForYourNutrition.domain.Address;
 import com.luckyGirls.ForYourNutrition.domain.Cart;
 import com.luckyGirls.ForYourNutrition.domain.Member;
+import com.luckyGirls.ForYourNutrition.domain.Wish;
+import com.luckyGirls.ForYourNutrition.service.AddressService;
 import com.luckyGirls.ForYourNutrition.service.CartService;
 import com.luckyGirls.ForYourNutrition.service.MemberService;
+import com.luckyGirls.ForYourNutrition.service.WishService;
 import com.luckyGirls.ForYourNutrition.validator.LoginFormValidator;
 import com.luckyGirls.ForYourNutrition.validator.MemberFormValidator;
+import com.luckyGirls.ForYourNutrition.validator.MemberUpdateFormValidator;
+import com.luckyGirls.ForYourNutrition.validator.SearchIdFormValidator;
+import com.luckyGirls.ForYourNutrition.validator.SearchPasswordFormValidator;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -32,6 +36,12 @@ public class MemberController {
 	
 	@Autowired
 	private CartService cartService;
+	
+	@Autowired
+	private WishService wishService;
+	
+	@Autowired
+	private AddressService addressService;
 
 	@ModelAttribute("loginForm")
 	public LoginForm formBacking(HttpServletRequest request) throws Exception {
@@ -39,13 +49,13 @@ public class MemberController {
 	}
 	
 	//로그인 폼
-	@GetMapping("/member/loginForm.do")
+	@GetMapping("/member/loginForm")
 	public String loginForm(Model model){
 		return "member/loginForm";
 	}
 
 	//로그인
-	@PostMapping("/member/login.do")
+	@PostMapping("/member/login")
 	public ModelAndView handleRequest(HttpServletRequest request, HttpSession session,
 			@ModelAttribute("loginForm") LoginForm loginForm, Model model, BindingResult bindingResult) throws Exception {
 		
@@ -62,57 +72,90 @@ public class MemberController {
 			authenticator.authenticate(loginForm); // id과 password가 맞는지 검증
 			MemberSession memberSession = new MemberSession(m);
 			session.setAttribute("ms", memberSession);
-			return new ModelAndView("redirect:/main.do");
+			return new ModelAndView("redirect:/main");
 		} catch (AuthenticationException e) { // 검증 실패 시
 			bindingResult.reject(e.getMessage()); // error message
 			return new ModelAndView("member/loginForm");
 		}
 	}
     
-	/*
-	@RequestMapping(value = "/searchId.do", method = RequestMethod.GET)
-	public ModelAndView viewSerchIdForm(HttpServletRequest request) throws Exception {
-		//추후 구현
+	//아이디 찾기 폼
+	@GetMapping("member/searchIdForm")
+	public String viewSerchIdForm(Model model){
+		model.addAttribute("searchIdForm", new SearchIdForm());
+		return "member/searchIdForm";
 	}
 
-	@RequestMapping(value = "/searchId.do", method = RequestMethod.POST)
-	public ModelAndView searchId(HttpServletRequest request,
-			@RequestParam("name") String name,
-			@RequestParam("email") String email) throws Exception {
-		//추후 구현
+	//아이디 찾기
+	@PostMapping("member/searchId")
+	public ModelAndView searchId(HttpServletRequest request, HttpSession session,
+			@ModelAttribute("searchIdForm") SearchIdForm searchIdForm, Model model, BindingResult bindingResult) throws Exception {
+		new SearchIdFormValidator().validate(searchIdForm, bindingResult);
+		
+		if (bindingResult.hasErrors()) {
+			System.out.println(bindingResult);
+			return new ModelAndView("member/searchIdForm");
+		}
+		
+		String id = memberService.findId(searchIdForm.getEmail(), searchIdForm.getName());
+        if (id != null) {
+            memberService.sendIdEmail(searchIdForm.getEmail(), id);
+            model.addAttribute("type", "아이디");
+            model.addAttribute("message", "회원님의 이메일로 아이디가 전송되었습니다.");
+        } else {
+        	model.addAttribute("type", "아이디");
+            model.addAttribute("message", "존재하지 않는 회원입니다.");
+        }
+        return new ModelAndView("member/searchResult");
+	}
+	
+	//비밀번호 찾기 폼
+	@GetMapping("member/searchPasswordForm")
+	public String viewSerchPasswordForm(Model model){
+		model.addAttribute("searchPasswordForm", new SearchPasswordForm());
+		return "member/searchPasswordForm";
 	}
 
-	@RequestMapping(value = "/searchPwd.do", method = RequestMethod.GET)
-	public ModelAndView viewSearchPwdForm(HttpServletRequest request) throws Exception {
-		//추후 구현
+	//비밀번호 찾기
+	@PostMapping("member/searchPassword")
+	public ModelAndView searchPassword(HttpServletRequest request, HttpSession session,
+			@ModelAttribute("searchPasswordForm") SearchPasswordForm searchPasswordForm, Model model, BindingResult bindingResult) throws Exception {
+		new SearchPasswordFormValidator().validate(searchPasswordForm, bindingResult);
+		
+		if (bindingResult.hasErrors()) {
+			System.out.println(bindingResult);
+			return new ModelAndView("member/searchIdForm");
+		}
+		
+		String pw = memberService.findPassword(searchPasswordForm.getId(), searchPasswordForm.getEmail());
+        if (pw != null) {
+            memberService.sendPasswordEmail(searchPasswordForm.getEmail(), pw);
+            model.addAttribute("type", "비밀번호");
+            model.addAttribute("message", "회원님의 이메일로 비밀번호가 전송되었습니다.");
+        } else {
+        	model.addAttribute("type", "비밀번호");
+            model.addAttribute("message", "존재하지 않는 회원입니다.");
+        }
+        return new ModelAndView("member/searchResult");
 	}
-
-	@RequestMapping(value = "/searchPwd.do", method = RequestMethod.POST)
-	public ModelAndView searchPwd(HttpServletRequest request,
-			@RequestParam("id") String id,
-			@RequestParam("email") String email) throws Exception {
-		//추후 구현
-	}
-
-	 */
 
 	//로그아웃
-	@RequestMapping("/member/logout.do")
+	@GetMapping("/member/logout")
 	public String handleRequest(HttpSession session, Model model) throws Exception {
 		session.removeAttribute("ms");
 		session.invalidate();
-		return "redirect:/main.do";
+		return "redirect:/main";
 	}
 	
 	//회원가입 폼
-	@GetMapping("member/join.do")
+	@GetMapping("member/join")
 	public String joinForm(Model model, HttpSession session) {
 		model.addAttribute("memberForm", new MemberForm());
 		return "member/joinForm";
 	}
 	
 	//회원가입
-	@PostMapping("member/join.do")
+	@PostMapping("member/join")
 	public String join(HttpServletRequest request, HttpSession session,
 			@ModelAttribute("memberForm") MemberForm memberForm, BindingResult result, Model model) throws Exception {
 		new MemberFormValidator().validate(memberForm, result);
@@ -126,12 +169,23 @@ public class MemberController {
 			return "member/joinForm";
 		} else {
 			memberService.insertMember(memberForm.getMember());
+			
+			Member new_m = memberService.getMember(memberForm.getMember().getId());
+			
+			Address address = memberForm.getAddress();
+			address.setMember(new_m);
+			addressService.insertAddress(address);
 
 			//회원가입 시 자동으로 cart 생성
 			Cart cart = new Cart();
-			Member new_m = memberService.getMember(memberForm.getMember().getId());
 			cart.setMember(new_m);;
 			cartService.createCart(new_m);
+			
+			//회원가입 시 자동으로 wish 생성
+			Wish wish = new Wish();
+			wish.setMember(new_m);
+			wishService.createWish(new_m);
+			
 			model.addAttribute("loginForm", new LoginForm());
 			
 			return "member/loginForm";
@@ -139,7 +193,7 @@ public class MemberController {
 	}
 
 	//회원 수정 폼
-	@GetMapping("member/modifyMember.do")
+	@GetMapping("member/modifyMember")
 	public String updateForm(Model model, HttpSession session) {
 		try {
 			MemberSession ms = (MemberSession)session.getAttribute("ms");
@@ -156,10 +210,10 @@ public class MemberController {
 	}
 	
 	//회원 수정
-	@PostMapping("member/modifyMember.do")
+	@PostMapping("member/modifyMember")
 	public String modifyMember(HttpServletRequest request, HttpSession session,
 			@ModelAttribute("memberForm") MemberForm memberForm, BindingResult result, Model model) throws Exception {
-		new MemberFormValidator().validate(memberForm, result);
+		new MemberUpdateFormValidator().validate(memberForm, result);
 		
 		if (result.hasErrors()) {
 			return "member/updateForm";
@@ -170,28 +224,49 @@ public class MemberController {
 			session.setAttribute("ms", memberSession);
 			System.out.println(memberSession.getMember().getId());
 			
-			return "redirect:/member/memberInfo.do";
+			return "redirect:/member/memberDetail";
 		}
 	}
 	
 	//회원 삭제
-	@GetMapping("member/delete.do")
+	@GetMapping("member/delete")
 	public String deleteMember(HttpSession session) throws Exception {
 		MemberSession memberSession = (MemberSession) session.getAttribute("ms");
 		memberService.deleteMember(memberSession.getMember().getId());
 		session.removeAttribute("memberSession");
 		session.invalidate();
-		return "redirect:/member/loginForm.do";
+		return "redirect:/member/loginForm";
 	}
 	
 	//회원 정보 조회
-	@GetMapping("/member/memberInfo.do")
-	public ModelAndView memberInfo(HttpSession session, Model model) throws Exception {
+	@GetMapping("/member/memberDetail")
+	public ModelAndView memberDetail(HttpSession session, Model model) throws Exception {
 		try {
 			MemberSession ms = (MemberSession)session.getAttribute("ms");
 			Member member = ms.getMember();
 			model.addAttribute("member", member);
-			return new ModelAndView("/member/memberInfo");
+			return new ModelAndView("/member/memberDetail");
+		}
+		catch (NullPointerException ex) {
+			model.addAttribute("member", new Member());
+			return new ModelAndView("member/loginForm");
+		}
+	}
+	
+	//마이페이지(상세)
+	@GetMapping("/member/memberInfo")
+	public String memberInfo(HttpSession session, Model model){
+		return "member/memberInfo";
+	}
+	
+	//마이페이지
+	@GetMapping("/member/myPage")
+	public ModelAndView myPage(HttpSession session, Model model){
+		try {
+			MemberSession ms = (MemberSession)session.getAttribute("ms");
+			Member member = ms.getMember();
+			model.addAttribute("member", member);
+			return new ModelAndView("/member/myPage");
 		}
 		catch (NullPointerException ex) {
 			model.addAttribute("member", new Member());
@@ -201,33 +276,11 @@ public class MemberController {
 	
 	@GetMapping("/header")
 	public String getHeader(Model model, HttpSession session) {
-		try {
-			MemberSession memberSession = (MemberSession) session.getAttribute("ms");
-			System.out.println(memberSession.getMember().getId());
-			System.out.println(memberSession != null);
-			model.addAttribute("isLoggedIn", true);
-			return "header";
-		}
-		catch (NullPointerException ex) {
-			model.addAttribute("isLoggedIn", false);
-			return "header";
-		}
+		return "header";
 	}
 	
-	@GetMapping({"/main.do", "/"})
+	@GetMapping({"/main", "/"})
 	public String getMain(Model model, HttpSession session) {
-		try {
-			MemberSession ms = (MemberSession) session.getAttribute("ms");
-			Member member = ms.getMember();
-			System.out.println(ms.getMember().getId());
-			System.out.println(ms != null);
-			model.addAttribute("isLoggedIn", true);
-			model.addAttribute("member", member);
-			return "main";
-		}
-		catch (NullPointerException ex) {
-			model.addAttribute("isLoggedIn", false);
-			return "main";
-		}
+		return "main";
 	}
 }

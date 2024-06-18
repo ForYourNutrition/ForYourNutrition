@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>배송지 목록</title>
+    <style>
+        .container {
+            width: 80%;
+		    margin: 20px auto;
+		    background-color: #ffffff;
+		    padding: 20px;
+		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		    border-radius: 10px;
+		    text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #001f4d;
+        }
+        .delete-button {
+            background-color: navy;
+            color: white;
+        }
+        .edit-button {
+            background-color: gray;
+            color: white;
+        }
+        .add-button {
+         	width: 15%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: navy;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        h1 {
+			color: navy;
+		}
+    </style>
+    <script>
+        function confirmDeletion() {
+            if (confirm("배송지를 삭제하시겠습니까?")) {
+                window.location.href = "/member/deleteAddress";
+            }
+        }
+    </script>
+</head>
+<body>
+	<div th:insert="~{header}"></div>
+    <div class="container">
+        <h1>배송지 목록</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>우편번호</th>
+                    <th>도로명 주소</th>
+                    <th>상세 주소</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="address : ${addresses}">
+                    <td th:text="${address.zipCode}">우편번호</td>
+                    <td th:text="${address.streetAddress}">도로명 주소</td>
+                    <td th:text="${address.detailAddress}">상세 주소</td>
+                    <td class="actions">
+                        <form th:action="@{deleteAddress}" method="post" th:object="${address}">
+                            <input type="hidden" name="address_id" th:value="${address.address_id}" />
+                            <button type="submit" onclick="confirmDeletion()" class="delete-button">삭제</button>
+                        </form>
+                        <form th:action="@{updateAddress}" method="get" th:object="${address}">
+                            <input type="hidden" name="address_id" th:value="${address.address_id}" />
+                            <button type="submit" class="edit-button">수정</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="add-button" th:onclick="|location.href='@{addressForm}'|">주소 추가</button>
+    </div>
+    <div th:insert="~{footer}"></div>
+</body>
+</html>

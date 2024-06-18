@@ -126,13 +126,13 @@ public class CartController {
     
     // 위시리스트에서 아이템을 카트로 이동하는 기능 추가
     @PostMapping("/wish/addToCart")
-    public String addToCartFromWish(@RequestParam int wishItemId, HttpSession session) {
+    public String addToCartFromWish(@RequestParam int wishItem_id, HttpSession session) {
         MemberSession ms = (MemberSession) session.getAttribute("ms");
         if (ms == null) {
             return "redirect:/member/loginForm";
         }
         Member member = ms.getMember();
-        WishItem wishItem = wishService.findWishItemById(wishItemId);
+        WishItem wishItem = wishService.findWishItemById(wishItem_id);
 
         CartItem cartItem = new CartItem();
         cartItem.setItem(wishItem.getItem());
@@ -140,7 +140,7 @@ public class CartController {
         cartItem.setQuantity(1); // 기본 수량을 1로 설정
 
         cartService.addCartItem(member, cartItem);
-        wishService.removeWishItem(member, wishItemId);
+        wishService.removeWishItem(member, wishItem_id);
 
         return "redirect:/cart/viewCart";
     }

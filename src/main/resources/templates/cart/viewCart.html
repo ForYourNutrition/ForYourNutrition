@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>장바구니 보기</title>
+    <title>장바구니</title>
     <link rel="stylesheet" type="text/css" href="/css/cartStyle.css">
     <script th:inline="javascript">
         function confirmAction(event, actionType) {
@@ -14,10 +14,10 @@
                     message = '기입하신 수량만큼 감소됩니다.';
                     break;
                 case 'delete':
-                    message = '이 항목을 장바구니에서 삭제하시겠습니까?';
+                    message = '이 항목을 Cart에서 삭제하시겠습니까?';
                     break;
                 case 'order':
-                    message = '장바구니의 모든 항목을 주문하시겠습니까?';
+                    message = 'Cart의 모든 항목을 주문하시겠습니까?';
                     break;
                 default:
                     message = '작업이 완료되었습니다!';
@@ -33,9 +33,9 @@
 <div th:insert="~{header}"></div>
 
 <div class="container">
-    <h1>장바구니 항목</h1>
+    <h1>Cart - List</h1>
     <div th:if="${cart == null or cart.cartItemList == null or cart.cartItemList.size() == 0}" class="empty-cart-message">
-        <p>장바구니가 비어 있습니다.</p>
+        <p>Cart가 비어 있습니다.</p>
     </div>
 
     <div th:if="${cart != null and cart.cartItemList != null and cart.cartItemList.size() > 0}">
@@ -44,6 +44,8 @@
                 <tr>
                     <th>Item</th>
                     <th>Quantity</th>
+                    <th>Category</th>
+                    <th>Effect</th>
                     <th>Detail</th>
                     <th>Price</th>
                     <th>Work</th>
@@ -53,8 +55,11 @@
                 <tr th:each="cartItem : ${cart.cartItemList}">
 		        <td th:text="${cartItem.item.name}">상품 이름</td>
 		        <td th:text="${cartItem.quantity} + ' 개'">수량</td>
+		        <td th:text="${cartItem.item.category}">카테고리</td>
+		        <td th:text="${cartItem.item.effect}">효과</td>
 		        <td th:text="${cartItem.item.detail}">details</td>
 		        <td th:text="${cartItem.item.price} + ' 원'">가격</td>
+		      
                     <td>
                         <form th:action="@{/cart/updateQuantity}" method="post" class="quantity-form" onsubmit="confirmAction(event, this.action.value)">
                             <input type="hidden" th:value="${cartItem.cartItem_id}" name="cartItem_id"/>
@@ -69,7 +74,7 @@
         </table>
     </div>
     <div class="order-button">
-        <form th:action="@{/order/createOrder}" method="get"  onsubmit="confirmAction(event, 'order')">
+        <form th:action="@{/order/formCartOrder}" method="get" onsubmit="confirmAction(event, 'order')">
             <input type="hidden" th:value="${cart.cart_id}" name="cart_id"/>
             <button type="submit">주문하기</button>
         </form>

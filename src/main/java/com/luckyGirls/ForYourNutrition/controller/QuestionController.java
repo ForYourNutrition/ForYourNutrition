@@ -45,6 +45,7 @@ public class QuestionController {
             	//questionForm.setQuestion_id(question.getQuestion_id());
             	questionForm.setTitle(question.getTitle());
             	questionForm.setContent(question.getContent());
+            	
                 return questionForm;
             }
         }
@@ -81,7 +82,7 @@ public class QuestionController {
 
 	        // 현재 시간 받아오기
 	        LocalDateTime now = LocalDateTime.now();
-	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 	        String formattedNow = now.format(formatter);
 
 	        Question question = new Question();

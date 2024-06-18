@@ -3,17 +3,15 @@ package com.luckyGirls.ForYourNutrition.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.luckyGirls.ForYourNutrition.dao.ReviewCommentDao;
 import com.luckyGirls.ForYourNutrition.domain.ReviewComment;
 
-@Service("reviewCommentServiceImpl")
+@Service
 public class ReviewCommentServiceImpl implements ReviewCommentService{
 
 	@Autowired
-	@Qualifier("jpaReviewCommentDao")
 	private ReviewCommentDao reviewCommentDao;
 	
 	@Override

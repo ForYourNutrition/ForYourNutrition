@@ -22,11 +22,7 @@ public class JpaReviewDao implements ReviewDao {
 	@Override
 	public Review getReview(int review_id) throws DataAccessException {
 		// TODO Auto-generated method stub
-		Review review = em.find(Review.class, review_id);
-		/*if(review == null) {
-			throw new ReviewNotFoundException();
-		}*/
-		return review;
+		return em.find(Review.class, review_id);
 	}
 
 	@Transactional
@@ -38,9 +34,9 @@ public class JpaReviewDao implements ReviewDao {
 
 	@Transactional
 	@Override
-	public void updateReview(Review review) throws DataAccessException {
+	public Review updateReview(Review review) throws DataAccessException {
 		// TODO Auto-generated method stub
-		em.merge(review);
+		return em.merge(review);
 	}
 
 	@Transactional
@@ -56,11 +52,10 @@ public class JpaReviewDao implements ReviewDao {
 	public List<Review> getReviewListForItem(int item_id) throws DataAccessException {
 		// TODO Auto-generated method stub
 		TypedQuery<Review> query = em.createQuery(
-				"SELECT r FROM Review r JOIN r.item i"
-				+ "WHERE i.item_id=?1", Review.class);
+				"SELECT r FROM Review r JOIN r.item i WHERE i.item_id=?1", Review.class);
 		query.setParameter(1, item_id);
-		List<Review> reviewList = query.getResultList();
-		return reviewList;
+		//List<Review> reviewList = query.getResultList();
+		return query.getResultList();
 	}
 
 	@Transactional
@@ -68,11 +63,10 @@ public class JpaReviewDao implements ReviewDao {
 	public List<Review> getReviewListForMember(int member_id) throws DataAccessException {
 		// TODO Auto-generated method stub
 		TypedQuery<Review> query = em.createQuery(
-				"SELECT r FROM Review r JOIN r.member m"
-				+ "WHERE m.member_id=?1", Review.class);
+				"SELECT r FROM Review r JOIN r.member m WHERE m.member_id=?1", Review.class);
 		query.setParameter(1, member_id);
-		List<Review> reviewList = query.getResultList();
-		return reviewList;
+		//List<Review> reviewList = query.getResultList();
+		return query.getResultList();
 	}
 
 }

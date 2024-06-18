@@ -18,6 +18,6 @@ public interface QuestionCommentService {
 
 	List<QuestionComment> getQuestionCommentListForMember(int member_id); //해당 멤버가 작성한 모든 문의 댓글 내역을 조회
 
-    void addCommentToQuestion(int question_id, String content, Member member);// 댓글 쓰기
+    void addCommentToQuestion(int question_id, String content, Member member, String qcdate);// 댓글 쓰기
 }
 

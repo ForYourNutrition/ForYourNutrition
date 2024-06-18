@@ -9,7 +9,7 @@ public interface ReviewService {
 	
 	void insertReview(Review review); //후기 추가
 	
-	void updateReview(Review review); //후기 수정
+	Review updateReview(Review review); //후기 수정
 	
 	void deleteReview(Review review); //후기 삭제
 	

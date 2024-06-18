@@ -87,6 +87,7 @@ td {
                     <th>고객명</th>
                     <th>주문 날짜</th>
                     <th>상태</th>
+                    <th>작업</th>
                 </tr>
             </thead>
             <tbody>
@@ -94,12 +95,37 @@ td {
                     <td th:text="${order.order_id}">1001</td>
                     <td th:text="${order.member.name}">홍길동</td>
                     <td th:text="${order.orderDate}">2024-06-01</td>
-                    <td th:text="${order.orderStatus}">배송 중</td>
+                    <td class="status" th:text="${order.orderStatus}">배송 중</td>
+                      <td>
+                     	<form id="orderForm" method="post" action="/order/cancleOrder">
+                     	<input type="hidden" th:value="${order.order_id}" name="order_id"/>
+                        <button type="submit">주문 취소</button>
+                        </form>
+                    </td>
                 </tr>
             </tbody>
         </table>
     </div>
 </body>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const statusElements = document.querySelectorAll('.status');
+    const statusMapping = {
+        0: '무통장 입금(입금 확인 대기)',
+        1: '주문 완료',
+        2: '배송 준비 중',
+        3: '배송중',
+        4: '배송 완료',
+        5: '취소 확인 중',
+        6: '환불 확인 중'
+    };
+
+    statusElements.forEach(function (element) {
+        const statusCode = parseInt(element.textContent, 10);
+        element.textContent = statusMapping[statusCode] || '알 수 없는 상태';
+    });
+});
+</script>
 </html>
 
 

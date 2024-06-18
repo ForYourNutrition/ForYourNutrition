@@ -40,7 +40,7 @@
         </table>
     </div>
     <div class="order-button">
-        <form th:action="@{/order/createOrder}" method="get">
+        <form th:action="@{/order/fromCartOrder}" method="post">
             <input type="hidden" th:value="${cart.cart_id}" name="cart_id"/>
             <button type="submit">주문하기</button>
         </form>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>카트 아이템 주문</title>
+    <style>
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+h1 {
+    text-align: center;
+    color: #333333;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input, select {
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+thead {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #dddddd;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+th {
+    background-color: #007bff;
+    color: white;
+}
+
+td {
+    color: #333333;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.remove-button {
+    background-color: #dc3545;
+    color: white;
+}
+
+.checkout-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.total {
+    text-align: right;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+    
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>카트 아이템 주문</h1>
+        <form id="orderCartForm" method="post" action="/order/saveCartOrder">
+         <div class="form-group">
+                <label for="name">이름</label>
+                <input th:value=${member.name} id="name" name="name" />
+            </div>
+            <div class="form-group">
+                <label for="email">이메일</label>
+                <input th:value=${member.email} id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="address">주소</label>
+                <input th:value=${address.zipCode} id="zipCode" name="zipCode"/>
+				<input th:value=${address.streetAddress} id="streetAddress" name="streetAddress"/>
+				<input th:value=${address.detailAddress} id="detailAddress" name="detailAddress"/>
+            </div>
+        		<div class="form-group">
+					<input type="radio" id="bank-transfer" name="payment-method" value="bank-transfer" onclick="togglePaymentMethod()" required>
+					<label for="bank-transfer">무통장 입금</label> 
+					<input type="radio" id="card-payment" name="payment-method" value="card-payment" onclick="togglePaymentMethod()">
+					<label for="card-payment">신용카드</label>
+				</div>
+				<div id="bank-transfer-info" class="hidden">
+					<div class="form-group">
+						<label for="account-number">카카오 뱅크 3333-12-804-6482</label>
+					</div>
+				</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>상품명</th>
+                    <th>수량</th>
+                    <th>가격</th>
+                    <th>총 가격</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="cartItem : ${cartList}">
+                    <td th:text="${cartItem.item.name}">노트북</td>
+                    <td th:text="${cartItem.quantity}">1</td>
+                    <td th:text="${cartItem.item.price}">1000.00</td>
+                    <td th:text="${cartItem.quantity * cartItem.item.price}">1000.00</td>   
+                </tr>
+            </tbody>
+        </table>
+        <div class="total">
+            <span>총 가격: </span>
+            <span th:text="${totalPrice}" name="totalPrice">0.00</span>
+        </div>
+        <input type="hidden" name="cart_id" th:value="${cart_id}">
+        <input type="hidden" name="totalPrice" th:value="${totalPrice}">
+        <button class="checkout-button">주문하기</button>
+    </div>
+</body>
+<script>
+function togglePaymentMethod() {
+    const bankTransferInfo = document.getElementById('bank-transfer-info');
+    const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+
+    if (paymentMethod === 'bank-transfer') {
+        bankTransferInfo.classList.remove('hidden');
+        cardPaymentInfo.classList.add('hidden');
+    }else{
+    	bankTransferInfo.classList.add('hidden');
+    }
+}
+</script>
+</html>

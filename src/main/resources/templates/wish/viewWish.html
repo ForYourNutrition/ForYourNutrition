@@ -7,6 +7,12 @@
 <body>
 <div th:insert="~{header}"></div>
     <h1>Wish 항목</h1>
+    
+    <!-- 에러 메시지 표시 -->
+    <div th:if="${error}" class="error-message">
+        <p th:text="${error}"></p>
+    </div>
+    
     <table>
         <thead>
             <tr>

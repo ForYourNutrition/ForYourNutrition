@@ -3,6 +3,7 @@ package com.luckyGirls.ForYourNutrition.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,8 +28,9 @@ public class QuestionComment implements Serializable{
 	@JoinColumn(name="question_id")
 	private Question question;
 	
+	@Column(nullable = false)
 	private String content;
-	private Date qcdate;
+	private String qcdate;
 	
 	@ManyToOne
 	@JoinColumn(name="member_id")
@@ -55,10 +57,10 @@ public class QuestionComment implements Serializable{
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public Date getQcdate() {
+	public String getQcdate() {
 		return qcdate;
 	}
-	public void setQcdate(Date qcdate) {
+	public void setQcdate(String qcdate) {
 		this.qcdate = qcdate;
 	}
 	public Member getMember() {
@@ -71,7 +73,7 @@ public class QuestionComment implements Serializable{
 	public QuestionComment() {
 		super();
 	}
-	public QuestionComment(int qc_id, Question question, String content, Date qcdate, Member member) {
+	public QuestionComment(int qc_id, Question question, String content, String qcdate, Member member) {
 		super();
 		this.qc_id = qc_id;
 		this.question = question;

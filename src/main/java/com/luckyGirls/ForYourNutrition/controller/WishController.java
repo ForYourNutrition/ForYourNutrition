@@ -67,12 +67,17 @@ public class WishController {
 	        
 	        Wish wish = wishService.getWishByMember(member);
 	        WishItem wishItem = new WishItem(member, item);
-	        wishService.addWishItem(member, wishItem);
+	        boolean added = wishService.addWishItem(member, wishItem);
 	        
 	        System.out.println("wishItem 정보: " + wishItem.getWishItem_id());
 	        System.out.println("wishItem mem 정보: " + wishItem.getMember().getName());
 
-	        model.addAttribute("wish", wish);
+	       
+	        if (!added) {
+	            model.addAttribute("error", "이미 Wish에 있는 상품입니다.");
+	            model.addAttribute("wish", wish);
+	            return "wish/viewWish";
+	        }
 	        return "redirect:/wish/viewWish";
 	}
 	@PostMapping("/wish/removeWishItem")

@@ -160,13 +160,27 @@ public class OrderController {
 		
 		Order order = orderService.getOrder(order_id);
 		
-		order.setOrderStatus(3);
+		order.setOrderStatus(5);
 		orderService.updateOrder(order);
 		
 		List<Order> orderList = orderService.getOrderList(member.getMember_id());
 		model.addAttribute("orderList", orderList);
 		
 		return "order/orderStatus";
+
+	}
+	
+	@GetMapping("/order/forMypageOrderStatus")
+	public String viewOrderStatus(Model model, HttpSession session) {
+		MemberSession ms = (MemberSession) session.getAttribute("ms");
+		if (ms == null) {
+			return "redirect:/login"; // 세션이 만료되었거나 없는 경우 로그인 페이지로 리다이렉트
+		}
+		Member member = ms.getMember();		
+		
+		List<Order> orderList = orderService.getOrderList(member.getMember_id());
+		model.addAttribute("orderList", orderList);
+		return "/order/orderStatus";
 
 	}
 	

@@ -16,8 +16,8 @@ public class MemberForm implements Serializable {
 
 	private String repeatedPassword;
 
-	public MemberForm(Member account) {
-		this.member = account;
+	public MemberForm(Member member) {
+		this.member = member;
 		this.newMember = false;
 	}
 

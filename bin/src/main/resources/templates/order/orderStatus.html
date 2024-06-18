@@ -1,40 +1,131 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>주문 상태 조회</title>
     <style>
-    /* 기존 스타일 유지 */
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 20px;
+}
 
-	.order-status-result {
-    	margin-top: 20px;
-   		padding: 10px;
-    	border: 1px solid #ddd;
-    	background-color: #f8f9fa;
-	}
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
 
-	.order-status-result p {
-    	margin: 0;
-    	font-size: 16px;
-	}
+h1 {
+    text-align: center;
+    color: #333333;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+thead {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #dddddd;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+th {
+    background-color: #007bff;
+    color: white;
+}
+
+td {
+    color: #333333;
+}
+
+@media (max-width: 600px) {
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+    th, td {
+        padding: 10px;
+        text-align: right;
+        position: relative;
+    }
+    th::before, td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        white-space: nowrap;
+    }
+}
+    
+    
     </style>
 </head>
 <body>
     <div class="container">
         <h1>주문 상태 조회</h1>
-        <form action="/check-order-status" method="GET">
-            <div class="form-group">
-                <label for="order-id">주문 번호</label>
-                <input type="text" id="order-id" name="order-id" required>
-            </div>
-            <button type="submit">조회하기</button>
-        </form>
-        
-        <!-- 주문 상태 결과를 표시할 섹션 -->
-        <div id="order-status-result" class="order-status-result">
-            <!-- 서버에서 주문 상태를 반환하여 이곳에 표시할 수 있습니다. -->
-        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>주문 번호</th>
+                    <th>고객명</th>
+                    <th>주문 날짜</th>
+                    <th>상태</th>
+                    <th>작업</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="order : ${orderList}">
+                    <td th:text="${order.order_id}">1001</td>
+                    <td th:text="${order.member.name}">홍길동</td>
+                    <td th:text="${order.orderDate}">2024-06-01</td>
+                    <td class="status" th:text="${order.orderStatus}">배송 중</td>
+                      <td>
+                     	<form id="orderForm" method="post" action="/order/cancleOrder">
+                     	<input type="hidden" th:value="${order.order_id}" name="order_id"/>
+                        <button type="submit">주문 취소</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </body>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const statusElements = document.querySelectorAll('.status');
+    const statusMapping = {
+        0: '무통장 입금(입금 확인 대기)',
+        1: '주문 완료',
+        2: '배송 준비 중',
+        3: '배송중',
+        4: '배송 완료',
+        5: '취소 확인 중',
+        6: '환불 확인 중'
+    };
+
+    statusElements.forEach(function (element) {
+        const statusCode = parseInt(element.textContent, 10);
+        element.textContent = statusMapping[statusCode] || '알 수 없는 상태';
+    });
+});
+</script>
 </html>
+
+

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.luckyGirls.ForYourNutrition.dao.mybatis.mapper.MemberMapper">
+  <cache />
+  
+  <select id="getAccountByIdAndPassword" resultType="Member">
+    SELECT MEMBER_ID, ID, PASSWORD, NAME, NICKNAME, BIRTH, GENDER, PHONE_NUMBER, EMAIL, POINT, TAKING_TIME
+    FROM MEMBER 
+    WHERE ID = #{param1} AND PASSWORD = #{param2}
+  </select> 
+  
+  <select id="getAccountById" resultType="Member">
+    SELECT MEMBER_ID, ID, PASSWORD, NAME, NICKNAME, BIRTH, GENDER, PHONE_NUMBER, EMAIL, POINT, TAKING_TIME
+    FROM MEMBER 
+    WHERE ID = #{param1}
+  </select>
+  
+  <insert id="insertMember" parameterType="Member">
+    INSERT INTO MEMBER 
+    (MEMBER_ID, ID, PASSWORD, NAME, NICKNAME, BIRTH, GENDER, PHONE_NUMBER, EMAIL, POINT, TAKING_TIME)
+    VALUES 
+    (MEMBERID_SEQ.nextval, #{id}, #{password}, #{name}, #{nickname}, #{birth}, #{gender}, #{phone_number}, #{email}, 0, #{taking_time})
+  </insert>
+  
+  <update id="updateMember" parameterType="Member">
+    UPDATE MEMBER SET
+      NAME = #{name},
+      NICKNAME = #{nickname},
+      BIRTH = #{birth},
+      GENDER = #{gender},
+      PHONE_NUMBER = #{phone_number},
+      EMAIL = #{email},
+      POINT = #{point},
+      TAKING_TIME = #{taking_time}
+    WHERE ID = #{id}
+  </update>
+  
+  <delete id="deleteMember" parameterType="String">
+    UPDATE MEMBER SET
+      ID = null,	
+      NAME = '탈퇴회원',
+      NICKNAME = '탈퇴회원'
+    WHERE ID = #{param1}
+  </delete>
+</mapper>

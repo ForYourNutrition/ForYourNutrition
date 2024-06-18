@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>review 수정하기</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/qFormStyle.css}">
+</head>
+<body>
+    <div>
+        <div th:insert="~{header}"></div>
+        <div class="container">
+            <h2>review 수정하기</h2>
+            <form action="#" method="post" th:action="@{/review/updateReview}" th:object="${reviewForm}">
+            <input type="hidden" name="item_id" th:field="*{item_id}" />
+                <div class="form-group">
+                    <label for="name">작성자 :</label>
+                    <span th:text="${memberName}"></span>
+                </div>
+                <div class="form-group" style="display:none;">
+                    <label for="review_id">리뷰 ID :</label>
+                    <input type="hidden" th:field="*{review_id}" id="review_id">
+                </div>
+                <div class="form-group">
+                    <label for="title">제목 :</label>
+                    <input type="text" th:field="*{title}" id="title">
+                </div>
+                <div class="form-group">
+                    <label for="content">내용 :</label>
+                    <textarea th:field="*{content}" id="content" rows="10"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="rating">평점 :</label>
+                    <select th:field="*{rating}" id="rating">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                <button type="submit">수정하기</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

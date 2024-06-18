@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>아이디 찾기 결과</title>
+    <style>
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .message {
+            font-size: 18px;
+            color: green;
+        }
+        .error {
+            font-size: 18px;
+            color: red;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+        button {
+            background-color: navy;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #001f4d;
+        }
+    </style>
+</head>
+<body>
+<div>
+<div th:insert="~{header}"></div>
+<div class="container">
+	<h2 th:text="${type} + ' 찾기 결과'">찾기 결과</h2>
+    <div th:if="${message}">
+        <p th:text="${message}" class="message"></p>
+    </div>
+    <div th:if="${error}">
+        <p th:text="${error}" class="error"></p>
+    </div>
+    <button type="button" th:onclick="|location.href='@{loginForm}'|">로그인 페이지로 돌아가기</button>
+</div>
+</div>
+<div th:insert="~{footer}"></div>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Page</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .hello {
+            font-size: 30px;
+            color: darkblue;
+            margin-bottom: 20px;
+        }
+
+        .points {
+            font-size: 24px;
+            color: #666666;
+            margin-bottom: 20px;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .nav a {
+            background-color: #f0f0f0;
+            color: #333333;
+            padding: 10px 15px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            width: 300px; /* 버튼의 가로 길이 설정 */
+            margin: 0 auto; /* 버튼을 가운데 정렬 */
+            transition: background-color 0.3s;
+        }
+
+        .nav a:hover {
+            background-color: #002366;
+            color: #ffffff;
+        }
+
+        /* Button styles for consistency */
+        .button-container {
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #002366;
+            color: #ffffff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 300px; /* 버튼의 가로 길이 설정 */
+        }
+
+        button:hover {
+            background-color: #001a4d;
+        }
+    </style>
+</head>
+<body>
+	<div th:insert="~{header}"></div>
+    <div class="container">
+        <div class="hello" th:text="${session.ms.member.name} + '님 안녕하세요'">[member.name]님 안녕하세요</div>
+        <div class="points" th:text="'Point: ' + ${session.ms.member.point}">Point: [member.point]</div>
+        <div class="nav">
+            <a href="/member/memberInfo">회원정보 관리</a>
+            <a href="/order/forMypageOrderStatus">주문 배송 관리</a>
+            <a href="reviewHistory.html">리뷰 내역</a>
+            <a href="qaHistory.html">Q&amp;A 내역</a>
+        </div>
+    </div>
+    <div th:insert="~{footer}"></div>
+</body>
+</html>

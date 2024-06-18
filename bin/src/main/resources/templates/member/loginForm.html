@@ -60,7 +60,7 @@
 <div th:insert="~{header}"></div>
 <div class="container">
     <h2>로그인</h2>
-    <form action="#" th:action="@{login.do}" th:object="${loginForm}" method="post">
+    <form action="#" th:action="@{login}" th:object="${loginForm}" method="post">
         <!-- 전역 오류 메시지 -->
         <div th:if="${#fields.hasGlobalErrors()}">
             <span th:each="err : ${#fields.globalErrors()}" th:text="${err}" class="error-class"></span><br>
@@ -83,14 +83,15 @@
         </div>
         <button type="submit">로그인</button>
         <div class="link-buttons">
-            <button type="button" th:onclick="|location.href='@{searchIdForm.do}'|">아이디 찾기</button> 
-            <button type="button" th:onclick="|location.href='@{searchPwdForm.do}'|">비밀번호 찾기</button>
+            <button type="button" th:onclick="|location.href='@{searchIdForm}'|">아이디 찾기</button> 
+            <button type="button" th:onclick="|location.href='@{searchPasswordForm}'|">비밀번호 찾기</button>
         </div>
         <div class="link-buttons">
-            <button type="button" th:onclick="|location.href='@{join.do}'|" class="signup-button">회원 가입</button>
+            <button type="button" th:onclick="|location.href='@{join}'|" class="signup-button">회원 가입</button>
         </div>
     </form>
 </div>
 </div>
+<div th:insert="~{footer}"></div>
 </body>
 </html>

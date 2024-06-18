@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>ITEM's Review</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/reviewListStyle.css}">
+</head>
+<body>
+    <div th:insert="~{header}"></div>
+    <div class="container" th:fragment="review">
+        <h2>ITEM's Review</h2>
+        
+        <!-- Form to create a new review -->
+        <div class="button-container">
+            <form action="/review/createReview" method="get">
+                <input type="hidden" name="item_id" th:value="${item.item_id}" />
+                <button type="submit">작성하기</button>
+            </form>
+        </div>
+        
+        <!-- Check if the reviews list is null or empty -->
+        <div th:if="${reviews == null or reviews.size() == 0}" class="empty-reviews-message">
+            <p>리뷰가 없습니다.</p><p>리뷰를 작성해보세요!</p>
+        </div>
+        
+        <!-- Check if the reviews list is not null and has elements -->
+        <div th:if="${reviews != null and reviews.size() > 0}">
+            <table class="reviews-table">
+                <thead>
+                    <tr>
+                        <th>작성자</th>
+                        <th>평점</th>
+                        <th>제목</th>
+                        <th>날짜</th>                        
+                        <th>내용</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="review : ${reviews}">
+                        <td th:text="${review.member.name}">작성자</td>
+                        <td th:text="${review.rating}">평점</td>
+                        <td><a th:href="@{/review/viewReview(review_id=${review.review_id})}" th:text="${review.title}">제목</a></td>
+                        <td th:text="${review.rdate}">날짜</td>  
+                        <td th:text="${review.content}">내용</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

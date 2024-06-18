@@ -10,9 +10,18 @@
             background-color: #f5f5f5;
         }
         .item-container {
+            margin-left: 5%;
+            margin-right: 5%;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
+        }
+        .paging {
+            margin-top: 20px;
+            text-align: center; /* 페이지 링크를 가운데 정렬 */
+        }
+        .paging span {
+            margin: 0 5px; /* 각 페이지 링크 사이의 간격 설정 */
         }
         .item-box {
             background-color: white;
@@ -20,23 +29,70 @@
             border: 1px solid #ccc;
             border-radius: 15px;
             text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px;
+        }
+        .search-bar input[type="text"] {
+            width: 50%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px 0 0 5px;
+            outline: none;
+        }
+        .search-bar button {
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: navy;
+            color: white;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            outline: none;
+        }
+        .search-bar button:hover {
+            background-color: #001f4d;
+        }
+        .buttons {
+            margin-left: 5.2%;
+        }
+        .buttons button{
+            border: 1px solid #000000;
+            background-color: navy;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            outline: none;
         }
     </style>
 </head>
 <body>
-<div>
+<div th:insert="~{header}"></div>
+<div class="search-bar-container">
+<div class="search-bar">
+    <input type="text" id="searchInput" placeholder="검색어를 입력하세요">
+    <button th:onclick="|searchItems()|">검색</button>
+</div>
+</div>
+<div class="buttons">
     <button th:onclick="|location.href='@{/item/searchItemList.do(text=${text}, page=${currentPage}, pageSize=${pageSize}, sortBy='sales')}'|">판매량순</button>
     <button th:onclick="|location.href='@{/item/searchItemList.do(text=${text}, page=${currentPage}, pageSize=${pageSize}, sortBy='dcRate')}'|">할인율순</button>
 </div>
+<p></p>
 <div class="item-container">
-    <div th:each="item : ${itemList.content}" class="item-box">
+    <div th:each="item : ${itemList.content}" class="item-box" th:onclick="|window.location.href='@{/item/viewItem.do(item_id=${item.item_id})}'|">
+        <img border="0" th:src="@{/images/img.png}" />
         <h3 th:text="${item.name}">Item Name</h3>
         <p th:text="${item.detail}">Item Description</p>
         <!-- 추가적인 Item 정보들 -->
     </div>
 </div>
 
-<div>
+<div class="paging">
     <span th:if="${currentPage > 0}">
         <a th:href="@{/item/searchItemList.do(text=${text}, page=${currentPage - 1}, pageSize=${pageSize}, sortBy=${sortBy})}">Previous</a>
     </span>
@@ -48,5 +104,17 @@
         <a th:href="@{/item/searchItemList.do(text=${text}, page=${currentPage + 1}, pageSize=${pageSize}, sortBy=${sortBy})}">Next</a>
     </span>
 </div>
+<p></p>
+<p></p>
+<script>
+    function searchItems() {
+        var text = document.getElementById('searchInput').value;
+        if (text) {
+            window.location.href = '/item/searchItemList.do?text=' + encodeURIComponent(text);
+        } else {
+            alert('검색어를 입력하세요.');
+        }
+    }
+</script>
 </body>
 </html>

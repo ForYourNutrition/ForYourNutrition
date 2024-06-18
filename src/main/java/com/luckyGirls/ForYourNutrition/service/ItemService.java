@@ -34,9 +34,9 @@ public class ItemService {
 	public Page<Item> getSearchList(String text, int page, int pageSize, String sortBy){
 		Sort sort;
 		if ("sales".equals(sortBy)) {
-			sort = Sort.by(Sort.Order.desc("sales"));  // 수정: 필드 이름 "sales"로 정렬
+			sort = Sort.by(Sort.Order.desc("sales"));
 		} else if ("dcRate".equals(sortBy)) {
-			sort = Sort.by(Sort.Order.desc("dcRate"));  // 수정: 필드 이름 "discountRate"로 정렬
+			sort = Sort.by(Sort.Order.desc("dcRate"));
 		} else {
 			sort = Sort.by(Sort.Order.asc("name"));
 		}

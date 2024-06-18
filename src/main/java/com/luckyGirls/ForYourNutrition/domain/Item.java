@@ -32,7 +32,7 @@ public class Item {
 	private int stock;
 
 	//카테고리
-	private int category;
+	private String category;
 
 	//섭취대상
 	private int target;
@@ -49,8 +49,8 @@ public class Item {
 	//할인율
 	private int dcRate;
 
-	// @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
-	// private List<IRecommend> irecommendList = new ArrayList<>();
+	@OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<IRecommend> irecommendList = new ArrayList<>();
 
 	public void removeStock(int stock){
 		int restStock = this.stock - stock;

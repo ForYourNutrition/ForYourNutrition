@@ -45,6 +45,7 @@ public class QuestionController {
             	//questionForm.setQuestion_id(question.getQuestion_id());
             	questionForm.setTitle(question.getTitle());
             	questionForm.setContent(question.getContent());
+            	
                 return questionForm;
             }
         }
@@ -81,7 +82,7 @@ public class QuestionController {
 
 	        // 현재 시간 받아오기
 	        LocalDateTime now = LocalDateTime.now();
-	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 	        String formattedNow = now.format(formatter);
 
 	        Question question = new Question();
@@ -242,4 +243,19 @@ public class QuestionController {
 		
 		return "question/viewQuestion";
 	}
+    @GetMapping("/question/myQuestionList")
+    public String listMyQuestions(Model model, HttpSession session) {
+        MemberSession ms = (MemberSession) session.getAttribute("ms");
+
+        if (ms == null) {
+            // Redirect to login page if session does not exist
+            return "redirect:/member/loginForm";
+        }
+
+        int memberId = ms.getMember().getMember_id();
+        List<Question> myQuestions = questionService.getQuestionListForMember(memberId);
+
+        model.addAttribute("myQuestions", myQuestions);
+        return "question/myQuestionList";
+    }
 }

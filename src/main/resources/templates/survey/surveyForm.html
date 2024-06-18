@@ -5,13 +5,14 @@
     <title>문진표</title>
     <style>
         .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            box-sizing: border-box;
-        }
+		    width: 60%;
+		    margin: 50px auto;
+		    background-color: #ffffff;
+		    padding: 30px;
+		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		    border-radius: 10px;
+		    text-align: center;
+		}
         label {
             display: block;
             font-weight: bold;
@@ -33,7 +34,7 @@
             text-align: left;
         }
         button {
-            width: 50%;
+            width: 30%;
             padding: 15px;
             border-radius: 5px;
             border: none;
@@ -47,8 +48,15 @@
         button:hover {
             background-color: #001f4d;
         }
-        h2 {
+        h1 {
 			color: navy;
+		}
+		.survey-form {
+		    padding: 20px;
+		    background-color: #f9f9f9;
+		    border: 1px solid #e0e0e0;
+		    border-radius: 10px;
+		    margin-bottom: 30px;
 		}
     </style>
     <script>
@@ -73,10 +81,11 @@
 <div>
 <div th:insert="~{header}"></div>
 <div class="container">
-    <h2>문진표</h2>
+    <h1>건강 문진표</h1><br>
+    <div class="survey-form">
     <form action="#" method="post" th:action="@{saveSurvey}" th:object="${surveyForm}" onsubmit="return validateForm()">
         <div class="radio-group">
-            <label>흡연 빈도</label><br>
+            <label>[흡연 빈도]</label><br>
             <label><input type="radio" th:field="*{smoking}" name="smoking" value="1"/> 하루에 한 번</label>
             <label><input type="radio" th:field="*{smoking}" name="smoking" value="2"/> 하루에 두 번</label>
             <label><input type="radio" th:field="*{smoking}" name="smoking" value="3"/> 하루에 세 번 이상</label>
@@ -84,7 +93,7 @@
             <div th:each="err : ${#fields.errors('smoking')}" class="error-class" th:text="${err}"></div>
         </div>
         <div class="radio-group">
-            <label>음주 빈도</label><br>
+            <label>[음주 빈도]</label><br>
             <label><input type="radio" th:field="*{drinking}" name="drinking" value="1"/> 주 1회 이하</label>
             <label><input type="radio" th:field="*{drinking}" name="drinking" value="2"/> 주 2~3회</label>
             <label><input type="radio" th:field="*{drinking}" name="drinking" value="3"/> 주 4회 이상</label>
@@ -92,7 +101,7 @@
             <div th:each="err : ${#fields.errors('drinking')}" class="error-class" th:text="${err}"></div>
         </div>
         <div class="radio-group">
-            <label>운동 빈도</label><br>
+            <label>[운동 빈도]</label><br>
             <label><input type="radio" th:field="*{exercising}" name="exercising" value="1"/> 주 1회 이하</label>
             <label><input type="radio" th:field="*{exercising}" name="exercising" value="2"/> 주 2~3회</label>
             <label><input type="radio" th:field="*{exercising}" name="exercising" value="3"/> 주 4회 이상</label>
@@ -100,7 +109,7 @@
             <div th:each="err : ${#fields.errors('exercising')}" class="error-class" th:text="${err}"></div>
         </div>
         <div class="checkbox-group">
-            <label>영양제 복용 이유</label><br>
+            <label>[영양제 복용 이유]</label><br>
             <label><input type="checkbox" th:field="*{effect}" name="effect" value="0"/> 면역력</label>
             <label><input type="checkbox" th:field="*{effect}" name="effect" value="1"/> 다이어트</label>
             <label><input type="checkbox" th:field="*{effect}" name="effect" value="2"/> 피로회복</label>
@@ -116,7 +125,9 @@
         </div>
         <button type="submit">저장</button>
     </form>
+    </div>
 </div>
 </div>
+<div th:insert="~{footer}"></div>
 </body>
 </html>

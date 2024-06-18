@@ -52,11 +52,9 @@ public class JpaReviewCommentDao implements ReviewCommentDao{
 	public List<ReviewComment> getReviewCommentListForReview(int review_id) throws DataAccessException {
 		// TODO Auto-generated method stub
 		TypedQuery<ReviewComment> query = em.createQuery(
-				"SELECT rc FROM ReviewComment rc JOIN rc.review r"
-				+ "WHERE r.review_id=?1", ReviewComment.class);
+				"SELECT rc FROM ReviewComment rc JOIN rc.review r WHERE r.review_id=?1", ReviewComment.class);
 		query.setParameter(1, review_id);
-		List<ReviewComment> reviewCommentList = query.getResultList();
-		return reviewCommentList;
+		return query.getResultList();
 	}
 
 	@Transactional
@@ -64,11 +62,9 @@ public class JpaReviewCommentDao implements ReviewCommentDao{
 	public List<ReviewComment> getReviewCommentListForMember(int member_id) throws DataAccessException {
 		// TODO Auto-generated method stub
 		TypedQuery<ReviewComment> query = em.createQuery(
-				"SELECT rc FROM ReviewComment rc JOIN rc.member m"
-				+ "WHERE m.member_id=?1", ReviewComment.class);
+				"SELECT rc FROM ReviewComment rc JOIN rc.member m WHERE m.member_id=?1", ReviewComment.class);
 		query.setParameter(1, member_id);
-		List<ReviewComment> reviewCommentList = query.getResultList();
-		return reviewCommentList;
+		return query.getResultList();
 	}
 
 }

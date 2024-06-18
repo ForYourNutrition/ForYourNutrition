@@ -38,7 +38,7 @@ public class WishServiceImpl implements WishService{
 		return wish;
 	}
 	
-	@Transactional
+	/*@Transactional
 	@Override
     public void addWishItem(Member member, WishItem wishItem) {
         Wish wish = wishDao.findWishByMember(member);
@@ -46,9 +46,40 @@ public class WishServiceImpl implements WishService{
             wish = new Wish(member);
             wishDao.saveWish(wish);
         }
-        wishItem.setWish(wish);
-        wishDao.saveWishItem(wishItem);  // 저장
+        //wishItem.setWish(wish);
+        //wishDao.saveWishItem(wishItem);  // 저장
+	}*/
+	
+	@Transactional
+	@Override
+	public boolean addWishItem(Member member, WishItem wishItem) {
+	    Wish wish = wishDao.findWishByMember(member);
+	    if (wish == null) {
+	        wish = new Wish(member);
+	        wishDao.saveWish(wish);
+	    } else {
+	    	for (WishItem item : wish.getWishItemList()) {
+	            if (item.getItem().getItem_id() == wishItem.getItem().getItem_id()) {
+	                return false;  // 이미 존재하는 경우 false 반환
+	            }
+	        }
+	    } 
+	    wishItem.setWish(wish);
+	    wishDao.saveWishItem(wishItem);
+	    return true;  // 성공적으로 추가된 경우 true 반환
+
+	    // Check if the item already exists in the wish
+	    /*boolean itemExists = wish.getWishItemList().stream()
+	        .anyMatch(existingWishItem -> existingWishItem.getItem().getItem_id() == wishItem.getItem().getItem_id());
+
+	    if (!itemExists) {
+	        wishItem.setWish(wish);
+	        wishDao.saveWishItem(wishItem);  // 저장
+	        return true;
+	    }
+	    return false;*/
 	}
+
 	
 	@Transactional
 	@Override

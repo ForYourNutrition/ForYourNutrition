@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Review View</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/viewReviewStyle.css}">
+</head>
+<body>
+    <div th:insert="~{header}"></div>
+    
+    <div class="container">
+        <div class="review-section">
+            <h2>Review 작성</h2>
+
+            <div class="review-details">
+                <div class="detail-item">
+                    <label for="name">작성자 :</label>
+                    <span th:text="${memberName}"></span>
+                </div>
+                <div class="detail-item">
+                    <label for="writtenTime">작성시간 :</label>
+                    <span th:text="${review.rdate}"></span>
+                </div>
+                <div class="detail-item">
+                    <label for="rating">평점 :</label>
+                    <span th:text="${review.rating}"></span>
+                </div>
+                <div class="detail-item">
+                    <label for="title">제목 :</label>
+                    <span th:text="${review.title}"></span>
+                </div>
+                <div class="detail-item">
+                    <label for="content">내용 :</label>
+                    <span th:text="${review.content}"></span>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <form th:action="@{/review/updateReviewForm}" method="get" class="inline-form">
+                    <input type="hidden" name="review_id" th:value="${review.review_id}" />
+                    <input type="hidden" name="item_id" th:value="${review.item.item_id}" />
+                    <button type="submit">리뷰 수정</button>
+                </form>
+
+                <form th:action="@{/review/deleteReview}" method="post" class="inline-form" onsubmit="return confirm('정말로 이 REVIEW 삭제하시겠습니까?');">
+                    <input type="hidden" name="review_id" th:value="${review.review_id}" />
+                    <input type="hidden" name="item_id" th:value="${review.item.item_id}" />
+                    <button type="submit">리뷰 삭제</button>
+                </form>
+            </div>
+        </div>
+            <form th:action="@{/review/reviewList}" method="get" class="inline-form">
+                <input type="hidden" name="item_id" th:value="${review.item.item_id}" />
+                <button type="submit" class="review-list-button">리뷰 List로 이동하기</button>
+            </form>
+        <div class="comment-section">
+            <h3>Review's Comment</h3>
+            <form th:action="@{/reviewComment/addComment}" method="post">
+                <input type="hidden" name="review_id" th:value="${review.review_id}" />
+                <div class="form-group">
+                    <label for="content">댓글 작성:</label>
+                    <textarea id="content" name="content" rows="4"></textarea>
+                </div>
+                <button type="submit">댓글 작성하기</button>
+            </form>
+            
+            <h3>Review's Comment List</h3>
+            <div th:if="${#lists.isEmpty(comments)}" class="no-comments">댓글이 없습니다.</div>
+            <div th:each="comment : ${comments}" class="comment">
+                <div class="comment-info">
+                    <div>
+                        <span class="comment-author" th:text="${comment.member.name}">작성자</span>
+                        <span class="comment-date" th:text="${comment.rcdate}">작성일</span>
+                    </div>
+                    <form th:action="@{/reviewComment/deleteComment}" method="post">
+                        <input type="hidden" name="rc_id" th:value="${comment.rc_id}" />
+                        <input type="hidden" name="review_id" th:value="${review.review_id}" /> 
+                        <button type="submit" class="delete-button">삭제</button>
+                    </form>
+                </div>
+                <div class="comment-content" th:text="${comment.content}">댓글 내용</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

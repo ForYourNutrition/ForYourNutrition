@@ -86,10 +86,11 @@
         <div class="points" th:text="'Point: ' + ${session.ms.member.point}">Point: [member.point]</div>
         <div class="nav">
             <a href="/member/memberInfo">회원정보 관리</a>
-            <a href="orderHistory.html">주문/배송 내역</a>
-            <a href="reviewHistory.html">리뷰 내역</a>
-            <a href="qaHistory.html">Q&amp;A 내역</a>
+            <a href="/order/forMypageOrderStatus">주문 배송 관리</a>
+            <a href="/review/myReviewList">리뷰 내역</a>
+            <a href="/question/myQuestionList">Q&amp;A 내역</a>
         </div>
     </div>
+    <div th:insert="~{footer}"></div>
 </body>
 </html>

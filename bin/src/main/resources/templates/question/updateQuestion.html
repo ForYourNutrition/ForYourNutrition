@@ -10,7 +10,7 @@
     <div>
         <div th:insert="~{header}"></div>
         <div class="container">
-            <h2>Q&A 수정하기</h2>
+            <h2>Question 수정하기</h2>
             <form th:action="@{/question/updateQuestion}" th:object="${questionForm}" method="post">
                 <input type="hidden" th:field="*{question_id}" />
                 <label for="title">제목 :</label>

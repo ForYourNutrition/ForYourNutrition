@@ -203,6 +203,10 @@
             </form>
         </div>
     </div>
+    <form id="reviewForm" method="get" action="/review/reviewList">
+		<input type="hidden" name="item_id" th:value="${item.item_id}">
+		<button type="submit">리뷰 보러가기</button>
+	</form>
     <div class="product-info">
         <div class="tabs">
             <button class="active" onclick="showTab('details')">상품 상세</button>

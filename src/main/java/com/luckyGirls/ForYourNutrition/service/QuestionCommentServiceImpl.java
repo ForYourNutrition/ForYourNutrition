@@ -1,5 +1,7 @@
 package com.luckyGirls.ForYourNutrition.service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,14 +44,20 @@ public class QuestionCommentServiceImpl implements QuestionCommentService{
 		
 	}
 	 @Transactional
-	 public void addCommentToQuestion(int question_id, String content,Member member) {
+	 public void addCommentToQuestion(int question_id, String content,Member member, String qcdate) {
 		 Question question = questionDao.getQuestion(question_id);
 	        if (question != null) {
+	        	
+	        	// 현재 시간 받아오기
+		        /*LocalDateTime now = LocalDateTime.now();
+		        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		        String formattedNow = now.format(formatter);     */   	
+	        	
 	            QuestionComment comment = new QuestionComment();
 	            comment.setQuestion(question);
 	            comment.setMember(member);
 	            comment.setContent(content);
-	            comment.setQcdate(new java.util.Date());
+	            comment.setQcdate(qcdate);
 	            questionCommentDao.insertQuestionComment(comment);
 	        }
 	}

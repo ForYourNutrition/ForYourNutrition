@@ -6,6 +6,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.luckyGirls.ForYourNutrition.dao.OrderDao;
+import com.luckyGirls.ForYourNutrition.domain.Member;
 import com.luckyGirls.ForYourNutrition.domain.Order;
 
 import jakarta.persistence.EntityManager;
@@ -54,10 +55,9 @@ public class JpaOrderDao implements OrderDao {
 	@Override
 	public List<Order> getOrderList(int member_id) throws DataAccessException {
 		// TODO Auto-generated method stub
-		TypedQuery<Order> query = em.createQuery(
-				"SELECT o FROM Orders o JOIN o.member m"
-				+ "WHERE m.member_id=?1", Order.class);
-		query.setParameter(1, member_id);
+		TypedQuery<Order> query = em.createQuery("SELECT o FROM Order o WHERE o.member.member_id = :member_id", Order.class);
+		
+		query.setParameter("member_id", member_id);
 		List<Order> orderList = query.getResultList();
 		return orderList;
 	}

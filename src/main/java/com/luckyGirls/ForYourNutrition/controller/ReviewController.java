@@ -373,4 +373,19 @@ public class ReviewController {
         
         return "review/reviewList";
     }
+    // 각 회원이 작성한 리뷰 목록 보기
+    @GetMapping("/review/myReviewList")
+    public String listMyReviews(Model model, HttpSession session) {
+        MemberSession ms = (MemberSession) session.getAttribute("ms");
+
+        if (ms == null) {
+            return "redirect:/member/loginForm";
+        }
+
+        int memberId = ms.getMember().getMember_id();
+        List<Review> myReviews = reviewService.getReviewListForMember(memberId);
+
+        model.addAttribute("myReviews", myReviews);
+        return "review/myReviewList";
+    }
 }

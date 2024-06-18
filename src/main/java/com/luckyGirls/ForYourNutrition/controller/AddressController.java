@@ -3,6 +3,7 @@ package com.luckyGirls.ForYourNutrition.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,14 +11,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.luckyGirls.ForYourNutrition.domain.Address;
 import com.luckyGirls.ForYourNutrition.domain.Member;
-import com.luckyGirls.ForYourNutrition.domain.Survey;
 import com.luckyGirls.ForYourNutrition.service.AddressService;
-import com.luckyGirls.ForYourNutrition.service.MemberService;
+import com.luckyGirls.ForYourNutrition.validator.AddressFormValidator;
 
 import jakarta.servlet.http.HttpSession;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.List;
 
 @Controller
@@ -25,9 +23,6 @@ public class AddressController {
 
     @Autowired
     private AddressService addressService;
-    
-    @Autowired
-	private MemberService memberService;
 
     @GetMapping("/member/viewAddressList")
     public String viewAddress(HttpSession session, Model model) {
@@ -45,12 +40,19 @@ public class AddressController {
     }
 
     @PostMapping("/member/addAddress")
-    public String addAddress(@ModelAttribute("address") Address address, HttpSession session) {
-    	MemberSession ms = (MemberSession)session.getAttribute("ms");
-		Member member = ms.getMember();
-        address.setMember(member);
-        addressService.insertAddress(address);
-        return "redirect:/member/viewAddressList";
+    public String addAddress(@ModelAttribute("address") Address address, BindingResult result, HttpSession session) {
+    	new AddressFormValidator().validate(address, result);
+		
+		if (result.hasErrors()) {
+			return "member/addressForm";
+		} else {
+			MemberSession ms = (MemberSession)session.getAttribute("ms");
+			Member member = ms.getMember();
+	        address.setMember(member);
+	        addressService.insertAddress(address);
+	        return "redirect:/member/viewAddressList";
+		}
+    	
     }
  
     @PostMapping("/member/deleteAddress")
@@ -67,12 +69,18 @@ public class AddressController {
     }
 
     @PostMapping("/member/updateAddress")
-    public String updateAddress(@ModelAttribute("address") Address address, HttpSession session) {
-    	MemberSession ms = (MemberSession)session.getAttribute("ms");
-		Member member = ms.getMember();
-        address.setMember(member);
-        addressService.updateAddress(address);
-        return "redirect:/member/viewAddressList";
+    public String updateAddress(@ModelAttribute("address") Address address, BindingResult result, HttpSession session) {
+    	new AddressFormValidator().validate(address, result);
+		
+		if (result.hasErrors()) {
+			return "member/addressUpdateForm";
+		} else {
+	    	MemberSession ms = (MemberSession)session.getAttribute("ms");
+			Member member = ms.getMember();
+	        address.setMember(member);
+	        addressService.updateAddress(address);
+	        return "redirect:/member/viewAddressList";
+		}
     }
     
 }

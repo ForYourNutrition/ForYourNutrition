@@ -4,36 +4,38 @@
     <meta charset="UTF-8">
     <title>설문 정보</title>
     <style>
-        .container {
-		    background-color: white;
-		    padding: 20px;
+    	.container {
+		    width: 60%;
+		    margin: 50px auto;
+		    background-color: #ffffff;
+		    padding: 30px;
+		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 		    border-radius: 10px;
-		    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-		    text-align: center; /* 텍스트를 가운데로 정렬합니다. */
-		    align-items: center;
-		    justify-content: center;
+		    text-align: center;
 		}
-        .survey-info p {
-            margin: 15px 0;
-            font-size: 18px;
-        }
-        .survey-info strong {
-            font-weight: bold;
-        }
-        button {
-            margin-top: 30px;
-            padding: 15px 30px;
+    	.survey-info {
+		    padding: 20px;
+		    background-color: #f9f9f9;
+		    border: 1px solid #e0e0e0;
+		    border-radius: 10px;
+		    margin-bottom: 30px;
+		}
+		 button {
+            width: 30%;
+            padding: 15px;
             border-radius: 5px;
-            border: 1px solid navy;
+            border: none;
             background-color: navy;
             color: white;
             cursor: pointer;
             font-size: 16px;
+            transition: background-color 0.3s;
+            margin-top: 10px;
         }
         button:hover {
             background-color: #001f4d;
         }
-        h2 {
+		h1 {
 			color: navy;
 		}
     </style>
@@ -42,7 +44,7 @@
 <div>
 <div th:insert="~{header}"></div>
 <div class="container">
-    <h2>문진표 정보</h2>
+    <h1>문진표 정보</h1>
     <div class="survey-info">
         <p><strong>[영양제 복용 이유]</strong><br>
         <span th:each="effect : ${surveyForm.effect}">
@@ -82,5 +84,6 @@
     </div>
 </div>
 </div>
+<div th:insert="~{footer}"></div>
 </body>
 </html>

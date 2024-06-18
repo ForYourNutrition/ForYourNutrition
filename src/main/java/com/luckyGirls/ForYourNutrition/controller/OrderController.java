@@ -145,8 +145,7 @@ public class OrderController {
 		
 		List<Order> orderList = orderService.getOrderList(member.getMember_id());
 		model.addAttribute("orderList", orderList);
-		
-		return "order/orderStatus";
+		return "redirect:/order/orderStatus";
 
 	}
 	

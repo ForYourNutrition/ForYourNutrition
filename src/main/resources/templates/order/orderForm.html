@@ -153,11 +153,7 @@ button:hover {
 				</div>
 				<div id="bank-transfer-info" class="hidden">
 					<div class="form-group">
-						<label for="account-number">3333-12-804-6482</label>
-						<input type="text" id="account-number" name="account-number" placeholder="Account Number">
-					</div>
-					<div class="form-group">
-						<label for="bank-name">카카오뱅크</label> <input type="text" id="bank-name" name="bank-name" placeholder="Bank Name">
+						<label for="account-number">카카오 뱅크 3333-12-804-6482</label>
 					</div>
 				</div>
 				<input type="hidden" name="item_id" th:value="${item.item_id}">
@@ -176,6 +172,8 @@ button:hover {
         if (paymentMethod === 'bank-transfer') {
             bankTransferInfo.classList.remove('hidden');
             cardPaymentInfo.classList.add('hidden');
+        }else{
+        	bankTransferInfo.classList.add('hidden');
         }
     }
 </script>

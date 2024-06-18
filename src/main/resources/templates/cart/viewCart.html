@@ -74,10 +74,7 @@
         </table>
     </div>
     <div class="order-button">
-        <form th:action="@{/order/formCartOrder}" method="get" onsubmit="confirmAction(event, 'order')">
-            <input type="hidden" th:value="${cart.cart_id}" name="cart_id"/>
-            <button type="submit">주문하기</button>
-        </form>
+        <form th:action="@{/order/fromCartOrder}" method="post">
     </div>
 </div>
 </body>

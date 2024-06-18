@@ -76,15 +76,13 @@ public class JpaReviewDao implements ReviewDao {
 		return query.getResultList();
 	}*/
 
-	@Transactional
-	@Override
-	public List<Review> getReviewListForMember(int member_id) throws DataAccessException {
-		// TODO Auto-generated method stub
-		TypedQuery<Review> query = em.createQuery(
-				"SELECT r FROM Review r JOIN r.member m WHERE m.member_id=?1", Review.class);
-		query.setParameter(1, member_id);
-		//List<Review> reviewList = query.getResultList();
-		return query.getResultList();
-	}
+    @Transactional
+    @Override
+    public List<Review> getReviewListForMember(int member_id) throws DataAccessException {
+        TypedQuery<Review> query = em.createQuery(
+                "SELECT r FROM Review r JOIN r.member m WHERE m.member_id = :member_id", Review.class);
+        query.setParameter("member_id", member_id);
 
+        return query.getResultList();
+    }
 }

@@ -28,21 +28,23 @@ import com.luckyGirls.ForYourNutrition.repository.SurveyRepository;
 
 import lombok.RequiredArgsConstructor;
 
+@Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-@Service
 public class IRecommendService {
-	private static ItemJpaRepository itemJpaRepository;
-	private static IRecommendJpaRepository iRecommendJpaRepository;
-	private static SurveyRepository surveyRepository;
+	@Autowired
+	private final ItemJpaRepository itemJpaRepository;
+	@Autowired
+	private final IRecommendJpaRepository iRecommendJpaRepository;
+	@Autowired
+	private final SurveyRepository surveyRepository;
 	@Autowired
 	private MemberDao memberDao;
 
 	//아이템 추천
 	//카테고리 1- 2-
-	public List<Item> getItem(int item_id, String category) throws Exception {
+	public List<Item> getItem(int item_id, int ctype) {
 		Item item = itemJpaRepository.findById(item_id);
-		int ctype = 1;
 		IRecommend iRecommend = iRecommendJpaRepository.findByItemAndCtype(item, ctype);
 		System.out.println("service- ctype" + iRecommend.getCtype());
 		List<Item> items = Arrays.asList(iRecommend.getItem1(), iRecommend.getItem2(), iRecommend.getItem3())
@@ -56,7 +58,7 @@ public class IRecommendService {
 	}
 
 	//아이템 추천 전체 카테고리
-	public List<Item> getAllItems(int item_id) throws Exception {
+	public List<Item> getAllItems(int item_id) {
 		Item item = itemJpaRepository.findById(item_id);
 		List<IRecommend> iRecommends = iRecommendJpaRepository.findAllByItem(item);
 		System.out.println("service- list" + iRecommends.get(0));
@@ -69,7 +71,7 @@ public class IRecommendService {
 	}
 
 	//아이템 랜덤 추천(3개)
-	public List<Item> getRandomItem(int item_id) throws Exception {
+	public List<Item> getRandomItem(int item_id) {
 		Item item = itemJpaRepository.findById(item_id);
 		List<IRecommend> iRecommends = iRecommendJpaRepository.findAllByItem(item);
 		System.out.println("service- list r" + iRecommends.get(0));
@@ -102,12 +104,17 @@ public class IRecommendService {
 	}
 
 	public static int calculateAge(LocalDate birthDate, LocalDate currentDate) {
-		if ((birthDate != null) && (currentDate != null)) {
-			return Period.between(birthDate, currentDate).getYears();
-		} else {
-			return 0;
+		if (birthDate == null || currentDate == null) {
+			throw new IllegalArgumentException("Birth date and current date must not be null");
 		}
+
+		System.out.println("Birth date - " + birthDate + ", Current date - " + currentDate);
+		int age = Period.between(birthDate, currentDate).getYears();
+		System.out.println("Age: " + age);
+
+		return age;
 	}
+
 
 	public static int[] parseEffects(String effectString) {
 		String[] parts = effectString.split(",");
@@ -121,7 +128,7 @@ public class IRecommendService {
 
 	//개인 추천
 	//효과 & 대상 기반
-	public List<Item> getPersonalRecItem(String member_id) throws Exception {
+	public List<Item> getPersonalRecItem(String member_id) {
 		List<Item> items = itemJpaRepository.findAll();
 		System.out.println("service- list p" + items.get(0));
 
@@ -143,8 +150,12 @@ public class IRecommendService {
 			.collect(Collectors.toList());
 		System.out.println("reco size" + recommendedItems.size());
 		Date birth = member.getBirth();
+		if (birth == null) {
+			throw new IllegalArgumentException("Birth date cannot be null");
+		}
 		LocalDate currentDate = LocalDate.now();
 		LocalDate localBirthDate = birth.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
 		int age = calculateAge(localBirthDate, currentDate);
 		System.out.println("age" + age);
 
@@ -161,14 +172,16 @@ public class IRecommendService {
 			.filter(item -> item.getTarget() == target)
 			.collect(Collectors.toList());
 
-		System.out.println("add size" + recommendedItems.size());
+		System.out.println("add size" + additionalItems.size());
+
 		recommendedItems.addAll(additionalItems.stream()
 			.collect(Collectors.toList()));
 		// 리스트를 섞어서 랜덤하게 만듦
 		Collections.shuffle(recommendedItems);
 
+		System.out.println("rec size" + recommendedItems.size());
 		// 섞인 리스트에서 처음 3개를 반환
-		return recommendedItems.stream().limit(3).collect(Collectors.toList());
+		return recommendedItems.stream().limit(4).collect(Collectors.toList());
 	}
 
 }

@@ -20,7 +20,4 @@ public interface ItemJpaRepository extends JpaRepository<Item, Integer> {
 	List<Item> findAll();
 	@Query("SELECT i FROM Item i WHERE LOWER(i.name) LIKE LOWER(CONCAT('%', :name, '%'))")
 	Page<Item> findByNameContainingIgnoreCase(@Param("name") String name, Pageable pageable);
-
-	@Query("SELECT i FROM Item i WHERE LOWER(i.name) LIKE LOWER(CONCAT('%', :name, '%'))")
-	Page<Item> findByC(@Param("name") String name, Pageable pageable);
 }

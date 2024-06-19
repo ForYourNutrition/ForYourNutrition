@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Category Recommendation</title>
+  <style>
+    .carousel-container {
+      display: flex;
+      align-items: center;
+    }
+    .carousel {
+      display: flex;
+      overflow: hidden;
+      width: 900px; /* 3개의 아이템을 표시하기 위한 너비 */
+    }
+    .carousel-inner {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    .item {
+      flex: 0 0 33.33%; /* 각 아이템은 1/3 너비 차지 */
+      box-sizing: border-box;
+      padding: 10px;
+      text-align: center;
+    }
+    .carousel-controls {
+      display: flex;
+      justify-content: space-between;
+      width: 50px; /* 필요에 따라 너비 조정 */
+    }
+    .carousel-controls button {
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .carousel-controls button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+<h1>Category Recommendation</h1>
+<div>
+  <h2>Recommended Items</h2>
+  <div class="carousel-container">
+    <div class="carousel-controls">
+      <button id="prevBtn" onclick="prevSlide()">&#9664;</button>
+    </div>
+    <div class="carousel">
+      <div class="carousel-inner" id="carouselInner">
+        <th:block th:each="item : ${recommendedItems}">
+          <div class="item">
+            <img border="0" th:src="@{/images/img.png}" />
+            <h3 th:text="${item.name}">Item Name</h3>
+            <p th:text="${item.detail}">Item Description</p>
+          </div>
+        </th:block>
+      </div>
+    </div>
+    <div class="carousel-controls">
+      <button id="nextBtn" onclick="nextSlide()">&#9654;</button>
+    </div>
+  </div>
+</div>
+<script>
+  let currentIndex = 0;
+  const itemsPerPage = 3;
+  const itemCount = /*[[${recommendedItems.size()}]]*/ 0;
+
+  function updateControls() {
+    document.getElementById('prevBtn').disabled = currentIndex === 0;
+    document.getElementById('nextBtn').disabled = currentIndex >= Math.ceil(itemCount / itemsPerPage) - 1;
+  }
+
+  function prevSlide() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      document.getElementById('carouselInner').style.transform = `translateX(-${currentIndex * 100}%)`;
+      updateControls();
+    }
+  }
+
+  function nextSlide() {
+    if (currentIndex < Math.ceil(itemCount / itemsPerPage) - 1) {
+      currentIndex++;
+      document.getElementById('carouselInner').style.transform = `translateX(-${currentIndex * 100}%)`;
+      updateControls();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    updateControls();
+  });
+</script>
+</body>
+</html>
+

@@ -50,7 +50,7 @@
         </div>
         <div class="carousel">
             <div class="carousel-inner" id="carouselInner">
-                <th:block th:each="item : ${recommendedItems}">
+                <th:block th:each="item : ${comparativeItems}">
                     <div class="item">
                         <img border="0" th:src="@{/images/img.png}" />
                         <h3 th:text="${item.name}">Item Name</h3>
@@ -67,7 +67,7 @@
 <script>
     let currentIndex = 0;
     const itemsPerPage = 3;
-    const itemCount = /*[[${recommendedItems.size()}]]*/ 0;
+    const itemCount = /*[[${comparativeItems.size()}]]*/ 0;
 
     function updateControls() {
         document.getElementById('prevBtn').disabled = currentIndex === 0;

@@ -2,7 +2,9 @@ package com.luckyGirls.ForYourNutrition.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,65 +13,75 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.luckyGirls.ForYourNutrition.domain.Item;
 import com.luckyGirls.ForYourNutrition.service.IRecommendService;
+import com.luckyGirls.ForYourNutrition.service.ItemService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-
-@RestController
+/**
+ *
+ * DB에 저장 ctype:0 - target
+ ctype:1 - 건강 고민
+ ctype:2 - 카테고리
+ 기준으로 추천 item 저장 ,
+ 카테고리는 비교를 위한 item List임.
+ *
+ * **/
+@Controller
 @RequiredArgsConstructor
-@RequestMapping("/recommend")
+@RequestMapping("/item")
 public class IRecommendController {
-	private static IRecommendService iRecommendService;
+	@Autowired
+	private final IRecommendService iRecommendService;
+	@Autowired
+	private final ItemService itemService;
 
 	// 개인 추천 아이템 조회
-	@GetMapping("/personalRecommendation")
+	@GetMapping("/viewMyRecommend.do")
 	public String getPersonalRecommendation(
 		@RequestParam("member_id") String memberId,
 		HttpSession session, Model model
 	) {
-		try {
 			List<Item> recommendedItems = iRecommendService.getPersonalRecItem(memberId);
 			System.out.println("cont" + recommendedItems);
 			model.addAttribute("recommendedItems", recommendedItems);
-			return "personal_recommendation_view"; // 개인 추천을 보여줄 뷰 이름
-		} catch (Exception e) {
-			model.addAttribute("error", "Failed to retrieve personal recommendations");
-			return "error_view"; // 에러 발생 시 보여줄 뷰 이름
-		}
+			return "item/viewMyRecommend"; // 개인 추천을 보여줄 뷰 이름
 	}
 
 	// 전체 추천 아이템 조회
-	@GetMapping("/allRecommendation")
+	@GetMapping("/viewItemRecommend.do")
 	public String getAllRecommendation(
 		@RequestParam("item_id") int itemId,
 		Model model
 	) {
-		try {
 			List<Item> recommendedItems = iRecommendService.getAllItems(itemId);
 			System.out.println("cont" + recommendedItems);
 			model.addAttribute("recommendedItems", recommendedItems);
-			return "all_recommendation_view"; // 전체 추천을 보여줄 뷰 이름
-		} catch (Exception e) {
-			model.addAttribute("error", "Failed to retrieve all recommendations");
-			return "error_view"; // 에러 발생 시 보여줄 뷰 이름
-		}
+			return "item/allRecommendation"; // 전체 추천을 보여줄 뷰 이름
 	}
 
 	// 카테고리별 추천 아이템 조회
-	@GetMapping("/categoryRecommendation")
+	@GetMapping("/viewCategoryRecommend.do")
 	public String getCategoryRecommendation(
 		@RequestParam("item_id") int itemId,
-		@RequestParam("category") String category,
+		@RequestParam("category") int ctype,
 		Model model
 	) {
-		try {
-			List<Item> recommendedItems = iRecommendService.getItem(itemId, category);
+			List<Item> recommendedItems = iRecommendService.getItem(itemId, ctype);
 			System.out.println("cont" + recommendedItems);
 			model.addAttribute("recommendedItems", recommendedItems);
-			return "category_recommendation_view"; // 카테고리별 추천을 보여줄 뷰 이름
-		} catch (Exception e) {
-			model.addAttribute("error", "Failed to retrieve category recommendations");
-			return "error_view"; // 에러 발생 시 보여줄 뷰 이름
-		}
+			return "item/viewCategoryRecommend";
+	}
+
+	//비교 상품 불러오기
+	@GetMapping("/viewComparativeItem.do")
+	public String getComparativeItem(
+		@RequestParam("item_id") int itemId,
+		Model model
+	) {
+			List<Item> comparativeItems = iRecommendService.getItem(itemId, 2);
+			Item item = itemService.getItemById(itemId);
+			model.addAttribute("comparativeItems", comparativeItems);
+			model.addAttribute("mainItem", item);
+			return "item/viewComparativeItem";
 	}
 }

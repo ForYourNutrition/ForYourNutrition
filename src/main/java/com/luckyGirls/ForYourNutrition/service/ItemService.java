@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ItemService {
+	@Autowired
 	private final ItemJpaRepository itemJpaRepository;
 
 	public ItemGetResponse getItem(int item_id) throws Exception {

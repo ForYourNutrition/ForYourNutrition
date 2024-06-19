@@ -56,7 +56,7 @@ public class IRecommendController {
 			List<Item> recommendedItems = iRecommendService.getAllItems(itemId);
 			System.out.println("cont" + recommendedItems);
 			model.addAttribute("recommendedItems", recommendedItems);
-			return "item/allRecommendation"; // 전체 추천을 보여줄 뷰 이름
+			return "item/viewItemRecommend"; // 전체 추천을 보여줄 뷰 이름
 	}
 
 	// 카테고리별 추천 아이템 조회

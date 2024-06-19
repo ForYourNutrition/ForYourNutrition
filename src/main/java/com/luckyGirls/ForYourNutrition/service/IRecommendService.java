@@ -3,6 +3,7 @@ package com.luckyGirls.ForYourNutrition.service;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -61,13 +62,17 @@ public class IRecommendService {
 	public List<Item> getAllItems(int item_id) {
 		Item item = itemJpaRepository.findById(item_id);
 		List<IRecommend> iRecommends = iRecommendJpaRepository.findAllByItem(item);
-		System.out.println("service- list" + iRecommends.get(0));
+		System.out.println("service- list r" + iRecommends.get(0));
 
-		List<Item> items = iRecommends.stream()
-			.map(IRecommend::getItem) // IRecommend 객체에서 Item 객체를 추출
-			.collect(Collectors.toList());
+		List<Item> items = new ArrayList<>();
 
-		return items;
+		for (IRecommend iRecommend : iRecommends) {
+			items.add(itemJpaRepository.findById(iRecommend.getItem1()));
+			items.add(itemJpaRepository.findById(iRecommend.getItem2()));
+			items.add(itemJpaRepository.findById(iRecommend.getItem3()));
+		}
+
+		return items.stream().limit(3).collect(Collectors.toList());
 	}
 
 	//아이템 랜덤 추천(3개)

@@ -48,6 +48,7 @@
         <div class="carousel-controls">
             <button id="prevBtn" onclick="prevSlide()">&#9664;</button>
         </div>
+        <h3 th:text="${mainItem.name}">Item Name</h3>
         <div class="carousel">
             <div class="carousel-inner" id="carouselInner">
                 <th:block th:each="item : ${comparativeItems}">

@@ -98,9 +98,18 @@
         </div>
         
         <input type="hidden" name="order_id" th:value="${order_id}">
-        <button type="submit" class="btn">Pay Now</button>
+        <button type="submit" class="btn" onclick="confirmAction(event)">Pay Now</button>
     </form>
 </div>
 
 </body>
+<script>
+ function confirmAction(event) {
+        var message = '주문이 완료되었습니다!';
+        
+        if (!confirm(message)) {
+            event.preventDefault();
+        }
+    }
+</script>
 </html>

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Item 상세보기</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/reviewListStyle.css}">
     <style>
         body {
             display: flex;
@@ -51,7 +52,7 @@
             margin-right: 20px;
         }
         .product-details {
-            max-width: 50%;
+            max-width: 30%;
             padding: 20px;
             margin-left: 80px;
         }
@@ -140,6 +141,22 @@
         .tab-content.active {
             display: block;
         }
+        .bt {
+        	display: flex;
+        	align-content: left;
+        }
+        .order-bt {
+        	width: 300px;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: navy;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -157,17 +174,20 @@
             <div class="infos">
                 <div class="info">
                     <div>섭취대상</div>
-                    <p><span th:if="${item.target == 0}">어린이</span>
+                    <p>
+                        <span th:if="${item.target == 0}">어린이</span>
                         <span th:if="${item.target == 1}">청소년</span>
                         <span th:if="${item.target == 2}">성인</span>
                         <span th:if="${item.target == 3}">시니어</span>
                         <span th:if="${item.target == 4}">여성</span>
                         <span th:if="${item.target == 5}">남성</span>
-                        <span th:if="${item.target == 6}">임산부</span></p>
+                        <span th:if="${item.target == 6}">임산부</span>
+                    </p>
                 </div>
                 <div class="info">
                     <div>효과</div>
-                    <p><span th:if="${item.effect == 0}">면역력</span>
+                    <p>
+                        <span th:if="${item.effect == 0}">면역력</span>
                         <span th:if="${item.effect == 1}">다이어트</span>
                         <span th:if="${item.effect == 2}">피로회복</span>
                         <span th:if="${item.effect == 3}">눈건강</span>
@@ -177,36 +197,36 @@
                         <span th:if="${item.effect == 7}">관절&뼈</span>
                         <span th:if="${item.effect == 8}">숙취해소</span>
                         <span th:if="${item.effect == 9}">혈행개선</span>
-                        <span th:if="${item.effect == 10}">항산화</span></p>
+                        <span th:if="${item.effect == 10}">항산화</span>
+                    </p>
                 </div>
-            </div>
-            <p></p>
-            <p></p>
+            </div><br>
             <div>
                 <button onclick="decreaseQuantity()">-</button>
-                <input type="number" id="quantity" class="quantity" value="1" min="1">
+                <input type="number" id="quantity" class="quantity" value="1" min="1" onchange="updateHiddenQuantity()">
                 <button onclick="increaseQuantity()">+</button>
+            </div><br>
+            <div class="bt">
+            <form id="cartForm" method="post" action="/cart/addCartItem" onsubmit="syncQuantity()">
+			    <input type="hidden" name="item_id" th:value="${item.item_id}">
+			    <input type="hidden" id="hiddenQuantity" name="quantity" value="1">
+			    <img src="/images/cart.png" alt="장바구니에 담기" onclick="document.getElementById('cartForm').submit();" style="width: 40px; height: auto; cursor: pointer;">
+			</form>
+			<form id="wishForm" method="post" action="/wish/addWishItem">
+                <input type="hidden" name="item_id" th:value="${item.item_id}">
+                <img src="/images/wish.png" alt="찜하기" onclick="document.getElementById('wishForm').submit();" style="width: 40px; height: auto; cursor: pointer;">
+            </form></div>
+            <div class="bt">
+            <p>&nbsp;&emsp;&emsp;&emsp;&emsp;cart 추가</p>
+            <p>&emsp;&emsp;&emsp;&emsp;wish 추가</p>
             </div>
-			<form id="cartForm" method="post" action="/cart/addCartItem">
+            <form id="orderForm" method="post" action="/order/createOrder" onsubmit="syncQuantity()">
                 <input type="hidden" name="item_id" th:value="${item.item_id}">
-                <input type="hidden" id="quantity" name="quantity" th:value="1">
-                <button type="submit">장바구니에 담기</button>
-            </form>
-            <form id="orderForm" method="post" action="/order/createOrder">
-                <input type="hidden" name="item_id" th:value="${item.item_id}">
-                <input type="hidden" id="quantity" name="quantity" th:value="1">
-                <button type="submit">구매하기</button>
-            </form>
-            <form id="wishForm" method="post" action="/wish/addWishItem">
-                <input type="hidden" name="item_id" th:value="${item.item_id}">
-                <button type="submit">찜하기</button>
+                <input type="hidden" id="hiddenOrderQuantity" name="quantity" value="1">
+                <button type="submit" class="order-bt">구매하기</button>
             </form>
         </div>
     </div>
-    <form id="reviewForm" method="get" action="/review/reviewList">
-		<input type="hidden" name="item_id" th:value="${item.item_id}">
-		<button type="submit">리뷰 보러가기</button>
-	</form>
     <div class="product-info">
         <div class="tabs">
             <button class="active" onclick="showTab('details')">상품 상세</button>
@@ -218,8 +238,7 @@
             <p><strong>Detail:</strong> <span th:text="${item.detail}"></span></p>
         </div>
         <div id="reviews" class="tab-content">
-            <h2>구매 후기</h2>
-            <p>구매 후기 내용</p>
+            <div th:insert="~{/review/reviewList :: review}"></div>
         </div>
         <div id="shipping" class="tab-content">
             <h2>배송 안내</h2>
@@ -234,6 +253,7 @@
         let currentQuantity = parseInt(quantityInput.value);
         if (currentQuantity > 1) {
             quantityInput.value = currentQuantity - 1;
+            updateHiddenQuantity();
         }
     }
 
@@ -241,6 +261,17 @@
         let quantityInput = document.getElementById('quantity');
         let currentQuantity = parseInt(quantityInput.value);
         quantityInput.value = currentQuantity + 1;
+        updateHiddenQuantity();
+    }
+
+    function updateHiddenQuantity() {
+        let quantityInput = document.getElementById('quantity').value;
+        document.getElementById('hiddenQuantity').value = quantityInput;
+        document.getElementById('hiddenOrderQuantity').value = quantityInput;
+    }
+
+    function syncQuantity() {
+        updateHiddenQuantity();
     }
 
     function showTab(tabId) {

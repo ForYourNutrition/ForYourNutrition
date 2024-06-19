@@ -118,7 +118,7 @@
                     <td>
                         <form id="orderForm" method="post" action="/order/cancleOrder">
                             <input type="hidden" th:value="${order.order_id}" name="order_id"/>
-                            <button type="submit">주문 취소</button>
+                            <button type="submit"  onclick="confirmAction(event)">주문 취소</button>
                         </form>
                     </td>
                 </tr>
@@ -143,6 +143,14 @@
                 element.textContent = statusMapping[statusCode] || '알 수 없는 상태';
             });
         });
+        
+        function confirmAction(event) {
+            var message = '주문 취소 요청이 완료되었습니다!';
+            
+            if (!confirm(message)) {
+                event.preventDefault();
+            }
+        }
     </script>
     <div th:insert="~{footer}"></div>
 </body>

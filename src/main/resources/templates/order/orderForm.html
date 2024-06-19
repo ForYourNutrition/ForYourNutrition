@@ -167,7 +167,7 @@
         <input type="hidden" name="item_id" th:value="${item.item_id}">
         <input type="hidden" name="totalPrice" th:value="${totalPrice}">
         <input type="hidden" name="count" th:value="${count}">
-        <button type="submit" class="checkout-button">주문하기</button>
+        <button type="submit" class="checkout-button" onclick="confirmAction(event)">주문하기</button>
     </form>
     <div th:insert="~{footer}"></div>
 </div>
@@ -181,6 +181,21 @@
             bankTransferInfo.classList.remove('hidden');
         } else {
             bankTransferInfo.classList.add('hidden');
+        }
+    }
+    
+    function confirmAction(event) {
+    	const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+        var message = '';
+
+        if (paymentMethod === 'bank-transfer') {
+        	  message = '주문이 완료되었습니다!';
+        } else {
+        	  message = '카드 결제 창으로 이동합니다!';
+        }
+        
+        if (!confirm(message)) {
+            event.preventDefault();
         }
     }
 </script>

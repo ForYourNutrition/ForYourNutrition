@@ -8,8 +8,10 @@
 <body>
 	<div th:insert="~{header}"></div>
 	<div class="container">
-		<h2>Q&A List</h2>
-
+	<br/><br/>
+		<h2>Q&A 게시판입니다!</h2>
+		<br/><br/><br/><br/>
+		<h4>찾으시는 문의 사항의 키워드를 검색해보세요.</h4>
 		<div class="controls">
 			<div class="sort-container">
 				<a th:href="@{/question/questionList(sort='latest')}"
@@ -30,11 +32,11 @@
 					작성하기</button>
 			</div>
 		</div>
-
+		<br/><br/>
 		<table>
 			<thead>
 				<tr>
-					<th>INDEX</th>
+					<th>Index</th>
 					<th class="title">Title</th>
 					<th class="author">Author</th>
 					<th class="date">Date</th>
@@ -51,7 +53,7 @@
 				</tr>
 			</tbody>
 		</table>
-
+		<br/>
 		<div class="pagination">
 			<a th:if="${nowPage > 1}"
 				th:href="@{/question/questionList(page=${nowPage - 2}, sort=${sort}, keyword=${keyword})}">이전</a>
@@ -65,6 +67,7 @@
 			<a th:if="${nowPage < totalPages}"
 				th:href="@{/question/questionList(page=${nowPage}, sort=${sort}, keyword=${keyword})}">다음</a>
 		</div>
+		<br/><br/>
 	</div>
 </body>
 </html>

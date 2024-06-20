@@ -32,7 +32,9 @@
 	<div th:insert="~{header}"></div>
 
 	<div class="container">
-		<h1>Cart - List</h1>
+		<br/><br/>
+		<h2>Cart에 담긴 상품을 확인해 주세요!</h2>
+		<br/><br/><br/><br/><br/>
 		<div
 			th:if="${cart == null or cart.cartItemList == null or cart.cartItemList.size() == 0}"
 			class="empty-cart-message">
@@ -58,7 +60,19 @@
 						<td th:text="${cartItem.item.name}">상품 이름</td>
 						<td th:text="${cartItem.quantity} + ' 개'">수량</td>
 						<td th:text="${cartItem.item.category}">카테고리</td>
-						<td th:text="${cartItem.item.effect}">효과</td>
+						<td th:switch="${cartItem.item.effect}">
+							<span th:case="0">면역력</span>
+							<span th:case="1">다이어트</span> 
+							<span th:case="2">피로회복</span> 
+							<span th:case="3">눈건강</span> 
+							<span th:case="4">간건강</span> 
+							<span th:case="5">장건강</span> 
+							<span th:case="6">피부건강</span> 
+							<span th:case="7">관절&뼈</span> 
+							<span th:case="8">숙취해소</span> 
+							<span th:case="9">혈행개선</span> 
+							<span th:case="10">항산화</span> 
+							<span th:case="*">효과 없음</span> <!-- Default case if none match --></td>
 						<td th:text="${cartItem.item.detail}">details</td>
 						<td th:text="${cartItem.item.price} + ' 원'">가격</td>
 
@@ -82,6 +96,7 @@
 				</tbody>
 			</table>
 		</div>
+		<br/><br/>
 		<div class="order-button">
 			<form th:action="@{/order/fromCartOrder}" method="post"
 				onsubmit="confirmAction(event, 'order')">
@@ -89,6 +104,7 @@
 				<button type="submit">주문하기</button>
 			</form>
 		</div>
+		<br/><br/>
 	</div>
 </body>
 </html>

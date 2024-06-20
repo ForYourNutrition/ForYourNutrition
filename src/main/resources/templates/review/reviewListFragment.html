@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review List</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/reviewListStyle.css}">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .button-container {
+            margin-bottom: 20px;
+        }
+        .button-container form button {
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+        }
+        .empty-reviews-message {
+            text-align: center;
+            color: #999;
+        }
+        .reviews-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .reviews-table th, .reviews-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .pagination a, .pagination strong {
+            padding: 8px;
+            text-decoration: none;
+            color: black;
+        }
+        .pagination a:hover {
+            background-color: #f2f2f2;
+        }
+        .pagination strong {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <br/><br/>
+    <h2>다양한 상품 리뷰를 확인하고, 여러분의 솔직한 의견을 남겨주세요!</h2>
+    <br/><br/>
+    <!-- Form to create a new review -->
+    <div class="button-container">
+        <form action="/review/createReview" method="get">
+            <input type="hidden" name="item_id" th:value="${item.item_id}" />
+            <button type="submit">리뷰 작성하기</button>
+        </form>
+    </div>
+    <br/><br/>
+    <!-- Check if the reviews list is null or empty -->
+    <div th:if="${reviews == null or reviews.size() == 0}" class="empty-reviews-message">
+        <p>리뷰가 없습니다.</p>
+        <p>리뷰를 작성해보세요!</p>
+    </div>
+    <br/><br/><br/>
+    <!-- Check if the reviews list is not null and has elements -->
+    <div th:if="${reviews != null and reviews.size() > 0}">
+        <table class="reviews-table">
+            <thead>
+                <tr>
+                    <th>INDEX</th>
+                    <th>Author</th>
+                    <th>Rating</th>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Content</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="review, iterStat : ${reviews}">
+                    <td th:text="${iterStat.index + 1}"></td>
+                    <td th:text="${review.member.name}">작성자</td>
+                    <td th:text="${review.rating}">평점</td>
+                    <td><a th:href="@{/review/viewReview(review_id=${review.review_id})}" th:text="${review.title}">제목</a></td>
+                    <td th:text="${review.rdate}">날짜</td>
+                    <td th:text="${review.content}">내용</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br/>
+    <div class="pagination">
+        <a th:if="${nowPage > 1}" th:href="@{/item/viewItem.do(item_id=${item.item_id}, page=${nowPage - 1}, sort=${sort})}">이전</a>
+        <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+            <a th:if="${page != nowPage}" th:href="@{/item/viewItem.do(item_id=${item.item_id}, page=${page}, sort=${sort})}" th:text="${page}"></a>
+            <strong th:if="${page == nowPage}" th:text="${page}" style="color: red"></strong>
+        </th:block>
+        <a th:if="${nowPage < totalPages}" th:href="@{/item/viewItem.do(item_id=${item.item_id}, page=${nowPage + 1}, sort=${sort})}">다음</a>
+    </div>
+
+    <br/><br/>
+</div>
+</body>
+</html>

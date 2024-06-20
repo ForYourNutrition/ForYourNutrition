@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
-import com.luckyGirls.ForYourNutrition.domain.SRecommend;
 import com.luckyGirls.ForYourNutrition.domain.Survey;
 
 public interface SurveyDao {

@@ -119,7 +119,6 @@ public class OrderController {
 
 			Member member = ms.getMember();	
 
-			// 현재 시간 받아오기
 			LocalDateTime now = LocalDateTime.now();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 			String formattedNow = now.format(formatter);
@@ -239,7 +238,7 @@ public class OrderController {
 			Model model, HttpSession session) {
 		MemberSession ms = (MemberSession) session.getAttribute("ms");
 		if (ms == null) {
-			return "redirect:/login"; // 세션이 만료되었거나 없는 경우 로그인 페이지로 리다이렉트
+			return "redirect:/login"; 
 		}
 		Member member = ms.getMember();		
 

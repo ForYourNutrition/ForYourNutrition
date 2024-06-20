@@ -1,57 +1,70 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>QnA</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/questionStyle.css}">
+<title>QnA</title>
+<link rel="stylesheet" type="text/css"
+	th:href="@{/css/questionStyle.css}">
 </head>
 <body>
-    <div th:insert="~{header}"></div>
-    <div class="container">
-        <h2>Q&A List</h2>
-        
-        <div class="controls">
-            <div class="sort-container">
-                <a th:href="@{/question/questionList(sort='latest')}" class="sort-button" th:classappend="${sort == 'latest'} ? 'active' : ''">최신순</a>
-                <a th:href="@{/question/questionList(sort='oldest')}" class="sort-button" th:classappend="${sort == 'oldest'} ? 'active' : ''">오래된 순</a>
-            </div>
-            <div class="search-container">
-                <form th:action="@{/question/questionList}" method="get">
-                    <input type="text" name="keyword" placeholder="키워드 검색" />
-                    <button type="submit">검색</button>
-                </form>
-            </div>
-            <div class="button-container">
-                <button onclick="location.href='/question/createQuestion'">문의글 작성하기</button>
-            </div>
-        </div>
-        
-        <table>
-            <thead>
-                <tr>
-                    <th>INDEX</th>
-                    <th class="title">Title</th>
-                    <th class="author">Author</th>
-                    <th class="date">Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="question, iterStat : ${questions}">
-                    <td th:text="${iterStat.index + 1}"></td>
-                    <td><a th:href="@{/question/viewQuestion(question_id=${question.question_id})}" th:text="${question.title}"></a></td>
-                    <td th:text="${question.member.name}"></td>
-                    <td th:text="${question.qdate}"></td>
-                </tr>
-            </tbody>
-        </table>
-        
-        <div class="pagination">
-            <a th:if="${nowPage > 1}" th:href="@{/question/questionList(page=${nowPage - 2}, sort=${sort}, keyword=${keyword})}">이전</a>
-            <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
-                <a th:if="${page != nowPage}" th:href="@{/question/questionList(page=${page - 1}, sort=${sort}, keyword=${keyword})}" th:text="${page}"></a>
-                <strong th:if="${page == nowPage}" th:text="${page}" style="color:red"></strong>
-            </th:block>
-            <a th:if="${nowPage < totalPages}" th:href="@{/question/questionList(page=${nowPage}, sort=${sort}, keyword=${keyword})}">다음</a>
-        </div>
-    </div>
+	<div th:insert="~{header}"></div>
+	<div class="container">
+		<h2>Q&A List</h2>
+
+		<div class="controls">
+			<div class="sort-container">
+				<a th:href="@{/question/questionList(sort='latest')}"
+					class="sort-button"
+					th:classappend="${sort == 'latest'} ? 'active' : ''">최신순</a> <a
+					th:href="@{/question/questionList(sort='oldest')}"
+					class="sort-button"
+					th:classappend="${sort == 'oldest'} ? 'active' : ''">오래된 순</a>
+			</div>
+			<div class="search-container">
+				<form th:action="@{/question/questionList}" method="get">
+					<input type="text" name="keyword" placeholder="키워드 검색" />
+					<button type="submit">검색</button>
+				</form>
+			</div>
+			<div class="button-container">
+				<button onclick="location.href='/question/createQuestion'">문의글
+					작성하기</button>
+			</div>
+		</div>
+
+		<table>
+			<thead>
+				<tr>
+					<th>INDEX</th>
+					<th class="title">Title</th>
+					<th class="author">Author</th>
+					<th class="date">Date</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="question, iterStat : ${questions}">
+					<td th:text="${iterStat.index + 1}"></td>
+					<td><a
+						th:href="@{/question/viewQuestion(question_id=${question.question_id})}"
+						th:text="${question.title}"></a></td>
+					<td th:text="${question.member.name}"></td>
+					<td th:text="${question.qdate}"></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="pagination">
+			<a th:if="${nowPage > 1}"
+				th:href="@{/question/questionList(page=${nowPage - 2}, sort=${sort}, keyword=${keyword})}">이전</a>
+			<th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+				<a th:if="${page != nowPage}"
+					th:href="@{/question/questionList(page=${page - 1}, sort=${sort}, keyword=${keyword})}"
+					th:text="${page}"></a>
+				<strong th:if="${page == nowPage}" th:text="${page}"
+					style="color: red"></strong>
+			</th:block>
+			<a th:if="${nowPage < totalPages}"
+				th:href="@{/question/questionList(page=${nowPage}, sort=${sort}, keyword=${keyword})}">다음</a>
+		</div>
+	</div>
 </body>
 </html>

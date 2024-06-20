@@ -14,17 +14,17 @@ import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
 @Repository
-public class JpaReviewCommentDao implements ReviewCommentDao{
+public class JpaReviewCommentDao implements ReviewCommentDao {
 	@PersistenceContext
 	private EntityManager em;
-	
+
 	@Transactional
 	@Override
 	public ReviewComment getReviewComment(int rc_id) throws DataAccessException {
 		// TODO Auto-generated method stub
 		return em.find(ReviewComment.class, rc_id);
 	}
-	
+
 	@Transactional
 	@Override
 	public void insertReviewComment(ReviewComment reviewComment) throws DataAccessException {

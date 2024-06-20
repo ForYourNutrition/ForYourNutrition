@@ -14,27 +14,27 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "ReviewComment")
 @SuppressWarnings("serial")
-public class ReviewComment implements Serializable{
-	
-	 /* Private Fields */
+public class ReviewComment implements Serializable {
+
+	/* Private Fields */
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reviewCommment_seq")
-    @SequenceGenerator(name = "reviewCommment_seq", sequenceName = "reviewCommment_seq", allocationSize = 1) 
+	@SequenceGenerator(name = "reviewCommment_seq", sequenceName = "reviewCommment_seq", allocationSize = 1)
 	private int rc_id;
-	
+
 	@ManyToOne
-	@JoinColumn(name="review_id")
+	@JoinColumn(name = "review_id")
 	private Review review;
-	
+
 	@ManyToOne
-	@JoinColumn(name="member_id")
+	@JoinColumn(name = "member_id")
 	private Member member;
-	
+
 	@Column(nullable = false)
 	private String content;
-	
+
 	private String rcdate;
-	
+
 	/* JavaBeans Properties */
 
 	public int getRc_id() {
@@ -90,8 +90,8 @@ public class ReviewComment implements Serializable{
 		this.rcdate = rcdate;
 	}
 
-    @Override
-    public String toString() {
-        return "ReviewComment [rc_id=" + rc_id + ", content=" + content + ", rcdate=" + rcdate + "]";
-    }
+	@Override
+	public String toString() {
+		return "ReviewComment [rc_id=" + rc_id + ", content=" + content + ", rcdate=" + rcdate + "]";
+	}
 }

@@ -112,6 +112,9 @@
         </a>
         <div class="recommendationContainer" th:if="${session.ms}" th:insert="~{item/viewMyRecommend}"></div>
     </div>
+    
+    <div th:insert="~{footer}"></div>
+    
     <script>
         function searchItems() {
             var text = document.getElementById('searchInput').value;

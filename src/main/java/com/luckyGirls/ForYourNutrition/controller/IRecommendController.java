@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.luckyGirls.ForYourNutrition.domain.Item;
+import com.luckyGirls.ForYourNutrition.domain.Member;
 import com.luckyGirls.ForYourNutrition.service.IRecommendService;
 import com.luckyGirls.ForYourNutrition.service.ItemService;
 
@@ -41,7 +42,9 @@ public class IRecommendController {
 		@RequestParam("member_id") String memberId,
 		HttpSession session, Model model
 	) {
-			List<Item> recommendedItems = iRecommendService.getPersonalRecItem(memberId);
+			MemberSession ms = (MemberSession)session.getAttribute("ms");
+			Member member = ms.getMember();
+			List<Item> recommendedItems = iRecommendService.getPersonalRecItem(member.getId());
 			System.out.println("cont" + recommendedItems);
 			model.addAttribute("recommendedItems", recommendedItems);
 			return "item/viewMyRecommend"; // 개인 추천을 보여줄 뷰 이름

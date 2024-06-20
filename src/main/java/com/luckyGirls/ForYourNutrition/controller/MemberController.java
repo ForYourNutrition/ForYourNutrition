@@ -1,11 +1,15 @@
 package com.luckyGirls.ForYourNutrition.controller;
 
+import java.util.List;
+
 import com.luckyGirls.ForYourNutrition.domain.Address;
 import com.luckyGirls.ForYourNutrition.domain.Cart;
+import com.luckyGirls.ForYourNutrition.domain.Item;
 import com.luckyGirls.ForYourNutrition.domain.Member;
 import com.luckyGirls.ForYourNutrition.domain.Wish;
 import com.luckyGirls.ForYourNutrition.service.AddressService;
 import com.luckyGirls.ForYourNutrition.service.CartService;
+import com.luckyGirls.ForYourNutrition.service.IRecommendService;
 import com.luckyGirls.ForYourNutrition.service.MemberService;
 import com.luckyGirls.ForYourNutrition.service.WishService;
 import com.luckyGirls.ForYourNutrition.validator.LoginFormValidator;
@@ -28,6 +32,8 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @SessionAttributes("memberSession")
 public class MemberController {
+	@Autowired
+	private IRecommendService iRecommendService;
 	@Autowired
 	private MemberService memberService;
 	
@@ -280,7 +286,19 @@ public class MemberController {
 	}
 	
 	@GetMapping({"/main", "/"})
-	public String getMain(Model model, HttpSession session) {
-		return "main";
+	public ModelAndView getMain(Model model, HttpSession session) {
+		try {
+			MemberSession ms = (MemberSession)session.getAttribute("ms");
+			Member member = ms.getMember();
+			List<Item> recommendedItems = iRecommendService.getPersonalRecItem(member.getId());
+			System.out.println("cont" + recommendedItems);
+			model.addAttribute("recommendedItems", recommendedItems);
+
+			return new ModelAndView("main");
+		}
+		catch (NullPointerException ex) {
+			model.addAttribute("member", new Member());
+			return new ModelAndView("main");
+		}
 	}
 }

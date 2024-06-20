@@ -100,6 +100,7 @@ public class ItemController {
 			model.addAttribute("totalPages", itemList.getTotalPages());
 			model.addAttribute("category", category);
 			model.addAttribute("sortBy", sortBy);
+			model.addAttribute("all", all);
 
 			return itemList;
 		}
@@ -111,6 +112,7 @@ public class ItemController {
 		model.addAttribute("totalPages", itemList.getTotalPages());
 		model.addAttribute("category", category);
 		model.addAttribute("sortBy", sortBy);
+		model.addAttribute("all", all);
 
 		System.out.println(itemList.getTotalElements());
 		System.out.println(page +", " + itemList.getTotalPages());
@@ -134,6 +136,7 @@ public class ItemController {
 			model.addAttribute("totalPages", itemList.getTotalPages());
 			model.addAttribute("target", target);
 			model.addAttribute("sortBy", sortBy);
+			model.addAttribute("all", all);
 
 			return itemList;
 		}
@@ -145,6 +148,7 @@ public class ItemController {
 		model.addAttribute("totalPages", itemList.getTotalPages());
 		model.addAttribute("target", target);
 		model.addAttribute("sortBy", sortBy);
+		model.addAttribute("all", all);
 
 		System.out.println(itemList.getTotalElements());
 		System.out.println(page +", " + itemList.getTotalPages());
@@ -168,6 +172,7 @@ public class ItemController {
 			model.addAttribute("totalPages", itemList.getTotalPages());
 			model.addAttribute("effect", effect);
 			model.addAttribute("sortBy", sortBy);
+			model.addAttribute("all", all);
 
 			return itemList;
 		}
@@ -179,6 +184,7 @@ public class ItemController {
 		model.addAttribute("totalPages", itemList.getTotalPages());
 		model.addAttribute("effect", effect);
 		model.addAttribute("sortBy", sortBy);
+		model.addAttribute("all", all);
 
 		System.out.println(itemList.getTotalElements());
 		System.out.println(page +", " + itemList.getTotalPages());

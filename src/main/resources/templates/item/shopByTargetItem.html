@@ -131,7 +131,8 @@
     <button th:onclick="|location.href='@{/item/shopByTargetItem.do(target=${target}, page=${currentPage}, pageSize=${pageSize}, sortBy='name')}'|">가나다순</button>
 </div>
 <p></p>
-<h3 class="print">
+<h3 th:if="${all}" class="print">전체</h3>
+<h3 th:if="${!all}" class="print">
     <span th:if="${target == 0}">어린이</span>
     <span th:if="${target == 1}">청소년</span>
     <span th:if="${target == 2}">성인</span>

@@ -135,7 +135,8 @@
     <button th:onclick="|location.href='@{/item/shopByEffectItem.do(effect=${effect}, page=${currentPage}, pageSize=${pageSize}, sortBy='name')}'|">가나다순</button>
 </div>
 <p></p>
-<h3 class="print">
+<h3 th:if="${all}" class="print">전체</h3>
+<h3 th:if="${!all}" class="print">
     <span th:if="${effect == 0}">면역력</span>
     <span th:if="${effect == 1}">다이어트</span>
     <span th:if="${effect == 2}">피로회복</span>

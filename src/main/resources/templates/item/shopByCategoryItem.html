@@ -129,7 +129,8 @@
   <button th:onclick="|location.href='@{/item/shopByCategoryItem.do(category=${category}, page=${currentPage}, pageSize=${pageSize}, sortBy='name')}'|">가나다순</button>
 </div>
 <p></p>
-<h3 class="print"><span th:text="${item.category}"></span></h3>
+<h3 th:if="${all}" class="print">전체</h3>
+<h3 th:if="${!all}" class="print"><span th:text="${category}"></span></h3>
 <div class="item-container">
   <div th:each="item : ${itemList.content}" class="item-box" th:onclick="|window.location.href='@{/item/viewItem.do(item_id=${item.item_id})}'|">
     <img border="0" th:src="@{/images/img.png}" />

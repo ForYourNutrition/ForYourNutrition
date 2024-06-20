@@ -10,10 +10,6 @@ import com.luckyGirls.ForYourNutrition.dao.MemberDao;
 import com.luckyGirls.ForYourNutrition.dao.mybatis.mapper.MemberMapper;
 import com.luckyGirls.ForYourNutrition.domain.Member;
 
-/**
- * @author Yeonwoo Nam
- *
- */
 @Repository
 public class MybatisMemberDao implements MemberDao{
 	

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import com.luckyGirls.ForYourNutrition.dao.ReviewDao;
+import com.luckyGirls.ForYourNutrition.domain.Member;
 import com.luckyGirls.ForYourNutrition.domain.Review;
 
 import jakarta.persistence.EntityManager;
@@ -20,7 +21,7 @@ import jakarta.transaction.Transactional;
 public class JpaReviewDao implements ReviewDao {
 	@PersistenceContext
 	private EntityManager em;
-	
+
 	@Transactional
 	@Override
 	public Review getReview(int review_id) throws DataAccessException {
@@ -49,40 +50,34 @@ public class JpaReviewDao implements ReviewDao {
 		Review managedReview = em.merge(review);
 		em.remove(managedReview);
 	}
-	
-    @Transactional
-    @Override
-    public Page<Review> getReviewListForItem(int item_id, Pageable pageable) throws DataAccessException {
-        TypedQuery<Review> query = em.createQuery(
-                "SELECT r FROM Review r JOIN r.item i WHERE i.item_id = :item_id", Review.class);
-        query.setParameter("item_id", item_id);
 
-        int totalRows = query.getResultList().size();
-        List<Review> reviewList = query.setFirstResult((int) pageable.getOffset())
-                                        .setMaxResults(pageable.getPageSize())
-                                        .getResultList();
-
-        return new PageImpl<>(reviewList, pageable, totalRows);
-    }
-
-	/*@Transactional
+	@Transactional
 	@Override
-	public List<Review> getReviewListForItem(int item_id) throws DataAccessException {
-		// TODO Auto-generated method stub
-		TypedQuery<Review> query = em.createQuery(
-				"SELECT r FROM Review r JOIN r.item i WHERE i.item_id=?1", Review.class);
-		query.setParameter(1, item_id);
-		//List<Review> reviewList = query.getResultList();
+	public Page<Review> getReviewListForItem(int item_id, Pageable pageable) throws DataAccessException {
+		TypedQuery<Review> query = em.createQuery("SELECT r FROM Review r JOIN r.item i WHERE i.item_id = :item_id",
+				Review.class);
+		query.setParameter("item_id", item_id);
+
+		int totalRows = query.getResultList().size();
+		List<Review> reviewList = query.setFirstResult((int) pageable.getOffset()).setMaxResults(pageable.getPageSize())
+				.getResultList();
+
+		return new PageImpl<>(reviewList, pageable, totalRows);
+	}
+
+	@Transactional
+	@Override
+	public List<Review> getReviewListForMember(int member_id) throws DataAccessException {
+		TypedQuery<Review> query = em
+				.createQuery("SELECT r FROM Review r JOIN r.member m WHERE m.member_id = :member_id", Review.class);
+		query.setParameter("member_id", member_id);
+
 		return query.getResultList();
-	}*/
+	}
 
-    @Transactional
-    @Override
-    public List<Review> getReviewListForMember(int member_id) throws DataAccessException {
-        TypedQuery<Review> query = em.createQuery(
-                "SELECT r FROM Review r JOIN r.member m WHERE m.member_id = :member_id", Review.class);
-        query.setParameter("member_id", member_id);
-
-        return query.getResultList();
-    }
+	@Override
+	public void updateMemberPoint(Member member, int point) {
+		// TODO Auto-generated method stub
+		member.setPoint(member.getPoint() + point);
+	}
 }

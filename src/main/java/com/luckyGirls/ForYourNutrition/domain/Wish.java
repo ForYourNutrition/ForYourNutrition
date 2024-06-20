@@ -24,15 +24,15 @@ public class Wish implements Serializable {
 	/* Private Fields */
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "wish_seq")
-    @SequenceGenerator(name = "wish_seq", sequenceName = "wish_seq", allocationSize = 1) 
+	@SequenceGenerator(name = "wish_seq", sequenceName = "wish_seq", allocationSize = 1)
 	private int wish_id;
-	
+
 	@ManyToOne
-	@JoinColumn(name="member_id")
+	@JoinColumn(name = "member_id")
 	private Member member;
-	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy="wish", cascade=CascadeType.REMOVE)
-	private List<WishItem> wishItemList= new ArrayList<>();
+
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "wish", cascade = CascadeType.REMOVE)
+	private List<WishItem> wishItemList = new ArrayList<>();
 
 	public int getWish_id() {
 		return wish_id;
@@ -68,16 +68,13 @@ public class Wish implements Serializable {
 	public Wish() {
 		super();
 	}
-	
+
 	public Wish(Member member) {
-		this.member  = member;
+		this.member = member;
 	}
+
 	@Override
-    public String toString() {
-        return "Wish{" +
-               "wish_id=" + wish_id +
-               ", member=" + member +
-               ", wishItemList=" + wishItemList.size() + // 간단히 사이즈만 출력하도록 변경
-               '}';
-    }
+	public String toString() {
+		return "Wish{" + "wish_id=" + wish_id + ", member=" + member + ", wishItemList=" + wishItemList.size() + '}';
+	}
 }

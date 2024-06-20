@@ -18,78 +18,73 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class WishController {
-	
+
 	@Autowired
 	private WishService wishService;
-	
-    @Autowired
-    private ItemService itemService;
-	
+
+	@Autowired
+	private ItemService itemService;
+
 	@GetMapping("/wish/viewWish")
 	public String viewWish(HttpSession session, Model model) {
-        MemberSession ms = (MemberSession) session.getAttribute("ms");
-        if (ms == null) {
-        	return "redirect:/member/loginForm";
-        }
-        Member member = ms.getMember();
-        Wish wish = null;
-        
-        try {
-        	wish = wishService.getWishByMember(member);
-        	if(wish != null) {
-        		System.out.println(wish.getWishItemList().toString());
-        		model.addAttribute("wishItems", wish.getWishItemList());
-        	} else {
-        		System.out.println("Wish is null");
-        	}
-        	
-        } catch (Exception e) {
-        	e.printStackTrace();
-        }
-        model.addAttribute("wish", wish);
-        return "wish/viewWish";
+		MemberSession ms = (MemberSession) session.getAttribute("ms");
+		if (ms == null) {
+			return "redirect:/member/loginForm";
+		}
+		Member member = ms.getMember();
+		Wish wish = null;
+
+		try {
+			wish = wishService.getWishByMember(member);
+			if (wish != null) {
+				System.out.println(wish.getWishItemList().toString());
+				model.addAttribute("wishItems", wish.getWishItemList());
+			} else {
+				System.out.println("Wish is null");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		model.addAttribute("wish", wish);
+		return "wish/viewWish";
 	}
-	
+
 	@PostMapping("/wish/addWishItem")
 	public String addWishItem(@RequestParam int item_id, HttpSession session, Model model) {
-		 MemberSession ms = (MemberSession) session.getAttribute("ms");
-	        if (ms == null) {
-	            return "redirect:/member/loginForm";
-	        }
+		MemberSession ms = (MemberSession) session.getAttribute("ms");
+		if (ms == null) {
+			return "redirect:/member/loginForm";
+		}
 
-	        Member member = ms.getMember();
-	        Item item = itemService.getItemById(item_id);
-	        
-	        //WishItem wishItem = new WishItem();
-	        //wishItem.setItem(item);
-	        //wishItem.setMember(member);
-	        //
-	        
-	        Wish wish = wishService.getWishByMember(member);
-	        WishItem wishItem = new WishItem(member, item);
-	        boolean added = wishService.addWishItem(member, wishItem);
-	        
-	        System.out.println("wishItem 정보: " + wishItem.getWishItem_id());
-	        System.out.println("wishItem mem 정보: " + wishItem.getMember().getName());
+		Member member = ms.getMember();
+		Item item = itemService.getItemById(item_id);
 
-	       
-	        if (!added) {
-	            model.addAttribute("error", "이미 Wish에 있는 상품입니다.");
-	            model.addAttribute("wish", wish);
-	            return "wish/viewWish";
-	        }
-	        return "redirect:/wish/viewWish";
+		Wish wish = wishService.getWishByMember(member);
+		WishItem wishItem = new WishItem(member, item);
+		boolean added = wishService.addWishItem(member, wishItem);
+
+		System.out.println("wishItem 정보: " + wishItem.getWishItem_id());
+		System.out.println("wishItem mem 정보: " + wishItem.getMember().getName());
+
+		if (!added) {
+			model.addAttribute("error", "이미 Wish에 있는 상품입니다.");
+			model.addAttribute("wish", wish);
+			return "wish/viewWish";
+		}
+		return "redirect:/wish/viewWish";
 	}
+
 	@PostMapping("/wish/removeWishItem")
 	public String removeWishItem(@RequestParam int wishItem_id, HttpSession session) {
-		 MemberSession ms = (MemberSession) session.getAttribute("ms");
-	        if (ms == null) {
-	            return "redirect:/member/loginForm";
-	        }
-	        Member member = ms.getMember();
-	        wishService.removeWishItem(member, wishItem_id);
+		MemberSession ms = (MemberSession) session.getAttribute("ms");
+		if (ms == null) {
+			return "redirect:/member/loginForm";
+		}
+		Member member = ms.getMember();
+		wishService.removeWishItem(member, wishItem_id);
 
-	        return "redirect:/wish/viewWish";
+		return "redirect:/wish/viewWish";
 	}
-	
+
 }

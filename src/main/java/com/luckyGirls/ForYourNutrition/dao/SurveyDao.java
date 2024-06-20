@@ -8,10 +8,6 @@ import org.springframework.stereotype.Repository;
 import com.luckyGirls.ForYourNutrition.domain.SRecommend;
 import com.luckyGirls.ForYourNutrition.domain.Survey;
 
-/**
- * @author Yeonwoo Nam
- *
- */
 public interface SurveyDao {
 	Survey getSurvey(int member_id) throws DataAccessException; //사용자의 문진표 조회
 	

@@ -18,14 +18,14 @@ import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
 @Repository
-public class JpaCartDao implements CartDao{
+public class JpaCartDao implements CartDao {
 
 	@PersistenceContext
 	private EntityManager em;
-	
+
 	@Transactional
 	@Override
-	public void saveCart(Cart cart) {
+	public void saveCart(Cart cart) throws DataAccessException {
 		// TODO Auto-generated method stub
 		if (cart.getCart_id() == 0) {
 			em.persist(cart);
@@ -33,57 +33,57 @@ public class JpaCartDao implements CartDao{
 			em.merge(cart);
 		}
 	}
-	
+
 	@Transactional
 	@Override
-	public Cart findCartByMember(Member member) {
+	public Cart findCartByMember(Member member) throws DataAccessException {
 		// TODO Auto-generated method stub
 		try {
-            TypedQuery<Cart> query = em.createQuery("SELECT c FROM Cart c WHERE c.member = :member", Cart.class);
-            query.setParameter("member", member);
-            return query.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
-	}
-	
-	@Transactional
-	@Override
-	public List<CartItem> findCartItemsByCartAndItem(Cart cart, Item item) {
-	    TypedQuery<CartItem> query = em.createQuery(
-	        "SELECT ci FROM CartItem ci WHERE ci.cart = :cart AND ci.item = :item", CartItem.class);
-	    query.setParameter("cart", cart);
-	    query.setParameter("item", item);
-	    return query.getResultList();
+			TypedQuery<Cart> query = em.createQuery("SELECT c FROM Cart c WHERE c.member = :member", Cart.class);
+			query.setParameter("member", member);
+			return query.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 	@Transactional
 	@Override
-	public void saveCartItem(CartItem cartItem) {
+	public List<CartItem> findCartItemsByCartAndItem(Cart cart, Item item) throws DataAccessException {
+		TypedQuery<CartItem> query = em
+				.createQuery("SELECT ci FROM CartItem ci WHERE ci.cart = :cart AND ci.item = :item", CartItem.class);
+		query.setParameter("cart", cart);
+		query.setParameter("item", item);
+		return query.getResultList();
+	}
+
+	@Transactional
+	@Override
+	public void saveCartItem(CartItem cartItem) throws DataAccessException {
 		// TODO Auto-generated method stub
 		if (cartItem.getCartItem_id() == 0) {
-            em.persist(cartItem);
-        } else {
-            em.merge(cartItem);
-        }
+			em.persist(cartItem);
+		} else {
+			em.merge(cartItem);
+		}
 	}
-	
+
 	@Transactional
 	@Override
-	public void deleteCartItemById(int cartItem_id) {
+	public void deleteCartItemById(int cartItem_id) throws DataAccessException {
 		// TODO Auto-generated method stub
 		CartItem cartItem = em.find(CartItem.class, cartItem_id);
-        if (cartItem != null) {
-            em.remove(cartItem);
-        }
+		if (cartItem != null) {
+			em.remove(cartItem);
+		}
 	}
-	
+
 	@Transactional
 	@Override
-	public CartItem findCartItemById(int cartItem_id) {
+	public CartItem findCartItemById(int cartItem_id) throws DataAccessException {
 		// TODO Auto-generated method stub
 		return em.find(CartItem.class, cartItem_id);
 	}

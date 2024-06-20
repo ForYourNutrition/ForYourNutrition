@@ -18,14 +18,14 @@ public class JpaQuestionCommentDao implements QuestionCommentDao {
 
 	@PersistenceContext
 	private EntityManager em;
-	
+
 	@Transactional
 	@Override
 	public QuestionComment getQuestionComment(int qc_id) throws DataAccessException {
 		// TODO Auto-generated method stub
 		return em.find(QuestionComment.class, qc_id);
 	}
-	
+
 	@Transactional
 	@Override
 	public void insertQuestionComment(QuestionComment questionComment) throws DataAccessException {
@@ -39,15 +39,13 @@ public class JpaQuestionCommentDao implements QuestionCommentDao {
 		// TODO Auto-generated method stub
 		em.merge(questionComment);
 	}
-	
+
 	@Transactional
 	@Override
 	public void deleteQuestionComment(QuestionComment questionComment) throws DataAccessException {
 		// TODO Auto-generated method stub
-		System.out.println("설마 여기서 오류?");
 		QuestionComment managedQC = em.merge(questionComment);
 		em.remove(managedQC);
-		System.out.println("는 아니지?");
 	}
 
 	@Transactional
@@ -55,24 +53,22 @@ public class JpaQuestionCommentDao implements QuestionCommentDao {
 	public List<QuestionComment> getQuestionCommentListForQuestion(int question_id) throws DataAccessException {
 		// TODO Auto-generated method stub
 		TypedQuery<QuestionComment> query = em.createQuery(
-				"SELECT qc FROM QuestionComment qc JOIN qc.question q " + 
-				"WHERE q.question_id=?1", QuestionComment.class);
+				"SELECT qc FROM QuestionComment qc JOIN qc.question q " + "WHERE q.question_id=?1",
+				QuestionComment.class);
 		query.setParameter(1, question_id);
 		List<QuestionComment> questionCommentList = query.getResultList();
-		return questionCommentList;	
+		return questionCommentList;
 	}
 
-	/*추후 추가 기능 구현을 위해 작성*/
 	@Transactional
 	@Override
 	public List<QuestionComment> getQuestionCommentListForMember(int member_id) throws DataAccessException {
 		// TODO Auto-generated method stub
 		TypedQuery<QuestionComment> query = em.createQuery(
-				"SELECT qc FROM QuestionComment qc JOIN qc.member m " + 
-				"WHERE m.member_id=?1", QuestionComment.class);
+				"SELECT qc FROM QuestionComment qc JOIN qc.member m " + "WHERE m.member_id=?1", QuestionComment.class);
 		query.setParameter(1, member_id);
 		List<QuestionComment> questionCommentList = query.getResultList();
-		return questionCommentList;	
+		return questionCommentList;
 	}
 
 }

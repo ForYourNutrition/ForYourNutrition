@@ -1,23 +1,24 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f8f8;
     margin: 0;
     padding: 0;
-    text-align: center; /* 중앙 정렬 */
 }
 
 .container {
     width: 80%;
-    margin: 0 auto;
-    background: #fff;
+    margin: 20px auto;
+    background-color: #ffffff;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-top: 30px;
-    border-radius: 8px;
+    border-radius: 10px;
+    text-align: center;
 }
 
 h2 {
+    text-align: center;
     color: #333;
+    margin-bottom: 20px;
 }
 
 .button-container {
@@ -30,7 +31,7 @@ h2 {
 }
 
 .button-container button {
-    background-color: #002366; /* 수정된 색깔 */
+    background-color: #002366;
     color: #ffffff;
     padding: 10px 20px;
     border: none;
@@ -40,7 +41,7 @@ h2 {
 }
 
 .button-container button:hover {
-    background-color: #001a4d; /* 수정된 호버 색깔 */
+    background-color: #001a4d;
 }
 
 .empty-reviews-message {
@@ -55,25 +56,22 @@ h2 {
     margin-top: 20px;
 }
 
-.reviews-table thead {
-    background-color: #007bff;
-    color: #fff;
-}
-
-.reviews-table th, .reviews-table td {
+.reviews-table th,
+.reviews-table td {
     padding: 12px 15px;
-    text-align: center; /* 중앙 정렬 */
+    text-align: center;
     border: 1px solid #ddd;
 }
+
 .reviews-table th {
-    background-color: #4da6ff; /* 기본 색상 */
-    color: #fff; /* 글자색 */
+    background-color: #f2f2f2;
+    color: #333;
 }
+
 .reviews-table tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
-/* 마우스 움직일 때 색 변화 제거 */
 .reviews-table tr:hover {
     background-color: initial;
 }
@@ -83,20 +81,21 @@ h2 {
     margin-top: 20px;
 }
 
-.pagination a, .pagination span {
+.pagination a,
+.pagination span {
     margin: 0 5px;
     padding: 5px 10px;
-    color: #007bff;
+    color: #002366;
     text-decoration: none;
-    border: 1px solid #ddd;
+    border: 1px solid #cccccc;
     border-radius: 5px;
 }
 
 .pagination a:hover {
-    background-color: #f1f1f1;
+    background-color: #f2f2f2;
 }
 
 .pagination .current {
-    background-color: #007bff;
-    color: #fff;
+    background-color: #002366;
+    color: #ffffff;
 }

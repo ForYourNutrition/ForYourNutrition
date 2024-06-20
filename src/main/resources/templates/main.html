@@ -20,8 +20,8 @@
         .search-bar input[type="text"] {
             width: 50%;
             padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px 0 0 5px;
+			border-radius: 10px;
+            border: 1px solid navy;
             outline: none;
         }
         .search-bar button {
@@ -77,17 +77,38 @@
         }
         .user-info {
             position: fixed;
-            top: 0;
+            top: 30px;
             right: 0;
             margin: 80px;
             background-color: white;
             color: navy;
             padding: 10px;
-            border-radius: 5px;
-            border: 1px solid navy;
+            border-radius: 10px;
+            border: 2px solid navy;
         }
         .recommendationContainer{
             width: 70%;
+            margin-left: 15%;
+        }
+        .recommend {
+        	display: flex;
+        	margin-left: 41%;
+        }
+        .recommend button {
+        	width: 15%;
+        	margin: 10px;
+            border-radius: 20px;
+            border: 2px solid navy;
+            background-color: #f0f0f0;
+            color: navy;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin-top: 15px;
+            margin-left: 18%;
+        }
+        .recommend button:hover {
+			background-color: lightgray;
         }
     </style>
 </head>
@@ -106,12 +127,19 @@
         </div>
     </div>
 
-    <div class="banner">
-        <a th:if="${session.ms == null}" href="survey/surveyForm">
+    <div class="banner" th:unless="${isSurvey}">
+        <a href="survey/surveyForm">
             <img src="/images/surveyBanner.png" alt="슬로건 이미지">
         </a>
-        <div class="recommendationContainer" th:if="${session.ms}" th:insert="~{item/viewMyRecommend}"></div>
     </div>
+    
+    <div th:if="${isSurvey}" style="text-align: center;">
+ 		<div class="recommend">
+			<h2 th:text="${session.ms.member.name} + '님을 위한 추천 ITEM'"></h2>
+			<button th:onclick="|location.href='@{survey/surveyForm}'|">문진표 수정</button>
+		</div>
+		<div class="recommendationContainer" th:insert="~{item/viewMyRecommend}"></div>
+	</div>
     
     <div th:insert="~{footer}"></div>
     

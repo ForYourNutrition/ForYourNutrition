@@ -6,11 +6,13 @@ import com.luckyGirls.ForYourNutrition.domain.Address;
 import com.luckyGirls.ForYourNutrition.domain.Cart;
 import com.luckyGirls.ForYourNutrition.domain.Item;
 import com.luckyGirls.ForYourNutrition.domain.Member;
+import com.luckyGirls.ForYourNutrition.domain.Survey;
 import com.luckyGirls.ForYourNutrition.domain.Wish;
 import com.luckyGirls.ForYourNutrition.service.AddressService;
 import com.luckyGirls.ForYourNutrition.service.CartService;
 import com.luckyGirls.ForYourNutrition.service.IRecommendService;
 import com.luckyGirls.ForYourNutrition.service.MemberService;
+import com.luckyGirls.ForYourNutrition.service.SurveyService;
 import com.luckyGirls.ForYourNutrition.service.WishService;
 import com.luckyGirls.ForYourNutrition.validator.LoginFormValidator;
 import com.luckyGirls.ForYourNutrition.validator.MemberFormValidator;
@@ -48,6 +50,9 @@ public class MemberController {
 	
 	@Autowired
 	private AddressService addressService;
+	
+	@Autowired
+	private SurveyService surveyService;
 
 	@ModelAttribute("loginForm")
 	public LoginForm formBacking(HttpServletRequest request) throws Exception {
@@ -294,10 +299,20 @@ public class MemberController {
 			System.out.println("cont" + recommendedItems);
 			model.addAttribute("recommendedItems", recommendedItems);
 
+			Survey sv = surveyService.getSurvey(member.getMember_id());
+			if (sv != null) {
+				System.out.println(sv.getBirth_year());
+				model.addAttribute("isSurvey", true);
+			}
+			else {
+				model.addAttribute("isSurvey", false);
+			}
+
+			
 			return new ModelAndView("main");
 		}
 		catch (NullPointerException ex) {
-			model.addAttribute("member", new Member());
+			model.addAttribute("isSurvey", false);
 			return new ModelAndView("main");
 		}
 	}

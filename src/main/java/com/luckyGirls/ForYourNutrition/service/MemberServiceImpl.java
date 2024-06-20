@@ -83,7 +83,7 @@ public class MemberServiceImpl implements MemberService {
         // 각 멤버에게 이메일 보내기
         for (Member member : members) {
             String to = member.getEmail();  // 멤버의 이메일 주소
-            String name = member.getName();
+            String nickname = member.getNickname();
             System.out.println(to);
             
             try {
@@ -93,7 +93,7 @@ public class MemberServiceImpl implements MemberService {
 
                 // 이메일 제목과 내용 설정
                 message.setSubject("[For Your Nutrition]영양제 섭취 시간 알림");
-                message.setText(name + "님 영양제 섭취하실 시간입니다!");
+                message.setText(nickname + "님 영양제 섭취하실 시간입니다!");
 
                 // 이메일 보내기
                 Transport.send(message);

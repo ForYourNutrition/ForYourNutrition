@@ -9,16 +9,23 @@
 <body>
 	<div>
 		<div th:insert="~{header}"></div>
+		
 		<div class="container">
 			<h2>Question 수정하기</h2>
-			<form th:action="@{/question/updateQuestion}"
-				th:object="${questionForm}" method="post">
-				<input type="hidden" th:field="*{question_id}" /> <label
-					for="title">제목 :</label> <input type="text" th:field="*{title}"
-					id="title" /> <br> <label for="content">내용 :</label>
+			<form th:action="@{/question/updateQuestion}" th:object="${questionForm}" method="post">
+				<input type="hidden" th:field="*{question_id}" /> 
+				<label for="name">작성자 :</label><br/><span th:text="${memNickName} + '님'"></span>
+				<br><br/><br/>
+				<label for="writtenTime">작성시간 :</label><br/> <span th:text="${question.qdate}"></span>
+				<br><br/><br/> 	
+				<label for="title">제목 :</label> 
+				<input type="text" th:field="*{title}" id="title" /> 
+				<br><br/><br/> 
+				<label for="content">내용 :</label>
 				<textarea th:field="*{content}" id="content"></textarea>
-				<br>
+				<br><br/><br/> 
 				<button type="submit">저장</button>
+				<br><br/><br/> 
 			</form>
 		</div>
 	</div>

@@ -46,6 +46,10 @@ public class WishController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		String memNickName = member.getNickname();
+		
+		model.addAttribute("memNickName", memNickName);
 		model.addAttribute("wish", wish);
 		return "wish/viewWish";
 	}

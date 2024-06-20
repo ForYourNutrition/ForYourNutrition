@@ -15,7 +15,7 @@
 
 			<div class="question-details">
 				<div class="detail-item">
-					<label for="name">작성자 :</label> <span th:text="${memberName}"></span>
+					<label for="name">작성자 :</label> <span th:text="${memNickName} + '님'"></span>
 				</div>
 				<div class="detail-item">
 					<label for="writtenTime">작성시간 :</label> <span
@@ -32,8 +32,7 @@
 
 			<!-- <div class="button-group" th:if="${question.member.member_id == member.member_id}"> -->
 			<div class="button-group">
-				<form th:action="@{/question/updateQuestionForm}" method="get"
-					class="inline-form">
+				<form th:action="@{/question/updateQuestionForm}" method="get" class="inline-form">
 					<input type="hidden" name="question_id"
 						th:value="${questionForm.question_id}" />
 					<button type="submit">문의글 수정</button>
@@ -72,7 +71,7 @@
 			<div th:each="comment : ${comments}" class="comment">
 				<div class="comment-info">
 					<div>
-						<span class="comment-author" th:text="${comment.member.name}">Author
+						<span class="comment-author" th:text="${comment.member.nickname}  + '님'">Author
 							Name</span> <span class="comment-date" th:text="${comment.qcdate}">Comment
 							Date</span>
 					</div>

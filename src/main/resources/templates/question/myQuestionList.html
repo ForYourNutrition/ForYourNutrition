@@ -11,7 +11,7 @@
 	}
 
 	function confirmDelete(event) {
-		if (!confirm('정말 삭제하시겠습니까? 삭제 시,Q&A List로 이동합니다.')) {
+		if (!confirm('삭제 시, Q&A 게시판으로 이동합니다. 정말 삭제하시겠습니까? ')) {
 			event.preventDefault();
 		}
 	}
@@ -20,7 +20,9 @@
 <body>
 	<div th:insert="~{header}"></div>
 	<div class="container">
-		<h1>My Questions</h1>
+	<br/><br/>
+		<h2><span th:text="${memNickName}  + '님'"></span>이 작성하신 문의글 내역입니다.</h2>
+		<br/><br/><br/><br/>
 		<table>
 			<thead>
 				<tr>
@@ -39,16 +41,17 @@
 					<td class="actions"><a
 						th:href="@{/question/viewQuestion(question_id=${question.question_id})}"
 						class="view-btn"
-						onclick="showAlert(event, 'Question View로 이동하겠습니다.');">View</a>
+						onclick="showAlert(event, 'Question 작성 내용으로 이동하겠습니다.');">보러가기</a>
 						<form th:action="@{/question/deleteQuestion}" method="post"
 							class="delete" onsubmit="confirmDelete(event);">
 							<input type="hidden" name="question_id"
 								th:value="${question.question_id}">
-							<button type="submit" class="delete-btn">Delete</button>
+							<button type="submit" class="delete-btn">삭제하기</button>
 						</form></td>
 				</tr>
 			</tbody>
 		</table>
+		<br/><br/>
 	</div>
 </body>
 </html>

@@ -7,10 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import com.luckyGirls.ForYourNutrition.domain.Member;
 
-/**
- * @author Yeonwoo Nam
- *
- */
 public interface MemberDao {
 	Member getMember(String id) throws DataAccessException; //회원 정보 가져오기
 

@@ -6,10 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.luckyGirls.ForYourNutrition.domain.Member;
 
-/**
- * @author Yeonwoo Nam
- *
- */
 @Mapper
 public interface MemberMapper {
 

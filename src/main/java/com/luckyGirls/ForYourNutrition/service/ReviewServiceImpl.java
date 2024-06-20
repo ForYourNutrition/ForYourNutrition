@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.luckyGirls.ForYourNutrition.dao.ReviewDao;
+import com.luckyGirls.ForYourNutrition.domain.Member;
 import com.luckyGirls.ForYourNutrition.domain.Review;
 
 import jakarta.transaction.Transactional;
@@ -59,6 +60,13 @@ public class ReviewServiceImpl implements ReviewService{
 	public List<Review> getReviewListForMember(int member_id) {
 		// TODO Auto-generated method stub
 		return reviewDao.getReviewListForMember(member_id);
+	}
+	
+	@Transactional
+	@Override
+	public void addPoint(Member member, int point) {
+		// TODO Auto-generated method stub
+		reviewDao.updateMemberPoint(member, point);
 	}
 
 }

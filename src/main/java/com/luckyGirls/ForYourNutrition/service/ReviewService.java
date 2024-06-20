@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.luckyGirls.ForYourNutrition.domain.Member;
 import com.luckyGirls.ForYourNutrition.domain.Review;
 
 public interface ReviewService {
@@ -19,4 +20,6 @@ public interface ReviewService {
 	//List<Review> getReviewListForItem(int item_id); //상품에 대한 모든 후기 조회
 	Page<Review> getReviewListForItem(int item_id, Pageable pageable);
 	List<Review> getReviewListForMember(int member_id); //해당 멤버가 작성한 모든 후기 내역을 조회
+
+	void addPoint(Member member, int point); //포인트 추가
 }

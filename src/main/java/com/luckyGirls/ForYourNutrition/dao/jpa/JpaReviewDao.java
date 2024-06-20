@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import com.luckyGirls.ForYourNutrition.dao.ReviewDao;
+import com.luckyGirls.ForYourNutrition.domain.Member;
 import com.luckyGirls.ForYourNutrition.domain.Review;
 
 import jakarta.persistence.EntityManager;
@@ -85,4 +86,10 @@ public class JpaReviewDao implements ReviewDao {
 
         return query.getResultList();
     }
+
+	@Override
+	public void updateMemberPoint(Member member, int point) {
+		// TODO Auto-generated method stub
+		member.setPoint(member.getPoint() + point);
+	}
 }

@@ -41,12 +41,12 @@
 					<td class="actions"><a
 						th:href="@{/question/viewQuestion(question_id=${question.question_id})}"
 						class="view-btn"
-						onclick="showAlert(event, 'Question 작성 내용으로 이동하겠습니다.');">보러가기</a>
+						onclick="showAlert(event, 'Question 작성 내용으로 이동하겠습니다.');">view</a>
 						<form th:action="@{/question/deleteQuestion}" method="post"
 							class="delete" onsubmit="confirmDelete(event);">
 							<input type="hidden" name="question_id"
 								th:value="${question.question_id}">
-							<button type="submit" class="delete-btn">삭제하기</button>
+							<button type="submit" class="delete-btn">delete</button>
 						</form></td>
 				</tr>
 			</tbody>

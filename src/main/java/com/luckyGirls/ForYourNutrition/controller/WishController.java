@@ -72,8 +72,11 @@ public class WishController {
 		System.out.println("wishItem mem 정보: " + wishItem.getMember().getName());
 
 		if (!added) {
+			String memNickName = member.getNickname();
+			
 			model.addAttribute("error", "이미 Wish에 있는 상품입니다.");
 			model.addAttribute("wish", wish);
+			model.addAttribute("memNickName", memNickName);
 			return "wish/viewWish";
 		}
 		return "redirect:/wish/viewWish";

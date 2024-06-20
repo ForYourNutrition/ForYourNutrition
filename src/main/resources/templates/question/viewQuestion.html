@@ -3,8 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <title>Question View</title>
-<link rel="stylesheet" type="text/css"
-	th:href="@{/css/viewQuestionStyle.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/viewQuestionStyle.css}">
+	<script>
+    function confirmDelete() {
+        return confirm('정말로 삭제하시겠습니까?');
+    }
+    function confirmAdd(){
+    	return confirm('댓글이 작성되었습니다.');
+    }
+</script>
 </head>
 <body>
 	<div th:insert="~{header}"></div>
@@ -32,7 +39,8 @@
 
 			<!-- <div class="button-group" th:if="${question.member.member_id == member.member_id}"> -->
 			<div class="button-group">
-				<form th:action="@{/question/updateQuestionForm}" method="get" class="inline-form">
+				<form th:action="@{/question/updateQuestionForm}" method="get" class="inline-form"
+					onsubmit="return confirm('문의글을 수정하겠습니까?');">
 					<input type="hidden" name="question_id"
 						th:value="${questionForm.question_id}" />
 					<button type="submit">문의글 수정</button>
@@ -40,7 +48,7 @@
 
 				<form th:action="@{/question/deleteQuestion}" method="post"
 					class="inline-form"
-					onsubmit="return confirm('정말로 이 게시글을 삭제하시겠습니까?');">
+					onsubmit="return confirm('정말로 이 문의글을 삭제하시겠습니까?');">
 					<input type="hidden" name="question_id"
 						th:value="${questionForm.question_id}" />
 					<button type="submit">문의글 삭제</button>
@@ -49,13 +57,13 @@
 		</div>
 
 		<form th:action="@{/question/questionList}" method="get"
-			class="inline-form">
+			class="inline-form" onsubmit="return confirm('Q&A List로 이동하겠습니다.');">
 			<button type="submit" class="qna-list-button">Q&A List로 이동하기</button>
 		</form>
 
 		<div class="comment-section">
 			<h3>Question's Comment</h3>
-			<form th:action="@{/questionComment/addComment}" method="post">
+			<form th:action="@{/questionComment/addComment}" method="post" onsubmit="return confirmAdd()">
 				<input type="hidden" name="question_id"
 					th:value="${question.question_id}" />
 				<div class="form-group">
@@ -66,24 +74,21 @@
 			</form>
 
 			<h3>Question's Comment List</h3>
-			<div th:if="${#lists.isEmpty(comments)}" class="no-comments">댓글이
-				없습니다.</div>
+			<div th:if="${#lists.isEmpty(comments)}" class="no-comments">댓글이 없습니다.</div>
 			<div th:each="comment : ${comments}" class="comment">
 				<div class="comment-info">
 					<div>
-						<span class="comment-author" th:text="${comment.member.nickname}  + '님'">Author
-							Name</span> <span class="comment-date" th:text="${comment.qcdate}">Comment
-							Date</span>
+						<span class="comment-author" th:text="${comment.member.nickname}  + '님'">Author	Name</span> 
+						<span class="comment-date" th:text="${comment.qcdate}">Comment Date</span>
 					</div>
-					<form th:action="@{/questionComment/deleteComment}" method="post">
+					<form th:action="@{/questionComment/deleteComment}" method="post" onsubmit="return confirmDelete()">
 						<input type="hidden" name="qc_id" th:value="${comment.qc_id}" />
 						<input type="hidden" name="question_id"
 							th:value="${question.question_id}" />
 						<button type="submit" class="delete-button">삭제</button>
 					</form>
 				</div>
-				<div class="comment-content" th:text="${comment.content}">Comment
-					Content</div>
+				<div class="comment-content" th:text="${comment.content}">Comment Content</div>
 			</div>
 		</div>
 	</div>

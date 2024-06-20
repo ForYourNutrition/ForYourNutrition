@@ -144,6 +144,9 @@ public class ReviewController {
 	        
 	        reviewService.insertReview(review);
 	        
+	        // 포인트 10점 추가
+	        reviewService.addPoint(member, 10);
+	        
 	        System.out.println("review의 item : " + review.getItem().getName());
 	        System.out.println("review_id : " + review.getReview_id());
 	        System.out.println("Saving Review: " + review);

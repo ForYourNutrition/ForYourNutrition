@@ -11,6 +11,7 @@ import com.luckyGirls.ForYourNutrition.domain.Wish;
 import com.luckyGirls.ForYourNutrition.service.AddressService;
 import com.luckyGirls.ForYourNutrition.service.CartService;
 import com.luckyGirls.ForYourNutrition.service.IRecommendService;
+import com.luckyGirls.ForYourNutrition.service.ItemService;
 import com.luckyGirls.ForYourNutrition.service.MemberService;
 import com.luckyGirls.ForYourNutrition.service.SurveyService;
 import com.luckyGirls.ForYourNutrition.service.WishService;
@@ -36,6 +37,8 @@ import org.springframework.web.servlet.ModelAndView;
 public class MemberController {
 	@Autowired
 	private IRecommendService iRecommendService;
+	@Autowired
+	private ItemService itemService;
 	@Autowired
 	private MemberService memberService;
 	
@@ -298,7 +301,9 @@ public class MemberController {
 			List<Item> recommendedItems = iRecommendService.getPersonalRecItem(member.getId());
 			System.out.println("cont" + recommendedItems);
 			model.addAttribute("recommendedItems", recommendedItems);
+			List<Item> itemList = itemService.getBestItemList();
 
+			model.addAttribute("itemList", itemList);
 			Survey sv = surveyService.getSurvey(member.getMember_id());
 			if (sv != null) {
 				System.out.println(sv.getBirth_year());
@@ -312,6 +317,9 @@ public class MemberController {
 			return new ModelAndView("main");
 		}
 		catch (NullPointerException ex) {
+			List<Item> itemList = itemService.getBestItemList();
+
+			model.addAttribute("itemList", itemList);
 			model.addAttribute("isSurvey", false);
 			return new ModelAndView("main");
 		}

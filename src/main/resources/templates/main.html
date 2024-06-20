@@ -110,6 +110,10 @@
         .recommend button:hover {
 			background-color: lightgray;
         }
+        .comparativeContainer{
+            width: 70%;
+            margin-left: 15%;
+        }
     </style>
 </head>
 <body>
@@ -132,7 +136,7 @@
             <img src="/images/surveyBanner.png" alt="슬로건 이미지">
         </a>
     </div>
-    
+
     <div th:if="${isSurvey}" style="text-align: center;">
  		<div class="recommend">
 			<h2 th:text="${session.ms.member.name} + '님을 위한 추천 ITEM'"></h2>
@@ -140,9 +144,12 @@
 		</div>
 		<div class="recommendationContainer" th:insert="~{item/viewMyRecommend}"></div>
 	</div>
-    
+    <div>
+        <div th:insert="~{item/viewBestItemList}"></div>
+    </div>
+
     <div th:insert="~{footer}"></div>
-    
+
     <script>
         function searchItems() {
             var text = document.getElementById('searchInput').value;

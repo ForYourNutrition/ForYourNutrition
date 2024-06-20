@@ -59,10 +59,10 @@ public class QuestionController {
 			return "redirect:/member/loginForm";
 		}
 		Member member = ms.getMember();
-		String memberName = member.getName();
-
-		System.out.println(memberName);
-		model.addAttribute("memberName", memberName);
+		//String memberName = member.getName();
+		String memNickName = member.getNickname();
+		System.out.println(memNickName);
+		model.addAttribute("memNickName", memNickName);
 		return "question/questionForm";
 	}
 
@@ -94,8 +94,9 @@ public class QuestionController {
 			questionService.insertQuestion(question);
 
 			questionForm.setQuestion_id(question.getQuestion_id());
-
-			model.addAttribute("memberName", member.getName());
+			String memNickName = member.getNickname();
+			
+			model.addAttribute("memNickName", memNickName);
 			model.addAttribute("questionForm", questionForm);
 			model.addAttribute("question", question);
 			return "question/viewQuestion";
@@ -123,6 +124,9 @@ public class QuestionController {
 			questionForm.setTitle(question.getTitle());
 			questionForm.setContent(question.getContent());
 
+			String memNickName = member.getNickname();
+			model.addAttribute("memNickName", memNickName);
+			
 			model.addAttribute("questionForm", questionForm);
 			model.addAttribute("question", question);
 
@@ -150,8 +154,10 @@ public class QuestionController {
 			question.setContent(questionForm.getContent());
 
 			questionService.updateQuestion(question);
-
-			model.addAttribute("memberName", member.getName());
+			
+			String memNickName = member.getNickname();
+			model.addAttribute("memNickName", memNickName);
+			
 			model.addAttribute("question", question);
 
 			List<QuestionComment> comments = questionCommentService
@@ -237,13 +243,17 @@ public class QuestionController {
 		model.addAttribute("questionForm", questionForm);
 		model.addAttribute("question", question);
 		model.addAttribute("comments", comments);
-		model.addAttribute("memberName", question.getMember().getName());
+
+		String memNickName = member.getNickname();
+		model.addAttribute("memNickName", memNickName);
+		
 		model.addAttribute("member", member);
 		model.addAttribute("newComment", new QuestionComment());
 
 		return "question/viewQuestion";
 	}
 
+	//InMyPage
 	@GetMapping("/question/myQuestionList")
 	public String listMyQuestions(Model model, HttpSession session) {
 		MemberSession ms = (MemberSession) session.getAttribute("ms");
@@ -254,7 +264,11 @@ public class QuestionController {
 
 		int memberId = ms.getMember().getMember_id();
 		List<Question> myQuestions = questionService.getQuestionListForMember(memberId);
-
+		
+		Member member = ms.getMember();
+		String memNickName = member.getNickname();
+		model.addAttribute("memNickName", memNickName);
+		
 		model.addAttribute("myQuestions", myQuestions);
 		return "question/myQuestionList";
 	}

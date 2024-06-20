@@ -45,20 +45,19 @@ public class OrderController {
 	@Autowired
 	private CartService cartService;
 
-	//주문서 작성 폼 띄우기
 	@PostMapping("/order/createOrder")
 	public String createForm(@RequestParam("item_id") int item_id,
-            @RequestParam("quantity") int count,
+			@RequestParam("quantity") int count,
 			Model model, HttpSession session) {
 		MemberSession ms = (MemberSession) session.getAttribute("ms");
 		if (ms == null) {
-			return "redirect:/login"; // 세션이 만료되었거나 없는 경우 로그인 페이지로 리다이렉트
+			return "redirect:/login"; 
 		}
 		Member member = ms.getMember();		
 
 		Item item = itemService.getItemById(item_id);
 		List<Address> addressList = addressService.getAddressList(member.getMember_id());
-		
+
 		int totalPrice = item.getPrice()*count;
 
 		model.addAttribute("member", member);
@@ -69,42 +68,41 @@ public class OrderController {
 		return "order/orderForm";
 
 	}
-	
-	//주문서 작성 폼 띄우기
-		@PostMapping("/order/fromCartOrder")
-		public String createForm2(@RequestParam("cart_id") int cart_id,
-				Model model, HttpSession session) {
-			MemberSession ms = (MemberSession) session.getAttribute("ms");
-			if (ms == null) {
-				return "redirect:/login"; // 세션이 만료되었거나 없는 경우 로그인 페이지로 리다이렉트
-			}
-			Member member = ms.getMember();		
 
-			Cart cart = cartService.getCartByMember(member);
-			List<CartItem> cartList = cart.getCartItemList();
-			
-			List<Address> addressList = addressService.getAddressList(member.getMember_id());
-			
-			int totalPrice = 0;
-			int quantity = 0;
-			int price = 0;
-			int itemPrice = 0;
-			
-			for(int i=0;i<cartList.size(); i++) {
-				quantity = cartList.get(i).getQuantity();
-				price = cartList.get(i).getItem().getPrice();
-				itemPrice = quantity * price;
-				totalPrice += itemPrice;
-						
-			}
-			model.addAttribute("cart_id", cart_id);
-			model.addAttribute("member", member);
-			model.addAttribute("cartList", cartList);
-			model.addAttribute("address", addressList.get(0));
-			model.addAttribute("totalPrice", totalPrice);
-			return "order/orderCartForm";
+	@PostMapping("/order/fromCartOrder")
+	public String createForm2(@RequestParam("cart_id") int cart_id,
+			Model model, HttpSession session) {
+		MemberSession ms = (MemberSession) session.getAttribute("ms");
+		if (ms == null) {
+			return "redirect:/login";
+		}
+		Member member = ms.getMember();		
+
+		Cart cart = cartService.getCartByMember(member);
+		List<CartItem> cartList = cart.getCartItemList();
+
+		List<Address> addressList = addressService.getAddressList(member.getMember_id());
+
+		int totalPrice = 0;
+		int quantity = 0;
+		int price = 0;
+		int itemPrice = 0;
+
+		for(int i=0;i<cartList.size(); i++) {
+			quantity = cartList.get(i).getQuantity();
+			price = cartList.get(i).getItem().getPrice();
+			itemPrice = quantity * price;
+			totalPrice += itemPrice;
 
 		}
+		model.addAttribute("cart_id", cart_id);
+		model.addAttribute("member", member);
+		model.addAttribute("cartList", cartList);
+		model.addAttribute("address", addressList.get(0));
+		model.addAttribute("totalPrice", totalPrice);
+		return "order/orderCartForm";
+
+	}
 
 	@PostMapping("/order/Order")
 	public String saveOrder(@RequestParam("name") String name,
@@ -131,34 +129,34 @@ public class OrderController {
 			address.setStreetAddress(streetAddress);
 			address.setDetailAddress(detailAddress);
 			address.setMember(member);
-			
+
 			Item item = itemService.getItemById(item_id);
 			OrderItem orderItem = new OrderItem();
-			
+
 			orderItem.setMember(member);
 			orderItem.setOrderPrice(item.getPrice());
 			orderItem.setCount(count);
 			orderItem.setItem(item);
 			Order order = new Order();
-			
+
 			order.setMember(member);
 			order.setOrderDate(formattedNow);
-			order.setOrderStatus(0);//무통장 입금인 경우 입금 확인 중
+			order.setOrderStatus(0);
 			order.setTotalPrice(item.getPrice()*count);
-			
+
 			model.addAttribute("memberName", member.getName());
 			model.addAttribute("order", order);
-			
+
 			int order_id = orderService.insertOrder(order);
 			orderItem.setOrders(orderService.getOrder(order_id));
-			
+
 			orderItemService.insertOrderItem(orderItem);
-			
+
 			if(paymentType.equals("bank-transfer")) {
 				List<Order> orderList = orderService.getOrderList(member.getMember_id());
 				model.addAttribute("orderList", orderList);
 				return "order/orderStatus";
-				}
+			}
 			else {
 				model.addAttribute("order_id", order_id);
 				return "order/cardForm";
@@ -169,7 +167,7 @@ public class OrderController {
 		}
 
 	}
-	
+
 	@PostMapping("/order/saveCartOrder")
 	public String saveCartOrder(@RequestParam("name") String name,
 			@RequestParam("email") String email,
@@ -195,17 +193,17 @@ public class OrderController {
 			address.setStreetAddress(streetAddress);
 			address.setDetailAddress(detailAddress);
 			address.setMember(member);
-			
+
 			Cart cart = cartService.getCartByMember(member);
 			List<CartItem> cartList = cart.getCartItemList();
-			
+
 			Order order = new Order();
 			order.setMember(member);
 			order.setOrderDate(formattedNow);
-			order.setOrderStatus(0);//무통장 입금인 경우 입금 확인 중
+			order.setOrderStatus(0);
 			order.setTotalPrice(totalPrice);
 			int order_id = orderService.insertOrder(order);
-			
+
 			for(int i = 0; i < cartList.size(); i++) {
 				OrderItem orderItem = new OrderItem();
 				orderItem.setMember(member);
@@ -215,16 +213,16 @@ public class OrderController {
 				orderItem.setOrders(orderService.getOrder(order_id));
 				orderItemService.insertOrderItem(orderItem);
 			}
-		
-			
+
+
 			model.addAttribute("memberName", member.getName());
 			model.addAttribute("order", order);
-			
+
 			if(paymentType.equals("bank-transfer")) {
 				List<Order> orderList = orderService.getOrderList(member.getMember_id());
 				model.addAttribute("orderList", orderList);
 				return "order/orderStatus";
-				}
+			}
 			else {
 				model.addAttribute("order_id", order_id);
 				return "order/cardForm";
@@ -235,8 +233,7 @@ public class OrderController {
 		}
 
 	}
-		
-	
+
 	@PostMapping("/order/orderByCard")
 	public String orderByCardForm(@RequestParam("order_id") int order_id,
 			Model model, HttpSession session) {
@@ -245,12 +242,26 @@ public class OrderController {
 			return "redirect:/login"; // 세션이 만료되었거나 없는 경우 로그인 페이지로 리다이렉트
 		}
 		Member member = ms.getMember();		
-		
+
 		Order order = orderService.getOrder(order_id);
-		
+
 		order.setOrderStatus(1);
 		orderService.updateOrder(order);
-		
+
+		List<Order> orderList = orderService.getOrderList(member.getMember_id());
+		model.addAttribute("orderList", orderList);
+		return "/order/orderStatus";
+
+	}
+
+	@GetMapping("/order/forMypageOrderStatus")
+	public String viewOrderStatus(Model model, HttpSession session) {
+		MemberSession ms = (MemberSession) session.getAttribute("ms");
+		if (ms == null) {
+			return "redirect:/login"; 
+		}
+		Member member = ms.getMember();		
+
 		List<Order> orderList = orderService.getOrderList(member.getMember_id());
 		model.addAttribute("orderList", orderList);
 		return "/order/orderStatus";
@@ -262,58 +273,40 @@ public class OrderController {
 			Model model, HttpSession session) {
 		MemberSession ms = (MemberSession) session.getAttribute("ms");
 		if (ms == null) {
-			return "redirect:/login"; // 세션이 만료되었거나 없는 경우 로그인 페이지로 리다이렉트
+			return "redirect:/login"; 
 		}
 		Member member = ms.getMember();		
-		
+
 		Order order = orderService.getOrder(order_id);
-		
+
 		order.setOrderStatus(5);
 		orderService.updateOrder(order);
-		
+
 		List<Order> orderList = orderService.getOrderList(member.getMember_id());
 		model.addAttribute("orderList", orderList);
-		
+
 		return "order/orderStatus";
 
 	}
-	
-	@GetMapping("/order/forMypageOrderStatus")
-	public String viewOrderStatus(Model model, HttpSession session) {
-		MemberSession ms = (MemberSession) session.getAttribute("ms");
-		if (ms == null) {
-			return "redirect:/login"; // 세션이 만료되었거나 없는 경우 로그인 페이지로 리다이렉트
-		}
-		Member member = ms.getMember();		
-		
-		List<Order> orderList = orderService.getOrderList(member.getMember_id());
-		model.addAttribute("orderList", orderList);
-		return "/order/orderStatus";
 
-	}
-	
 	@PostMapping("/order/refundOrder")
 	public String refundOrder(@RequestParam("order_id") int order_id,
 			Model model, HttpSession session) {
 		MemberSession ms = (MemberSession) session.getAttribute("ms");
 		if (ms == null) {
-			return "redirect:/login"; // 세션이 만료되었거나 없는 경우 로그인 페이지로 리다이렉트
+			return "redirect:/login"; 
 		}
 		Member member = ms.getMember();		
-		
+
 		Order order = orderService.getOrder(order_id);
-		
+
 		order.setOrderStatus(4);
 		orderService.updateOrder(order);
-		
+
 		List<Order> orderList = orderService.getOrderList(member.getMember_id());
 		model.addAttribute("orderList", orderList);
-		
+
 		return "order/orderStatus";
 
 	}
-	
-	//삭제, 환불, 배송상태 + 결제구현
-
-
 }

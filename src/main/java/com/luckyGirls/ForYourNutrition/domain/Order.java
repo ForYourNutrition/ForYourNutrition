@@ -34,9 +34,9 @@ public class Order {
 	@JoinColumn(name="member_id")
 	private Member member;
 
-	private String orderDate; //주문일
+	private String orderDate; 
 
-	private int orderStatus; //주문상태(주문_무통장입금:0 주문:1 배송중:2 취소:3 환불:4)
+	private int orderStatus; 
 
 	private int totalPrice;
 

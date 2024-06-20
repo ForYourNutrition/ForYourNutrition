@@ -89,6 +89,9 @@
         .recommendationContainer{
             width: 70%;
             margin-left: 15%;
+            background-color: #f0f0f0;
+            border-radius: 20px;
+            color: navy;
         }
         .recommend {
         	display: flex;
@@ -113,6 +116,9 @@
         .comparativeContainer{
             width: 70%;
             margin-left: 15%;
+            border-radius: 20px;
+            background-color: #f2f1ff;
+            color: navy;
         }
     </style>
 </head>
@@ -144,9 +150,7 @@
 		</div>
 		<div class="recommendationContainer" th:insert="~{item/viewMyRecommend}"></div>
 	</div>
-    <div>
-        <div th:insert="~{item/viewBestItemList}"></div>
-    </div>
+    <div class="comparativeContainer" th:insert="~{item/viewBestItemList}"></div>
 
     <div th:insert="~{footer}"></div>
 

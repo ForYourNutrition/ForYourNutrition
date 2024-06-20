@@ -105,29 +105,6 @@ public class CartController {
 		return "redirect:/cart/viewCart";
 	}
 
-	@GetMapping("/order/createOrder")
-	public String createOrderForm(HttpSession session, Model model) {
-		MemberSession ms = (MemberSession) session.getAttribute("ms");
-		if (ms == null) {
-			return "redirect:/member/loginForm";
-		}
-		Member member = ms.getMember();
-		Cart cart = cartService.getCartByMember(member);
-
-		if (cart != null) {
-			System.out.println("cartId : " + cart.getCart_id());
-			System.out.println("CartItemList : ");
-			for (CartItem cartItem : cart.getCartItems()) {
-				System.out
-						.println(" - Item: " + cartItem.getItem().getName() + ", Quantity: " + cartItem.getQuantity());
-			}
-		} else {
-			System.out.println("Cart is null");
-		}
-		model.addAttribute("cart", cart);
-		return "cart/fromCartToOrder";
-	}
-
 	// 위시리스트에서 아이템을 카트로 이동하는 기능
 	@PostMapping("/wish/addToCart")
 	public String addToCartFromWish(@RequestParam int wishItem_id, HttpSession session) {

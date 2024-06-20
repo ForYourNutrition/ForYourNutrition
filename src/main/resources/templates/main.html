@@ -122,7 +122,7 @@
         </div>
         <!-- 로그인 정보 출력 -->
         <div class="user-info" th:if="${session.ms}">
-            <p th:text="${session.ms.member.name} + '님 반갑습니다.'"></p>
+            <p th:text="${session.ms.member.nickname} + '님 반갑습니다.'"></p>
             <p th:text="'POINT: ' + ${session.ms.member.point}"></p>
         </div>
     </div>
@@ -135,7 +135,7 @@
     
     <div th:if="${isSurvey}" style="text-align: center;">
  		<div class="recommend">
-			<h2 th:text="${session.ms.member.name} + '님을 위한 추천 ITEM'"></h2>
+			<h2 th:text="${session.ms.member.nickname} + '님을 위한 추천 ITEM'"></h2>
 			<button th:onclick="|location.href='@{survey/surveyForm}'|">문진표 수정</button>
 		</div>
 		<div class="recommendationContainer" th:insert="~{item/viewMyRecommend}"></div>

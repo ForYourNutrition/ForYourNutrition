@@ -82,7 +82,7 @@
 <body>
 	<div th:insert="~{header}"></div>
     <div class="container">
-        <div class="hello" th:text="${session.ms.member.name} + '님 안녕하세요'">[member.name]님 안녕하세요</div>
+        <div class="hello" th:text="${session.ms.member.nickname} + '님 안녕하세요'">[member.name]님 안녕하세요</div>
         <div class="points" th:text="'Point: ' + ${session.ms.member.point}">Point: [member.point]</div>
         <div class="nav">
             <a href="/member/memberInfo">회원정보 관리</a>

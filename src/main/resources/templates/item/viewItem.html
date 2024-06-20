@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,9 +65,14 @@
             font-size: 16px;
             color: #666;
         }
-        .product-details .price {
-            font-size: 24px;
-            color: #333;
+        .product-details .price1 {
+            font-size: 10px;
+            color: #666555;
+            margin-bottom: 20px;
+        }
+        .product-details .price2 {
+            font-size: 15px;
+            color: #000000;
             margin-bottom: 20px;
         }
         .infos {
@@ -142,11 +147,11 @@
             display: block;
         }
         .bt {
-        	display: flex;
-        	align-content: left;
+            display: flex;
+            align-content: left;
         }
         .order-bt {
-        	width: 300px;
+            width: 300px;
             padding: 10px;
             border-radius: 5px;
             border: none;
@@ -156,6 +161,84 @@
             font-size: 16px;
             transition: background-color 0.3s;
             margin-top: 10px;
+        }
+        .recommendationContainer {
+            width: 90%;
+            height: 200px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .recommendationContainer .carousel {
+            display: flex;
+            overflow: hidden;
+            width: 900px; /* Adjust the width as necessary */
+        }
+
+        .recommendationContainer .carousel-inner {
+            display: flex;
+            transition: transform 0.5s ease;
+            width: 100%;
+        }
+
+        .recommendationContainer .item {
+            box-sizing: border-box;
+            padding: 10px;
+            text-align: center;
+            margin: 0 15px; /* Add margin to increase spacing */
+        }
+
+        .recommendationContainer .carousel-controls {
+            display: flex;
+            justify-content: space-between;
+            width: 50px; /* Adjust width if necessary */
+        }
+
+        .recommendationContainer .carousel-controls button {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .recommendationContainer .carousel-controls button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+        }
+        .category {
+            font-size: 18px;
+            color: #666;
+            margin: 10px 0;
+        }
+        .price {
+            font-size: 20px;
+            color: #e74c3c;
+            margin: 10px 0;
+        }
+        .price del {
+            color: #999;
+            font-size: 18px;
+            margin-left: 10px;
+        }
+        .sale-price {
+            font-size: 24px;
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .original-price {
+            font-size: 20px;
+            color: #999;
+            text-decoration: line-through;
         }
     </style>
 </head>
@@ -168,9 +251,9 @@
         </div>
         <div class="product-details">
             <h1 th:text="${item.name}">Product Name</h1>
-            <p>카테고리 > <span th:text="${item.category}"></span></p>
-            <p class="price"><span th:text="${item.price}"></span>원</p>
-            <p><span th:text="${item.detail}"></span></p>
+            <p class="category">카테고리 > <span th:text="${item.category}"></span></p>
+            <p class="price">정가 > <span class="original-price" th:text="${item.price}"></span>원</p>
+            <p class="price">세일가 > <span class="sale-price" th:text="(${item.price} * (100 - ${item.dcRate})) / 100"></span>원</p>
             <div class="infos">
                 <div class="info">
                     <div>섭취대상</div>
@@ -207,18 +290,18 @@
                 <button onclick="increaseQuantity()">+</button>
             </div><br>
             <div class="bt">
-            <form id="cartForm" method="post" action="/cart/addCartItem" onsubmit="syncQuantity()">
-			    <input type="hidden" name="item_id" th:value="${item.item_id}">
-			    <input type="hidden" id="hiddenQuantity" name="quantity" value="1">
-			    <img src="/images/cart.png" alt="장바구니에 담기" onclick="document.getElementById('cartForm').submit();" style="width: 40px; height: auto; cursor: pointer;">
-			</form>
-			<form id="wishForm" method="post" action="/wish/addWishItem">
-                <input type="hidden" name="item_id" th:value="${item.item_id}">
-                <img src="/images/wish.png" alt="찜하기" onclick="document.getElementById('wishForm').submit();" style="width: 40px; height: auto; cursor: pointer;">
-            </form></div>
+                <form id="cartForm" method="post" action="/cart/addCartItem" onsubmit="syncQuantity()">
+                    <input type="hidden" name="item_id" th:value="${item.item_id}">
+                    <input type="hidden" id="hiddenQuantity" name="quantity" value="1">
+                    <img src="/images/cart.png" alt="장바구니에 담기" onclick="document.getElementById('cartForm').submit();" style="width: 40px; height: auto; cursor: pointer;">
+                </form>
+                <form id="wishForm" method="post" action="/wish/addWishItem">
+                    <input type="hidden" name="item_id" th:value="${item.item_id}">
+                    <img src="/images/wish.png" alt="찜하기" onclick="document.getElementById('wishForm').submit();" style="width: 40px; height: auto; cursor: pointer;">
+                </form></div>
             <div class="bt">
-            <p>&nbsp;&emsp;&emsp;&emsp;&emsp;cart 추가</p>
-            <p>&emsp;&emsp;&emsp;&emsp;wish 추가</p>
+                <p>&nbsp;&emsp;&emsp;&emsp;&emsp;cart 추가</p>
+                <p>&emsp;&emsp;&emsp;&emsp;wish 추가</p>
             </div>
             <form id="orderForm" method="post" action="/order/createOrder" onsubmit="syncQuantity()">
                 <input type="hidden" name="item_id" th:value="${item.item_id}">
@@ -227,6 +310,8 @@
             </form>
         </div>
     </div>
+
+    <div class="recommendationContainer" th:insert="~{item/viewComparativeItem}"></div>
     <div class="product-info">
         <div class="tabs">
             <button class="active" onclick="showTab('details')">상품 상세</button>
@@ -291,3 +376,4 @@
 
 </body>
 </html>
+

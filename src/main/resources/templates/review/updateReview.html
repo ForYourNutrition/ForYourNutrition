@@ -12,7 +12,7 @@
 		<div class="container">
 			<h2>review 수정하기</h2>
 			<form action="#" method="post" th:action="@{/review/updateReview}"
-				th:object="${reviewForm}">
+				th:object="${reviewForm}" onsubmit="return confirm('리뷰가 작성되었습니다.');">
 				<input type="hidden" name="item_id" th:field="*{item_id}" />
 				<div class="form-group">
 					<label for="name">작성자 :</label><br/><span th:text="${memNickName} + '님'"></span>

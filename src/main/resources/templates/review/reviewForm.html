@@ -21,7 +21,7 @@
 				<input type="hidden" name="item_id" th:value="${item_id}" />
 
 				<div class="form-group">
-					<label for="name">작성자 :</label> <span th:text="${memberName}"></span>
+					<label for="name">작성자 :</label> <span th:text="${memNickName} + '님'"></span>
 				</div>
 				<div class="form-group">
 					<label for="rating">평점 :</label> <select th:field="*{rating}"

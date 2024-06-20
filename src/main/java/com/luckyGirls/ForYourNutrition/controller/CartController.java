@@ -48,7 +48,9 @@ public class CartController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		String memNickName = member.getNickname();
+		
+		model.addAttribute("memNickName", memNickName);
 		model.addAttribute("cart", cart);
 		return "cart/viewCart";
 	}

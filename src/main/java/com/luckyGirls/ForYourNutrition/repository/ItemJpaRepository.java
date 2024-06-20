@@ -27,8 +27,8 @@ public interface ItemJpaRepository extends JpaRepository<Item, Integer> {
 
 	Page<Item> findAllByTarget(int target, Pageable pageable);
 
-	@Query("SELECT i FROM Item i ORDER BY i.sales")
-	List<Item> findAllBySales();
+	@Query("SELECT i FROM Item i ORDER BY i.sales DESC")
+	List<Item> findAllOrderBySalesDESC();
 	@Query("SELECT i FROM Item i WHERE i.dcRate > 0")
 	Page<Item> findAllByDcRate( Pageable pageable);
 }

@@ -134,9 +134,9 @@ public class ItemService {
 
 	@Transactional
 	public List<Item> getBestItemList(){
-		List<Item> items = itemJpaRepository.findAllBySales();
+		List<Item> items = itemJpaRepository.findAllOrderBySalesDESC();
 		System.out.println("ef = " + items.get(0));
-		return items.stream().limit(10).collect(Collectors.toList());
+		return items.stream().limit(6).collect(Collectors.toList());
 	}
 
 	//혜지 추가..

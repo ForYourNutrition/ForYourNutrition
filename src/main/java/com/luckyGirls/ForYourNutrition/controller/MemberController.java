@@ -297,22 +297,23 @@ public class MemberController {
 	public ModelAndView getMain(Model model, HttpSession session) {
 		try {
 			MemberSession ms = (MemberSession)session.getAttribute("ms");
-			Member member = ms.getMember();
-			List<Item> recommendedItems = iRecommendService.getPersonalRecItem(member.getId());
-			System.out.println("cont" + recommendedItems);
-			model.addAttribute("recommendedItems", recommendedItems);
+			Member member;
+			if(ms != null) {
+				member = ms.getMember();
+				List<Item> recommendedItems = iRecommendService.getPersonalRecItem(member.getId());
+				System.out.println("cont" + recommendedItems);
+				model.addAttribute("recommendedItems", recommendedItems);
+
+				Survey sv = surveyService.getSurvey(member.getMember_id());
+				if (sv != null) {
+					System.out.println(sv.getBirth_year());
+					model.addAttribute("isSurvey", true);
+				} else {
+					model.addAttribute("isSurvey", false);
+				}
+			}
 			List<Item> itemList = itemService.getBestItemList();
-
 			model.addAttribute("itemList", itemList);
-			Survey sv = surveyService.getSurvey(member.getMember_id());
-			if (sv != null) {
-				System.out.println(sv.getBirth_year());
-				model.addAttribute("isSurvey", true);
-			}
-			else {
-				model.addAttribute("isSurvey", false);
-			}
-
 			
 			return new ModelAndView("main");
 		}

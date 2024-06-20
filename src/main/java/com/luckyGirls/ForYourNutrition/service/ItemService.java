@@ -2,6 +2,7 @@ package com.luckyGirls.ForYourNutrition.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -131,6 +132,12 @@ public class ItemService {
 		return items;
 	}
 
+	@Transactional
+	public List<Item> getBestItemList(){
+		List<Item> items = itemJpaRepository.findAllOrderBySalesDESC();
+		System.out.println("ef = " + items.get(0));
+		return items.stream().limit(6).collect(Collectors.toList());
+	}
 
 	//혜지 추가..
 	 @Autowired

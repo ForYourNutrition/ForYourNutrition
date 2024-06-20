@@ -213,4 +213,14 @@ public class ItemController {
 		System.out.println(page +", " + itemList.getTotalPages());
 		return itemList;
 	}
+
+	@GetMapping("/viewBestItemList.do")
+	public List<Item> getDcItemList(Model model) {
+		List<Item> itemList = itemService.getBestItemList();
+
+		model.addAttribute("itemList", itemList);
+
+		System.out.println(itemList.size());
+		return itemList;
+	}
 }

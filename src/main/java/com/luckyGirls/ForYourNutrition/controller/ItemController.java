@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.luckyGirls.ForYourNutrition.domain.Item;
 import com.luckyGirls.ForYourNutrition.domain.Review;
 import com.luckyGirls.ForYourNutrition.dto.response.ItemGetResponse;
+import com.luckyGirls.ForYourNutrition.service.IRecommendService;
 import com.luckyGirls.ForYourNutrition.service.ItemService;
 import com.luckyGirls.ForYourNutrition.service.ReviewService;
 
@@ -34,6 +35,7 @@ import lombok.RequiredArgsConstructor;
 @SessionAttributes("memberSession")
 public class ItemController {
 	private final ItemService itemService;
+	private final IRecommendService iRecommendService;
 	
 	@Autowired
 	private ReviewService reviewService;
@@ -60,6 +62,8 @@ public class ItemController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
+		List<Item> comparativeItems = iRecommendService.getItem(item_id, 2);
+		model.addAttribute("comparativeItems", comparativeItems);
 		return "item/viewItem"; // "item/viewItem" 뷰 이름 반환
 	}
 

@@ -2,17 +2,10 @@ package com.luckyGirls.ForYourNutrition.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.support.PagedListHolder;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,25 +18,25 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "Cart")
 @SuppressWarnings("serial")
-public class Cart implements Serializable{
-	
+public class Cart implements Serializable {
+
 	/* Private Fields */
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cart_seq")
-    @SequenceGenerator(name = "cart_seq", sequenceName = "cart_seq", allocationSize = 1) 
+	@SequenceGenerator(name = "cart_seq", sequenceName = "cart_seq", allocationSize = 1)
 	private int cart_id;
-	
+
 	@ManyToOne
-	@JoinColumn(name="member_id")
+	@JoinColumn(name = "member_id")
 	private Member member;
-	
-	private int quantity;//카트에 담긴 총 개수
-	
-	@OneToMany(mappedBy="cart", cascade=CascadeType.REMOVE)
-	private List<CartItem> cartItemList= new ArrayList<>();
+
+	private int quantity;// 카트에 담긴 총 개수
+
+	@OneToMany(mappedBy = "cart", cascade = CascadeType.REMOVE)
+	private List<CartItem> cartItemList = new ArrayList<>();
 
 	/* JavaBeans Properties */
-	
+
 	public Cart() {
 		super();
 	}
@@ -54,37 +47,38 @@ public class Cart implements Serializable{
 		this.member = member;
 		this.cartItemList = cartItemList;
 	}
-	 // Parameterized constructor
-    public Cart(Member member) {
-        this.member = member;
-    }
 
-    // Getters and Setters
-    public int getCart_id() {
-        return cart_id;
-    }
+	// Parameterized constructor
+	public Cart(Member member) {
+		this.member = member;
+	}
 
-    public void setCart_id(int cart_id) {
-        this.cart_id = cart_id;
-    }
+	// Getters and Setters
+	public int getCart_id() {
+		return cart_id;
+	}
 
-    public Member getMember() {
-        return member;
-    }
+	public void setCart_id(int cart_id) {
+		this.cart_id = cart_id;
+	}
 
-    public void setMember(Member member) {
-        this.member = member;
-    }
+	public Member getMember() {
+		return member;
+	}
 
-    public List<CartItem> getCartItems() {
-        return cartItemList;
-    }
+	public void setMember(Member member) {
+		this.member = member;
+	}
 
-    public void setCartItems(List<CartItem> cartItems) {
-        this.cartItemList = cartItems;
-    }
+	public List<CartItem> getCartItems() {
+		return cartItemList;
+	}
 
-    public int getQuantity() {
+	public void setCartItems(List<CartItem> cartItems) {
+		this.cartItemList = cartItems;
+	}
+
+	public int getQuantity() {
 		return quantity;
 	}
 
@@ -100,24 +94,22 @@ public class Cart implements Serializable{
 		this.cartItemList = cartItemList;
 	}
 
-	// Utility methods
-    public void addCartItem(CartItem cartItem) {
-        cartItemList.add(cartItem);
-        cartItem.setCart(this);
-    }
+	public void addCartItem(CartItem cartItem) {
+		cartItemList.add(cartItem);
+		cartItem.setCart(this);
+	}
 
-    public void removeCartItem(CartItem cartItem) {
-        cartItemList.remove(cartItem);
-        cartItem.setCart(null);
-    }
+	public void removeCartItem(CartItem cartItem) {
+		cartItemList.remove(cartItem);
+		cartItem.setCart(null);
+	}
+
     @Override
     public String toString() {
         return "Cart{" +
                "cart_id=" + cart_id +
                ", member=" + member +
-               ", cartItemList=" + cartItemList.size() + // 간단히 사이즈만 출력하도록 변경
+               ", cartItemList=" + cartItemList.size() + // 사이즈 출력
                '}';
     }
-	
-	
 }

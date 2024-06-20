@@ -9,11 +9,11 @@ import com.luckyGirls.ForYourNutrition.dao.ReviewCommentDao;
 import com.luckyGirls.ForYourNutrition.domain.ReviewComment;
 
 @Service
-public class ReviewCommentServiceImpl implements ReviewCommentService{
+public class ReviewCommentServiceImpl implements ReviewCommentService {
 
 	@Autowired
 	private ReviewCommentDao reviewCommentDao;
-	
+
 	@Override
 	public ReviewComment getReviewComment(int rc_id) {
 		// TODO Auto-generated method stub

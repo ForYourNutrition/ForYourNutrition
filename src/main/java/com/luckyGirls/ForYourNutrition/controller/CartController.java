@@ -21,151 +21,153 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class CartController {
 
-    @Autowired
-    private CartService cartService;
-    
-    @Autowired
-    private ItemService itemService;
-    
-    @Autowired
-    private WishService wishService;
+	@Autowired
+	private CartService cartService;
 
-    @GetMapping("/cart/viewCart")
-    public String viewCart(HttpSession session, Model model) {
-        MemberSession ms = (MemberSession) session.getAttribute("ms");
-        if (ms == null) {
-        	return "redirect:/member/loginForm";
-        }
-        Member member = ms.getMember();
-        Cart cart = null;
-        try {
-            cart = cartService.getCartByMember(member);
-            if (cart != null) {
-                System.out.println(cart.toString());
-            } else {
-                System.out.println("Cart is null");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+	@Autowired
+	private ItemService itemService;
 
-        model.addAttribute("cart", cart);
-        return "cart/viewCart";
-    }
+	@Autowired
+	private WishService wishService;
 
-    @PostMapping("/cart/addCartItem")
-    public String addCartItem(@RequestParam int item_id, @RequestParam int quantity, HttpSession session, Model model) {
-        MemberSession ms = (MemberSession) session.getAttribute("ms");
-        if (ms == null) {
-            return "redirect:/member/loginForm";
-        }
+	@GetMapping("/cart/viewCart")
+	public String viewCart(HttpSession session, Model model) {
+		MemberSession ms = (MemberSession) session.getAttribute("ms");
+		if (ms == null) {
+			return "redirect:/member/loginForm";
+		}
+		Member member = ms.getMember();
+		Cart cart = null;
+		try {
+			cart = cartService.getCartByMember(member);
+			if (cart != null) {
+				System.out.println(cart.toString());
+			} else {
+				System.out.println("Cart is null");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-        Member member = ms.getMember();
-        Item item = itemService.getItemById(item_id);
+		model.addAttribute("cart", cart);
+		return "cart/viewCart";
+	}
 
-        CartItem cartItem = new CartItem();
-        cartItem.setItem(item);
-        cartItem.setMember(member);
-        cartItem.setQuantity(quantity);
-        cartService.addCartItem(member, cartItem);
+	@PostMapping("/cart/addCartItem")
+	public String addCartItem(@RequestParam int item_id, @RequestParam int quantity, HttpSession session, Model model) {
+		MemberSession ms = (MemberSession) session.getAttribute("ms");
+		if (ms == null) {
+			return "redirect:/member/loginForm";
+		}
 
-        Cart cart = cartService.getCartByMember(member);
-        model.addAttribute("cart", cart);
-        return "redirect:/cart/viewCart";
-    }
+		Member member = ms.getMember();
+		Item item = itemService.getItemById(item_id);
 
-    @PostMapping("/cart/removeCartItem")
-    public String removeCartItem(@RequestParam int cartItem_id, HttpSession session) {
-        MemberSession ms = (MemberSession) session.getAttribute("ms");
-        if (ms == null) {
-        	return "redirect:/member/loginForm";
-        }
-        Member member = ms.getMember();
-        cartService.removeCartItem(member, cartItem_id);
-        return "redirect:/cart/viewCart";
-    }
+		CartItem cartItem = new CartItem();
+		cartItem.setItem(item);
+		cartItem.setMember(member);
+		cartItem.setQuantity(quantity);
+		cartService.addCartItem(member, cartItem);
 
-    @PostMapping("/cart/updateQuantity")
-    public String updateQuantity(@RequestParam int cartItem_id, @RequestParam int quantity, @RequestParam String action, HttpSession session) {
-        MemberSession ms = (MemberSession) session.getAttribute("ms");
-        if (ms == null) {
-        	return "redirect:/member/loginForm";
-        }
-        Member member = ms.getMember();
-        if ("add".equals(action)) {
-            cartService.addQuantity(member, cartItem_id, quantity);
-        } else if ("remove".equals(action)) {
-            cartService.removeQuantity(member, cartItem_id, quantity);
-        } else if ("delete".equals(action)) {
-            cartService.removeCartItem(member, cartItem_id);
-        }
-        return "redirect:/cart/viewCart";
-    }
+		Cart cart = cartService.getCartByMember(member);
+		model.addAttribute("cart", cart);
+		return "redirect:/cart/viewCart";
+	}
 
-    @GetMapping("/order/createOrder")
-    public String createOrderForm(HttpSession session, Model model) {
-        MemberSession ms = (MemberSession) session.getAttribute("ms");
-        if (ms == null) {
-        	return "redirect:/member/loginForm";
-        }
-        Member member = ms.getMember();
-        Cart cart = cartService.getCartByMember(member);
-        
-        if(cart != null) {
-        	System.out.println("cartId : " + cart.getCart_id());
-        	System.out.println("CartItemList : ");
-            for (CartItem cartItem : cart.getCartItems()) {
-                System.out.println(" - Item: " + cartItem.getItem().getName() + ", Quantity: " + cartItem.getQuantity());
-            }
-        } else {
-            System.out.println("Cart is null");
-        }
-        model.addAttribute("cart", cart);
-        return "cart/fromCartToOrder";
-    }
-    
-    // 위시리스트에서 아이템을 카트로 이동하는 기능 추가
-    @PostMapping("/wish/addToCart")
-    public String addToCartFromWish(@RequestParam int wishItem_id, HttpSession session) {
-        MemberSession ms = (MemberSession) session.getAttribute("ms");
-        if (ms == null) {
-            return "redirect:/member/loginForm";
-        }
-        Member member = ms.getMember();
-        WishItem wishItem = wishService.findWishItemById(wishItem_id);
+	@PostMapping("/cart/removeCartItem")
+	public String removeCartItem(@RequestParam int cartItem_id, HttpSession session) {
+		MemberSession ms = (MemberSession) session.getAttribute("ms");
+		if (ms == null) {
+			return "redirect:/member/loginForm";
+		}
+		Member member = ms.getMember();
+		cartService.removeCartItem(member, cartItem_id);
+		return "redirect:/cart/viewCart";
+	}
 
-        CartItem cartItem = new CartItem();
-        cartItem.setItem(wishItem.getItem());
-        cartItem.setMember(member);
-        cartItem.setQuantity(1); // 기본 수량을 1로 설정
+	@PostMapping("/cart/updateQuantity")
+	public String updateQuantity(@RequestParam int cartItem_id, @RequestParam int quantity, @RequestParam String action,
+			HttpSession session) {
+		MemberSession ms = (MemberSession) session.getAttribute("ms");
+		if (ms == null) {
+			return "redirect:/member/loginForm";
+		}
+		Member member = ms.getMember();
+		if ("add".equals(action)) {
+			cartService.addQuantity(member, cartItem_id, quantity);
+		} else if ("remove".equals(action)) {
+			cartService.removeQuantity(member, cartItem_id, quantity);
+		} else if ("delete".equals(action)) {
+			cartService.removeCartItem(member, cartItem_id);
+		}
+		return "redirect:/cart/viewCart";
+	}
 
-        cartService.addCartItem(member, cartItem);
-        wishService.removeWishItem(member, wishItem_id);
+	@GetMapping("/order/createOrder")
+	public String createOrderForm(HttpSession session, Model model) {
+		MemberSession ms = (MemberSession) session.getAttribute("ms");
+		if (ms == null) {
+			return "redirect:/member/loginForm";
+		}
+		Member member = ms.getMember();
+		Cart cart = cartService.getCartByMember(member);
 
-        return "redirect:/cart/viewCart";
-    }
+		if (cart != null) {
+			System.out.println("cartId : " + cart.getCart_id());
+			System.out.println("CartItemList : ");
+			for (CartItem cartItem : cart.getCartItems()) {
+				System.out
+						.println(" - Item: " + cartItem.getItem().getName() + ", Quantity: " + cartItem.getQuantity());
+			}
+		} else {
+			System.out.println("Cart is null");
+		}
+		model.addAttribute("cart", cart);
+		return "cart/fromCartToOrder";
+	}
 
-    @PostMapping("/wish/addAllToCart")
-    public String addAllToCartFromWish(HttpSession session) {
-        MemberSession ms = (MemberSession) session.getAttribute("ms");
-        if (ms == null) {
-            return "redirect:/member/loginForm";
-        }
-        Member member = ms.getMember();
-        List<WishItem> wishItems = wishService.getWishItemsByMember(member);
+	// 위시리스트에서 아이템을 카트로 이동하는 기능
+	@PostMapping("/wish/addToCart")
+	public String addToCartFromWish(@RequestParam int wishItem_id, HttpSession session) {
+		MemberSession ms = (MemberSession) session.getAttribute("ms");
+		if (ms == null) {
+			return "redirect:/member/loginForm";
+		}
+		Member member = ms.getMember();
+		WishItem wishItem = wishService.findWishItemById(wishItem_id);
 
-        if (wishItems != null) {
-            for (WishItem wishItem : wishItems) {
-                CartItem cartItem = new CartItem();
-                cartItem.setItem(wishItem.getItem());
-                cartItem.setMember(member);
-                cartItem.setQuantity(1); // 기본 수량을 1로 설정
+		CartItem cartItem = new CartItem();
+		cartItem.setItem(wishItem.getItem());
+		cartItem.setMember(member);
+		cartItem.setQuantity(1); // 기본 수량을 1로 설정
 
-                cartService.addCartItem(member, cartItem);
-                wishService.removeWishItem(member, wishItem.getWishItem_id());
-            }
-        }
+		cartService.addCartItem(member, cartItem);
+		wishService.removeWishItem(member, wishItem_id);
 
-        return "redirect:/cart/viewCart";
-    }
+		return "redirect:/cart/viewCart";
+	}
+
+	@PostMapping("/wish/addAllToCart")
+	public String addAllToCartFromWish(HttpSession session) {
+		MemberSession ms = (MemberSession) session.getAttribute("ms");
+		if (ms == null) {
+			return "redirect:/member/loginForm";
+		}
+		Member member = ms.getMember();
+		List<WishItem> wishItems = wishService.getWishItemsByMember(member);
+
+		if (wishItems != null) {
+			for (WishItem wishItem : wishItems) {
+				CartItem cartItem = new CartItem();
+				cartItem.setItem(wishItem.getItem());
+				cartItem.setMember(member);
+				cartItem.setQuantity(1); // 기본 수량을 1로 설정
+
+				cartService.addCartItem(member, cartItem);
+				wishService.removeWishItem(member, wishItem.getWishItem_id());
+			}
+		}
+
+		return "redirect:/cart/viewCart";
+	}
 }

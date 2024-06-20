@@ -19,38 +19,37 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "Review")
 @SuppressWarnings("serial")
-public class Review implements Serializable{
-	
-	 /* Private Fields */
+public class Review implements Serializable {
+
+	/* Private Fields */
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "wish_seq")
-    @SequenceGenerator(name = "wish_seq", sequenceName = "wish_seq", allocationSize = 1) 
+	@SequenceGenerator(name = "wish_seq", sequenceName = "wish_seq", allocationSize = 1)
 	private int review_id;
-	
+
 	@ManyToOne
-	@JoinColumn(name="member_id")
+	@JoinColumn(name = "member_id")
 	private Member member;
-	
+
 	@ManyToOne
-	@JoinColumn(name="item_id")
+	@JoinColumn(name = "item_id")
 	private Item item;
-	
+
 	@Column(nullable = false)
 	private String title;
-	
+
 	@Column(nullable = false)
 	private String content;
-	
+
 	private String rdate;
-	
-	//private String img;
-	private int rating; //평가
-	
-	@OneToMany(mappedBy="review", cascade=CascadeType.REMOVE,  fetch = FetchType.EAGER)
+
+	private int rating; // 평가
+
+	@OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	private List<ReviewComment> rcList;
 
 	/* JavaBeans Properties */
-	
+
 	public int getReview_id() {
 		return review_id;
 	}
@@ -99,14 +98,6 @@ public class Review implements Serializable{
 		this.rdate = rdate;
 	}
 
-	/*public String getImg() {
-		return img;
-	}
-
-	public void setImg(String img) {
-		this.img = img;
-	}*/
-
 	public int getRating() {
 		return rating;
 	}
@@ -127,8 +118,8 @@ public class Review implements Serializable{
 		super();
 	}
 
-	public Review(int review_id, Member member, Item item, String title, String content, String rdate,
-			int rating, List<ReviewComment> rcList) {
+	public Review(int review_id, Member member, Item item, String title, String content, String rdate, int rating,
+			List<ReviewComment> rcList) {
 		super();
 		this.review_id = review_id;
 		this.member = member;
@@ -143,7 +134,6 @@ public class Review implements Serializable{
 	@Override
 	public String toString() {
 		return "Review [review_id=" + review_id + ", member=" + member + ", item=" + item + ", title=" + title
-				+ ", content=" + content + ", rdate=" + rdate + ",  rating=" + rating + ", rcList="
-				+ rcList + "]";
-	}	
+				+ ", content=" + content + ", rdate=" + rdate + ",  rating=" + rating + ", rcList=" + rcList + "]";
+	}
 }

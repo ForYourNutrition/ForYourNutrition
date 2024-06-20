@@ -120,7 +120,8 @@ public class ReviewController {
 			System.out.println("review_id : " + review.getReview_id());
 			System.out.println("Saving Review: " + review);
 
-			String memNickName = member.getNickname();
+			String memNickName = review.getMember().getNickname();
+			
 			model.addAttribute("memNickName", memNickName);
 			
 			model.addAttribute("reviewForm", reviewForm);
@@ -162,7 +163,8 @@ public class ReviewController {
 			reviewForm.setRating(review.getRating());
 			reviewForm.setItem_id(review.getItem().getItem_id());
 
-			String memNickName = member.getNickname();
+			String memNickName = review.getMember().getNickname();
+			
 			model.addAttribute("memNickName", memNickName);
 			
 			model.addAttribute("reviewForm", reviewForm);
@@ -202,7 +204,7 @@ public class ReviewController {
 
 			reviewService.updateReview(review);
 
-			String memNickName = member.getNickname();
+			String memNickName = review.getMember().getNickname();
 			
 			model.addAttribute("memNickName", memNickName);			
 			model.addAttribute("review", review);
@@ -273,7 +275,8 @@ public class ReviewController {
 		model.addAttribute("review", review);
 		model.addAttribute("comments", comments);
 		
-		String memNickName = member.getNickname();
+		String memNickName = review.getMember().getNickname();
+		
 		
 		model.addAttribute("memNickName", memNickName);
 		model.addAttribute("member", member);

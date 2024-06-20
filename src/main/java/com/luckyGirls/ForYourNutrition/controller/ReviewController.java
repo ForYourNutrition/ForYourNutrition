@@ -21,6 +21,7 @@ import com.luckyGirls.ForYourNutrition.domain.Member;
 import com.luckyGirls.ForYourNutrition.domain.Review;
 import com.luckyGirls.ForYourNutrition.domain.ReviewComment;
 import com.luckyGirls.ForYourNutrition.service.ItemService;
+import com.luckyGirls.ForYourNutrition.service.MemberService;
 import com.luckyGirls.ForYourNutrition.service.ReviewCommentService;
 import com.luckyGirls.ForYourNutrition.service.ReviewService;
 
@@ -38,6 +39,9 @@ public class ReviewController {
 
 	@Autowired
 	private ItemService itemService;
+	
+	@Autowired
+	private MemberService memberService;
 
 	@ModelAttribute("reviewForm")
 	public ReviewForm formBacking(HttpServletRequest request, HttpSession session) throws Exception {
@@ -66,10 +70,9 @@ public class ReviewController {
 			return "redirect:/member/loginForm";
 		}
 		Member member = ms.getMember();
-		String memberName = member.getName();
-
-		System.out.println(memberName);
-		model.addAttribute("memberName", memberName);
+		
+		String memNickName = member.getNickname();
+		model.addAttribute("memNickName", memNickName);
 
 		model.addAttribute("item_id", item_id);
 
@@ -117,7 +120,9 @@ public class ReviewController {
 			System.out.println("review_id : " + review.getReview_id());
 			System.out.println("Saving Review: " + review);
 
-			model.addAttribute("memberName", member.getName());
+			String memNickName = member.getNickname();
+			model.addAttribute("memNickName", memNickName);
+			
 			model.addAttribute("reviewForm", reviewForm);
 			model.addAttribute("review", review);
 
@@ -157,9 +162,10 @@ public class ReviewController {
 			reviewForm.setRating(review.getRating());
 			reviewForm.setItem_id(review.getItem().getItem_id());
 
+			String memNickName = member.getNickname();
+			model.addAttribute("memNickName", memNickName);
+			
 			model.addAttribute("reviewForm", reviewForm);
-			model.addAttribute("memberName", member.getName());
-
 			return "review/updateReview";
 		}
 		return "redirect:/review/reviewList";
@@ -196,7 +202,9 @@ public class ReviewController {
 
 			reviewService.updateReview(review);
 
-			model.addAttribute("memberName", member.getName());
+			String memNickName = member.getNickname();
+			
+			model.addAttribute("memNickName", memNickName);			
 			model.addAttribute("review", review);
 
 			return "review/viewReview";
@@ -223,6 +231,13 @@ public class ReviewController {
 
 			if (r != null && r.getMember().getMember_id() == member.getMember_id()) {
 				reviewService.deleteReview(r);
+				
+				// 포인트 차감 로직 추가
+                int currentPoints = member.getPoint();
+                int newPoints = Math.max(currentPoints - 10, 0);
+                member.setPoint(newPoints);
+                memberService.updateMember(member);
+				
 				// item_id 값을 포함한 item 페이지로 리다이렉트
 				return "redirect:/item/viewItem.do?item_id=" + item_id;
 			}
@@ -249,7 +264,6 @@ public class ReviewController {
 		reviewForm.setReview_id(review.getReview_id());
 		reviewForm.setTitle(review.getTitle());
 		reviewForm.setContent(review.getContent());
-		// reviewForm.setImg(review.getImg());
 		reviewForm.setRating(review.getRating());
 		reviewForm.setItem_id(review.getItem().getItem_id()); // item_id 추가
 
@@ -258,7 +272,10 @@ public class ReviewController {
 		model.addAttribute("reviewForm", reviewForm);
 		model.addAttribute("review", review);
 		model.addAttribute("comments", comments);
-		model.addAttribute("memberName", review.getMember().getName());
+		
+		String memNickName = member.getNickname();
+		
+		model.addAttribute("memNickName", memNickName);
 		model.addAttribute("member", member);
 		model.addAttribute("newComment", new ReviewComment());
 
@@ -290,7 +307,7 @@ public class ReviewController {
         return "review/reviewList";
 	}
 
-	// 각 회원이 작성한 리뷰 목록 보기
+	//InMyPage
 	@GetMapping("/review/myReviewList")
 	public String listMyReviews(Model model, HttpSession session) {
 		MemberSession ms = (MemberSession) session.getAttribute("ms");
@@ -301,7 +318,11 @@ public class ReviewController {
 
 		int memberId = ms.getMember().getMember_id();
 		List<Review> myReviews = reviewService.getReviewListForMember(memberId);
-
+		
+		Member member = ms.getMember();
+		String memNickName = member.getNickname();
+		
+		model.addAttribute("memNickName", memNickName);
 		model.addAttribute("myReviews", myReviews);
 		return "review/myReviewList";
 	}

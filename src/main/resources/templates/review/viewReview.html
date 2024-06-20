@@ -15,7 +15,7 @@
 
 			<div class="review-details">
 				<div class="detail-item">
-					<label for="name">작성자 :</label> <span th:text="${memberName}"></span>
+					<label for="name">작성자 :</label> <span th:text="${memNickName} + '님'"></span>
 				</div>
 				<div class="detail-item">
 					<label for="writtenTime">작성시간 :</label> <span
@@ -43,9 +43,10 @@
 
 				<form th:action="@{/review/deleteReview}" method="post"
 					class="inline-form"
-					onsubmit="return confirm('정말로 이 REVIEW 삭제하시겠습니까?');">
+					onsubmit="return confirm('포인트 10점이 차감됩니다. 정말로 이 Review를 삭제하시겠습니까?');">
 					<input type="hidden" name="review_id"
-						th:value="${review.review_id}" /> <input type="hidden"
+						th:value="${review.review_id}" /> 
+					<input type="hidden"
 						name="item_id" th:value="${review.item.item_id}" />
 					<button type="submit">리뷰 삭제</button>
 				</form>
@@ -74,7 +75,7 @@
 			<div th:each="comment : ${comments}" class="comment">
 				<div class="comment-info">
 					<div>
-						<span class="comment-author" th:text="${comment.member.name}">작성자</span>
+						<span class="comment-author" th:text="${comment.member.nickname}  + '님'">작성자</span>
 						<span class="comment-date" th:text="${comment.rcdate}">작성일</span>
 					</div>
 					<form th:action="@{/reviewComment/deleteComment}" method="post">

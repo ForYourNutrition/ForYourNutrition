@@ -8,11 +8,9 @@
 <body>
 	<div th:insert="~{header}"></div>
 	<div class="container" th:fragment="review">
-		<br />
-		<br />
+		<br/><br/>
 		<h2>다양한 상품 리뷰를 확인하고, 여러분의 솔직한 의견을 남겨주세요!</h2>
-		<br />
-		<br />
+		<br/><br/>
 		<!-- Form to create a new review -->
 		<div class="button-container">
 			<form action="/review/createReview" method="get">
@@ -28,9 +26,7 @@
 			<p>리뷰가 없습니다.</p>
 			<p>리뷰를 작성해보세요!</p>
 		</div>
-		<br />
-		<br />
-		<br />
+		<br/><br/><br/>
 		<!-- Check if the reviews list is not null and has elements -->
 		<div th:if="${reviews != null and reviews.size() > 0}">
 			<table class="reviews-table">
@@ -47,7 +43,7 @@
 				<tbody>
 					<tr th:each="review, iterStat : ${reviews}">
 						<td th:text="${iterStat.index + 1}"></td>
-						<td th:text="${review.member.name}">작성자</td>
+						<td th:text="${review.member.nickname} + '님'"></td>
 						<td th:text="${review.rating}">평점</td>
 						<td><a
 							th:href="@{/review/viewReview(review_id=${review.review_id})}"
@@ -73,8 +69,7 @@
 				th:href="@{/item/viewItem.do(item_id=${item.item_id}, page=${nowPage + 1}, sort=${sort})}">다음</a>
 		</div>
 
-		<br />
-		<br />
+		<br/><br/>
 	</div>
 </body>
 </html>

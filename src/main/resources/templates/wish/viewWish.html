@@ -30,7 +30,7 @@
 
 	<div class="container">
 		<br/><br/>
-		<h2>Wish에 담긴 상품을 확인해 주세요!</h2>
+		<h2><span th:text="${memNickName}"></span>님의 Wish에 담긴 상품을 확인해 주세요!</h2>
 		<br/><br/>
 		<div th:if="${error}" class="error-message">
 			<p th:text="${error}"></p>

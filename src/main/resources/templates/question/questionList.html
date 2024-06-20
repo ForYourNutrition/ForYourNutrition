@@ -48,7 +48,7 @@
 					<td><a
 						th:href="@{/question/viewQuestion(question_id=${question.question_id})}"
 						th:text="${question.title}"></a></td>
-					<td th:text="${question.member.name}"></td>
+					<td th:text="${question.member.nickname} + '님'"></td>
 					<td th:text="${question.qdate}"></td>
 				</tr>
 			</tbody>

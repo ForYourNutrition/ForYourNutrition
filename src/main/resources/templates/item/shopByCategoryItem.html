@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Item List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+    .item-container {
+      margin-left: 5%;
+      margin-right: 5%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .paging {
+      margin-top: 20px;
+      text-align: center; /* 페이지 링크를 가운데 정렬 */
+    }
+    .paging span {
+      margin: 0 5px; /* 각 페이지 링크 사이의 간격 설정 */
+    }
+    .item-box {
+      background-color: white;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .search-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 50px;
+    }
+    .search-bar input[type="text"] {
+      width: 50%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px 0 0 5px;
+      outline: none;
+    }
+    .search-bar button {
+      padding: 10px;
+      border: 1px solid #ccc;
+      background-color: navy;
+      color: white;
+      border-radius: 0 5px 5px 0;
+      cursor: pointer;
+      outline: none;
+    }
+    .search-bar button:hover {
+      background-color: #001f4d;
+    }
+    .buttons {
+      margin-left: 5.2%;
+    }
+    .buttons button{
+      border: 1px solid #000000;
+      background-color: navy;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      outline: none;
+      margin-right: 10px;
+    }
+    .categories {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .category-button {
+      background-color: navy;
+      color: white;
+      border: 2px solid navy;
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 13px;
+      margin: 10px;
+      cursor: pointer;
+      outline: none;
+    }
+    .category-button:hover {
+      background-color: #001f4d;
+      border-color: #001f4d;
+    }
+    .selected {
+      background-color: #001f4d;
+      border-color: #001f4d;
+    }
+    .print {
+      padding: 20px;
+      border-radius: 30px;
+      text-align: center;
+      flex: 1;
+      margin: 0 10px;
+    }
+  </style>
+</head>
+<body>
+<div th:insert="~{header}"></div>
+<div class="search-bar-container">
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="검색어를 입력하세요">
+    <button onclick="searchItems()">검색</button>
+  </div>
+</div>
+<div class="categories">
+  <button class="category-button" onclick="selectCategory('')">전체</button>
+  <button class="category-button" onclick="selectCategory('비타민')">종합 비타민</button>
+  <button class="category-button" onclick="selectCategory('오메가3')">오메가3</button>
+  <button class="category-button" onclick="selectCategory('철분')">철분</button>
+  <button class="category-button" onclick="selectCategory('칼슘,마그네슘')">칼슘&마그네슘</button>
+  <button class="category-button" onclick="selectCategory('프로바이오틱스')">프로바이오틱스</button>
+</div>
+<div class="buttons">
+  <button th:onclick="|location.href='@{/item/shopByCategoryItem.do(category=${category}, page=${currentPage}, pageSize=${pageSize}, sortBy='sales')}'|">판매량순</button>
+  <button th:onclick="|location.href='@{/item/shopByCategoryItem.do(category=${category}, page=${currentPage}, pageSize=${pageSize}, sortBy='dcRate')}'|">할인율순</button>
+  <button th:onclick="|location.href='@{/item/shopByCategoryItem.do(category=${category}, page=${currentPage}, pageSize=${pageSize}, sortBy='name')}'|">가나다순</button>
+</div>
+<p></p>
+<h3 th:if="${all}" class="print">전체</h3>
+<h3 th:if="${!all}" class="print"><span th:text="${category}"></span></h3>
+<div class="item-container">
+  <div th:each="item : ${itemList.content}" class="item-box" th:onclick="|window.location.href='@{/item/viewItem.do(item_id=${item.item_id})}'|">
+    <img border="0" th:src="@{/images/img.png}" />
+    <h3 th:text="${item.name}">Item Name</h3>
+    <p th:text="${item.price}">가격</p>
+    <p th:text="${item.detail}">Item Description</p>
+    <!-- 추가적인 Item 정보들 -->
+  </div>
+</div>
+
+<div class="paging">
+    <span th:if="${currentPage > 0}">
+        <a th:href="@{/item/shopByCategoryItem.do(category=${category}, page=${currentPage - 1}, pageSize=${pageSize}, sortBy=${sortBy})}">Previous</a>
+    </span>
+  <span th:if="${totalPages > 0}" th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+        <a th:href="@{/item/shopByCategoryItem.do(category=${category}, page=${i}, pageSize=${pageSize}, sortBy=${sortBy})}"
+           th:text="${i + 1}">1</a>
+    </span>
+  <span th:if="${currentPage < totalPages - 1}">
+        <a th:href="@{/item/shopByCategoryItem.do(category=${category}, page=${currentPage + 1}, pageSize=${pageSize}, sortBy=${sortBy})}">Next</a>
+    </span>
+</div>
+<p></p>
+<p></p>
+<script>
+  function searchItems() {
+    var text = document.getElementById('searchInput').value;
+    if (text) {
+      window.location.href = '/item/searchItemList.do?text=' + encodeURIComponent(text);
+    } else {
+      alert('검색어를 입력하세요.');
+    }
+  }
+
+  function selectCategory(category) {
+    var text = category; // 현재 검색어 값 가져오기
+    var currentPage = /*[[${currentPage}]]*/ 0; // Thymeleaf에서 currentPage 값을 가져오기
+    var pageSize = /*[[${pageSize}]]*/ 9; // Thymeleaf에서 pageSize 값을 가져오기
+    var sortBy = /*[[${sortBy}]]*/ 'default'; // Thymeleaf에서 sortBy 값을 가져오기
+
+    // category 값에 따라 URL 변경
+    if (category) {
+      window.location.href = '/item/shopByCategoryItem.do?category=' + encodeURIComponent(text) + '&page=' + currentPage + '&pageSize=' + pageSize + '&sortBy=' + sortBy;
+    } else {
+      window.location.href = '/item/shopByCategoryItem.do?page=' + currentPage + '&pageSize=' + pageSize + '&sortBy=' + sortBy + '&all=' + true;
+    }
+  }
+
+</script>
+</body>
+</html>
+

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Category Recommendation</title>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
+  <style>
+    .carousel-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+    .carousel {
+      width: 100%; /* Adjust as necessary */
+    }
+    .item {
+      box-sizing: border-box;
+      padding: 10px;
+      text-align: center;
+    }
+    .item img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto 10px; /* Center the image and add space below */
+    }
+    .item h3 {
+      margin: 0;
+      font-size: 1.2em;
+    }
+    .item p {
+      margin: 0;
+      font-size: 1em;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="carousel">
+    <div class="carousel-inner" id="carouselInner">
+      <th:block th:each="item : ${recommendedItems}">
+        <div class="item" th:onclick="|window.location.href='@{/item/viewItem.do(item_id=${item.item_id})}'|">
+          <img border="0" th:src="@{/images/img.png}" />
+          <h3 th:text="${item.name}">Item Name</h3>
+          <p th:text="${item.detail}">Item Description</p>
+        </div>
+      </th:block>
+    </div>
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#carouselInner').slick({
+      slidesToShow: 3,
+      slidesToScroll: 1,
+      infinite: true,
+      dots: true,
+      autoplay: true,
+      autoplaySpeed: 3000, // 슬라이드가 2초마다 자동으로 이동
+      prevArrow: '<button type="button" class="slick-prev">&#9664;</button>',
+      nextArrow: '<button type="button" class="slick-next">&#9654;</button>'
+    });
+  });
+</script>
+</body>
+</html>

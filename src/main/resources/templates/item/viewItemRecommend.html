@@ -1,146 +1,74 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>추천 ITEM</title>
+    <title>Category Recommendation</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        .container {
-            width: 90%;
-            margin: auto;
-            padding-top: 20px;
-        }
-        .section-title {
-            text-align: center;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        .carousel {
-            display: flex;
-            overflow: hidden;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .carousel-item {
-            flex: 1;
-            text-align: center;
-            margin: 0 10px;
-        }
-        .product-section {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-        .product {
-            text-align: center;
-            width: 32%;
-            margin-bottom: 20px;
-        }
-        .product p {
-            margin: 10px 0;
-        }
-        .price {
-            color: #333;
-        }
-        .tab-menu {
+        .carousel-container {
             display: flex;
             justify-content: center;
-            margin-top: 20px;
-            border-bottom: 1px solid #ccc;
+            align-items: center;
+            width: 100%;
         }
-        .tab-menu button {
-            margin: 0 10px;
-            padding: 10px 20px;
-            border: none;
-            background-color: white;
-            cursor: pointer;
-            font-size: 16px;
+        .carousel {
+            width: 70%; /* Adjust as necessary */
         }
-        .tab-menu button.active {
-            color: #007BFF;
-            border-bottom: 2px solid #007BFF;
-        }
-        .pagination {
+        .item {
+            box-sizing: border-box;
+            padding: 10px;
             text-align: center;
-            margin-top: 20px;
         }
-        .pagination span {
-            margin: 0 5px;
-            cursor: pointer;
-            font-size: 18px;
+        .item img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto 10px; /* Center the image and add space below */
+        }
+        .item h3 {
+            margin: 0;
+            font-size: 1.2em;
+        }
+        .item p {
+            margin: 0;
+            font-size: 1em;
+            color: #666;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="section-title">추천 ITEM</div>
+<h1>Category Recommendation</h1>
+<div>
+    <h2>Recommended Items</h2>
     <div class="carousel">
-        <div class="carousel-item">
-            <p>Product 02</p>
-        </div>
-        <div class="carousel-item">
-            <p>Product 02</p>
-        </div>
-        <div class="carousel-item">
-            <p>Product 02</p>
+        <div class="carousel-inner" id="carouselInner">
+            <th:block th:each="item : ${recommendedItems}">
+                <div class="item" th:onclick="|window.location.href='@{/item/viewItem.do(item_id=${item.item_id})}'|">
+                    <img border="0" th:src="@{/images/img.png}" />
+                    <h3 th:text="${item.name}">Item Name</h3>
+                    <p th:text="${item.detail}">Item Description</p>
+                </div>
+            </th:block>
         </div>
     </div>
-    <div class="carousel">
-        <div class="carousel-item" th:each="item, iterStat : ${items}">
-            <p th:text="${item.name}">Product</p>
-        </div>
-    </div>
-<!--    <div class="tab-menu">-->
-<!--        <button class="active">리뷰순</button>-->
-<!--        <button>판매순</button>-->
-<!--        <button>인기순</button>-->
-<!--    </div>-->
-<!--    <div class="product-section">-->
-<!--        <div class="product">-->
-<!--            <p>Product</p>-->
-<!--            <p>설명 첫 번째 제품</p>-->
-<!--            <p class="price">$10.99</p>-->
-<!--        </div>-->
-<!--        <div class="product">-->
-<!--            <p>Product</p>-->
-<!--            <p>설명 두 번째 제품</p>-->
-<!--            <p class="price">$10.99</p>-->
-<!--        </div>-->
-<!--        <div class="product">-->
-<!--            <p>Product</p>-->
-<!--            <p>설명 세 번째 제품</p>-->
-<!--            <p class="price">$10.99</p>-->
-<!--        </div>-->
-<!--        <div class="product">-->
-<!--            <p>Product</p>-->
-<!--            <p>설명 첫 번째 제품</p>-->
-<!--            <p class="price">$10.99</p>-->
-<!--        </div>-->
-<!--        <div class="product">-->
-<!--            <p>Product</p>-->
-<!--            <p>설명 두 번째 제품</p>-->
-<!--            <p class="price">$10.99</p>-->
-<!--        </div>-->
-<!--        <div class="product">-->
-<!--            <p>Product</p>-->
-<!--            <p>설명 세 번째 제품</p>-->
-<!--            <p class="price">$10.99</p>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <div class="pagination">-->
-<!--        <span>&lt;&lt;</span>-->
-<!--        <span>1</span>-->
-<!--        <span>2</span>-->
-<!--        <span>3</span>-->
-<!--        <span>&gt;&gt;</span>-->
-<!--    </div>-->
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#carouselInner').slick({
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            infinite: true,
+            dots: true,
+            autoplay: true,
+            autoplaySpeed: 2000, // 슬라이드가 2초마다 자동으로 이동
+            prevArrow: '<button type="button" class="slick-prev">&#9664;</button>',
+            nextArrow: '<button type="button" class="slick-next">&#9654;</button>'
+        });
+    });
+</script>
 </body>
 </html>

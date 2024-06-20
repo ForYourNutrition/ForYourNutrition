@@ -83,4 +83,130 @@ public class ItemController {
 		return itemList;
 	}
 
+	@GetMapping("/shopByCategoryItem.do")
+	public Page<Item> getCategoryItemList(@RequestParam(value = "category", defaultValue = "비타민") String category,
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "9") int pageSize,
+		@RequestParam(defaultValue = "sales") String sortBy,
+		@RequestParam(value = "all", defaultValue = "false", required = false) Boolean all,
+		HttpSession session, Model model) {
+		Page<Item> itemList;
+		if(all) {
+			itemList = itemService.getAllItem(page, pageSize, sortBy);
+
+			model.addAttribute("itemList", itemList);
+			model.addAttribute("currentPage", page);
+			model.addAttribute("pageSize", pageSize);
+			model.addAttribute("totalPages", itemList.getTotalPages());
+			model.addAttribute("category", category);
+			model.addAttribute("sortBy", sortBy);
+			model.addAttribute("all", all);
+
+			return itemList;
+		}
+		itemList = itemService.getCategoryList(category, page, pageSize, sortBy);
+
+		model.addAttribute("itemList", itemList);
+		model.addAttribute("currentPage", page);
+		model.addAttribute("pageSize", pageSize);
+		model.addAttribute("totalPages", itemList.getTotalPages());
+		model.addAttribute("category", category);
+		model.addAttribute("sortBy", sortBy);
+		model.addAttribute("all", all);
+
+		System.out.println(itemList.getTotalElements());
+		System.out.println(page +", " + itemList.getTotalPages());
+		return itemList;
+	}
+
+	@GetMapping("/shopByTargetItem.do")
+	public Page<Item> getTargetItemList(@RequestParam(value = "target", defaultValue = "2") int target,
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "9") int pageSize,
+		@RequestParam(defaultValue = "sales") String sortBy,
+		@RequestParam(value = "all", defaultValue = "false", required = false) Boolean all,
+		HttpSession session, Model model) {
+		Page<Item> itemList;
+		if(all) {
+			itemList = itemService.getAllItem(page, pageSize, sortBy);
+
+			model.addAttribute("itemList", itemList);
+			model.addAttribute("currentPage", page);
+			model.addAttribute("pageSize", pageSize);
+			model.addAttribute("totalPages", itemList.getTotalPages());
+			model.addAttribute("target", target);
+			model.addAttribute("sortBy", sortBy);
+			model.addAttribute("all", all);
+
+			return itemList;
+		}
+		itemList = itemService.getTargetList(target, page, 9, sortBy);
+
+		model.addAttribute("itemList", itemList);
+		model.addAttribute("currentPage", page);
+		model.addAttribute("pageSize", 9);
+		model.addAttribute("totalPages", itemList.getTotalPages());
+		model.addAttribute("target", target);
+		model.addAttribute("sortBy", sortBy);
+		model.addAttribute("all", all);
+
+		System.out.println(itemList.getTotalElements());
+		System.out.println(page +", " + itemList.getTotalPages());
+		return itemList;
+	}
+
+	@GetMapping("/shopByEffectItem.do")
+	public Page<Item> getEffectItemList(@RequestParam(value = "effect", defaultValue = "3") int effect,
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "9") int pageSize,
+		@RequestParam(defaultValue = "sales") String sortBy,
+		@RequestParam(value = "all", defaultValue = "false", required = false) Boolean all,
+		HttpSession session, Model model) {
+		Page<Item> itemList;
+		if(all) {
+			itemList = itemService.getAllItem(page, pageSize, sortBy);
+
+			model.addAttribute("itemList", itemList);
+			model.addAttribute("currentPage", page);
+			model.addAttribute("pageSize", pageSize);
+			model.addAttribute("totalPages", itemList.getTotalPages());
+			model.addAttribute("effect", effect);
+			model.addAttribute("sortBy", sortBy);
+			model.addAttribute("all", all);
+
+			return itemList;
+		}
+		itemList = itemService.getEffectList(effect, page, pageSize, sortBy);
+
+		model.addAttribute("itemList", itemList);
+		model.addAttribute("currentPage", page);
+		model.addAttribute("pageSize", pageSize);
+		model.addAttribute("totalPages", itemList.getTotalPages());
+		model.addAttribute("effect", effect);
+		model.addAttribute("sortBy", sortBy);
+		model.addAttribute("all", all);
+
+		System.out.println(itemList.getTotalElements());
+		System.out.println(page +", " + itemList.getTotalPages());
+		return itemList;
+	}
+
+	@GetMapping("/shopByDCItem.do")
+	public Page<Item> getDcItemList(
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(defaultValue = "9") int pageSize,
+		@RequestParam(defaultValue = "sales") String sortBy,
+		HttpSession session, Model model) {
+		Page<Item> itemList = itemService.getDcRateList(page, pageSize, sortBy);
+
+		model.addAttribute("itemList", itemList);
+		model.addAttribute("currentPage", page);
+		model.addAttribute("pageSize", pageSize);
+		model.addAttribute("totalPages", itemList.getTotalPages());
+		model.addAttribute("sortBy", sortBy);
+
+		System.out.println(itemList.getTotalElements());
+		System.out.println(page +", " + itemList.getTotalPages());
+		return itemList;
+	}
 }

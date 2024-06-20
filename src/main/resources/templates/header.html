@@ -11,6 +11,19 @@
             padding: 0;
             background-color: white;
         }
+        #shop-submenu {
+            display: none;
+            margin-left: 20px; /* Optional: To indent the submenu items */
+        }
+        .menu-content a {
+            display: block;
+            padding: 5px;
+            text-decoration: none;
+            color: black;
+        }
+        .menu-content a:hover {
+            background-color: #f0f0f0;
+        }
         .header {
             display: flex;
             justify-content: space-between;
@@ -79,7 +92,13 @@
         <div class="menu">
             <button>Menu</button>
             <div class="menu-content">
-                <a href="/shop">Shop</a>
+                <a href="#" id="shop-toggle">Shop</a>
+                <div id="shop-submenu">
+                    <a href="/item/shopByTargetItem.do">섭취대상</a>
+                    <a href="/item/shopByEffectItem.do">건강고민별 상품</a>
+                    <a href="/item/shopByCategoryItem.do">카테고리별 상품</a>
+                    <a href="/item/shopByDCItem.do">특가 상품</a>
+                </div>
                 <a href="/member/myPage">Mypage</a>
                 <a href="/question/questionList">Q&amp;A</a>
             </div>
@@ -102,5 +121,16 @@
             </div>
         </div>
     </div>
+    <script>
+        document.getElementById('shop-toggle').addEventListener('click', function(event) {
+            event.preventDefault();
+            var submenu = document.getElementById('shop-submenu');
+            if (submenu.style.display === 'none' || submenu.style.display === '') {
+                submenu.style.display = 'block';
+            } else {
+                submenu.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>

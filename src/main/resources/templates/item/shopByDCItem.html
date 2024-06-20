@@ -67,42 +67,73 @@
             border-radius: 5px;
             cursor: pointer;
             outline: none;
+            margin-right: 10px;
+        }
+        .categories {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .category-button {
+            background-color: navy;
+            color: white;
+            border: 2px solid navy;
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            outline: none;
+        }
+        .category-button:hover {
+            background-color: #001f4d;
+            border-color: #001f4d;
+        }
+        .selected {
+            background-color: #001f4d;
+            border-color: #001f4d;
         }
     </style>
 </head>
 <body>
 <div th:insert="~{header}"></div>
 <div class="search-bar-container">
-<div class="search-bar">
-    <input type="text" id="searchInput" placeholder="검색어를 입력하세요">
-    <button th:onclick="|searchItems()|">검색</button>
-</div>
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="검색어를 입력하세요">
+        <button onclick="searchItems()">검색</button>
+    </div>
 </div>
 <div class="buttons">
-    <button th:onclick="|location.href='@{/item/searchItemList.do(text=${text}, page=${currentPage}, pageSize=${pageSize}, sortBy='sales')}'|">판매량순</button>
-    <button th:onclick="|location.href='@{/item/searchItemList.do(text=${text}, page=${currentPage}, pageSize=${pageSize}, sortBy='dcRate')}'|">할인율순</button>
+    <button th:onclick="|location.href='@{/item/shopByDCItem.do(dcRate=${dcRate}, page=${currentPage}, pageSize=${pageSize}, sortBy='sales')}'|">판매량순</button>
+    <button th:onclick="|location.href='@{/item/shopByDCItem.do(dcRate=${dcRate}, page=${currentPage}, pageSize=${pageSize}, sortBy='dcRate')}'|">할인율순</button>
+    <button th:onclick="|location.href='@{/item/shopByDCItem.do(dcRate=${dcRate}, page=${currentPage}, pageSize=${pageSize}, sortBy='name')}'|">가나다순</button>
 </div>
 <p></p>
 <div class="item-container">
     <div th:each="item : ${itemList.content}" class="item-box" th:onclick="|window.location.href='@{/item/viewItem.do(item_id=${item.item_id})}'|">
         <img border="0" th:src="@{/images/img.png}" />
         <h3 th:text="${item.name}">Item Name</h3>
+        <p th:text="${item.dcRate} + '%'">할인율</p>
         <p th:text="${item.price}">가격</p>
-        <p th:text="${item.detail}">Item Description</p>
         <!-- 추가적인 Item 정보들 -->
     </div>
 </div>
 
 <div class="paging">
     <span th:if="${currentPage > 0}">
-        <a th:href="@{/item/searchItemList.do(text=${text}, page=${currentPage - 1}, pageSize=${pageSize}, sortBy=${sortBy})}">Previous</a>
+        <a th:href="@{/item/shopByDCItem.do(dcRate=${dcRate}, page=${currentPage - 1}, pageSize=${pageSize}, sortBy=${sortBy}, category=${category})}">Previous</a>
     </span>
-    <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-        <a th:href="@{/item/searchItemList.do(text=${text}, page=${i}, pageSize=${pageSize}, sortBy=${sortBy})}"
+    <span th:if="${totalPages > 0}" th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+        <a th:href="@{/item/shopByDCItem.do(dcRate=${dcRate}, page=${i}, pageSize=${pageSize}, sortBy=${sortBy}, category=${category})}"
            th:text="${i + 1}">1</a>
     </span>
     <span th:if="${currentPage < totalPages - 1}">
-        <a th:href="@{/item/searchItemList.do(text=${text}, page=${currentPage + 1}, pageSize=${pageSize}, sortBy=${sortBy})}">Next</a>
+        <a th:href="@{/item/shopByDCItem.do(dcRate=${dcRate}, page=${currentPage + 1}, pageSize=${pageSize}, sortBy=${sortBy}, category=${category})}">Next</a>
     </span>
 </div>
 <p></p>
@@ -116,6 +147,21 @@
             alert('검색어를 입력하세요.');
         }
     }
+
+    function selectCategory(dcRate) {
+        var text = dcRate; // 현재 검색어 값 가져오기
+        var currentPage = /*[[${currentPage}]]*/ 0; // Thymeleaf에서 currentPage 값을 가져오기
+        var pageSize = /*[[${pageSize}]]*/ 9; // Thymeleaf에서 pageSize 값을 가져오기
+        var sortBy = /*[[${sortBy}]]*/ 'default'; // Thymeleaf에서 sortBy 값을 가져오기
+
+        // category 값에 따라 URL 변경
+        if (dcRate) {
+            window.location.href = '/item/shopByDCItem.do?dcRate=' + encodeURIComponent(text) + '&page=' + currentPage + '&pageSize=' + pageSize + '&sortBy=' + sortBy;
+        } else {
+            window.location.href = '/item/shopByDCItem.do?dcRate=' + currentPage + '&pageSize=' + pageSize + '&sortBy=' + sortBy;
+        }
+    }
+
 </script>
 </body>
 </html>

@@ -16,8 +16,17 @@ import com.luckyGirls.ForYourNutrition.domain.Item;
 public interface ItemJpaRepository extends JpaRepository<Item, Integer> {
 	Item findById(int id);
 	List<Item> findAllByCategory(String category);
-	
+
+	Page<Item> findAll(Pageable pageable);
 	@Query("SELECT i FROM Item i WHERE LOWER(i.name) LIKE LOWER(CONCAT('%', :name, '%'))")
 	Page<Item> findByNameContainingIgnoreCase(@Param("name") String name, Pageable pageable);
 
+	Page<Item> findAllByCategory(String category, Pageable pageable);
+
+	Page<Item> findAllByEffect(int effect, Pageable pageable);
+
+	Page<Item> findAllByTarget(int target, Pageable pageable);
+
+	@Query("SELECT i FROM Item i WHERE i.dcRate > 0")
+	Page<Item> findAllByDcRate( Pageable pageable);
 }

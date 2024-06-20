@@ -80,12 +80,12 @@
       color: white;
       border: 2px solid navy;
       border-radius: 50%;
-      width: 70px;
-      height: 70px;
+      width: 120px;
+      height: 120px;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 16px;
+      font-size: 13px;
       margin: 10px;
       cursor: pointer;
       outline: none;
@@ -97,6 +97,13 @@
     .selected {
       background-color: #001f4d;
       border-color: #001f4d;
+    }
+    .print {
+      padding: 20px;
+      border-radius: 30px;
+      text-align: center;
+      flex: 1;
+      margin: 0 10px;
     }
   </style>
 </head>
@@ -110,11 +117,11 @@
 </div>
 <div class="categories">
   <button class="category-button" onclick="selectCategory('')">전체</button>
-  <button class="category-button" onclick="selectCategory('category1')">카테고리1</button>
-  <button class="category-button" onclick="selectCategory('category2')">카테고리2</button>
-  <button class="category-button" onclick="selectCategory('category3')">카테고리3</button>
-  <button class="category-button" onclick="selectCategory('category4')">카테고리4</button>
-  <button class="category-button" onclick="selectCategory('category5')">카테고리5</button>
+  <button class="category-button" onclick="selectCategory('비타민')">종합 비타민</button>
+  <button class="category-button" onclick="selectCategory('오메가3')">오메가3</button>
+  <button class="category-button" onclick="selectCategory('철분')">철분</button>
+  <button class="category-button" onclick="selectCategory('칼슘,마그네슘')">칼슘&마그네슘</button>
+  <button class="category-button" onclick="selectCategory('프로바이오틱스')">프로바이오틱스</button>
 </div>
 <div class="buttons">
   <button th:onclick="|location.href='@{/item/shopByCategoryItem.do(category=${category}, page=${currentPage}, pageSize=${pageSize}, sortBy='sales')}'|">판매량순</button>
@@ -122,10 +129,12 @@
   <button th:onclick="|location.href='@{/item/shopByCategoryItem.do(category=${category}, page=${currentPage}, pageSize=${pageSize}, sortBy='name')}'|">가나다순</button>
 </div>
 <p></p>
+<h3 class="print"><span th:text="${item.category}"></span></h3>
 <div class="item-container">
   <div th:each="item : ${itemList.content}" class="item-box" th:onclick="|window.location.href='@{/item/viewItem.do(item_id=${item.item_id})}'|">
     <img border="0" th:src="@{/images/img.png}" />
     <h3 th:text="${item.name}">Item Name</h3>
+    <p th:text="${item.price}">가격</p>
     <p th:text="${item.detail}">Item Description</p>
     <!-- 추가적인 Item 정보들 -->
   </div>
@@ -133,14 +142,14 @@
 
 <div class="paging">
     <span th:if="${currentPage > 0}">
-        <a th:href="@{/item/shopByCategoryItem.do(category=${category}, page=${currentPage - 1}, pageSize=${pageSize}, sortBy=${sortBy}, category=${category})}">Previous</a>
+        <a th:href="@{/item/shopByCategoryItem.do(category=${category}, page=${currentPage - 1}, pageSize=${pageSize}, sortBy=${sortBy})}">Previous</a>
     </span>
-  <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-        <a th:href="@{/item/shopByCategoryItem.do(category=${category}, page=${i}, pageSize=${pageSize}, sortBy=${sortBy}, category=${category})}"
+  <span th:if="${totalPages > 0}" th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+        <a th:href="@{/item/shopByCategoryItem.do(category=${category}, page=${i}, pageSize=${pageSize}, sortBy=${sortBy})}"
            th:text="${i + 1}">1</a>
     </span>
   <span th:if="${currentPage < totalPages - 1}">
-        <a th:href="@{/item/shopByCategoryItem.do(category=${category}, page=${currentPage + 1}, pageSize=${pageSize}, sortBy=${sortBy}, category=${category})}">Next</a>
+        <a th:href="@{/item/shopByCategoryItem.do(category=${category}, page=${currentPage + 1}, pageSize=${pageSize}, sortBy=${sortBy})}">Next</a>
     </span>
 </div>
 <p></p>
@@ -149,26 +158,27 @@
   function searchItems() {
     var text = document.getElementById('searchInput').value;
     if (text) {
-      window.location.href = '/item/shopByCategoryItem.do?category=' + encodeURIComponent(text);
+      window.location.href = '/item/searchItemList.do?text=' + encodeURIComponent(text);
     } else {
       alert('검색어를 입력하세요.');
     }
   }
 
   function selectCategory(category) {
-    var text = document.getElementById('searchInput').value; // 현재 검색어 값 가져오기
+    var text = category; // 현재 검색어 값 가져오기
     var currentPage = /*[[${currentPage}]]*/ 0; // Thymeleaf에서 currentPage 값을 가져오기
-    var pageSize = /*[[${pageSize}]]*/ 10; // Thymeleaf에서 pageSize 값을 가져오기
+    var pageSize = /*[[${pageSize}]]*/ 9; // Thymeleaf에서 pageSize 값을 가져오기
     var sortBy = /*[[${sortBy}]]*/ 'default'; // Thymeleaf에서 sortBy 값을 가져오기
 
     // category 값에 따라 URL 변경
     if (category) {
       window.location.href = '/item/shopByCategoryItem.do?category=' + encodeURIComponent(text) + '&page=' + currentPage + '&pageSize=' + pageSize + '&sortBy=' + sortBy;
     } else {
-      window.location.href = '/item/shopByCategoryItem.do?page=' + currentPage + '&pageSize=' + pageSize + '&sortBy=' + sortBy;
+      window.location.href = '/item/shopByCategoryItem.do?page=' + currentPage + '&pageSize=' + pageSize + '&sortBy=' + sortBy + '&all=' + true;
     }
   }
 
 </script>
 </body>
 </html>
+

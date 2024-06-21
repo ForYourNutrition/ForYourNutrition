@@ -12,7 +12,7 @@
 		
 		<div class="container">
 			<h2>Question 수정하기</h2>
-			<form th:action="@{/question/updateQuestion}" th:object="${questionForm}" method="post">
+			<form th:action="@{/question/updateQuestion}" th:object="${questionForm}" method="post" onsubmit="return confirm('문의글이 수정되었습니다.');">
 				<input type="hidden" th:field="*{question_id}" /> 
 				<label for="name">작성자 :</label><br/><span th:text="${memNickName} + '님'"></span>
 				<br><br/><br/>
@@ -29,5 +29,6 @@
 			</form>
 		</div>
 	</div>
+	<div th:insert="~{footer}"></div>
 </body>
 </html>

@@ -94,7 +94,7 @@ public class QuestionController {
 			questionService.insertQuestion(question);
 
 			questionForm.setQuestion_id(question.getQuestion_id());
-			String memNickName = member.getNickname();
+			String memNickName = question.getMember().getNickname();
 			
 			model.addAttribute("memNickName", memNickName);
 			model.addAttribute("questionForm", questionForm);
@@ -124,7 +124,7 @@ public class QuestionController {
 			questionForm.setTitle(question.getTitle());
 			questionForm.setContent(question.getContent());
 
-			String memNickName = member.getNickname();
+			String memNickName = question.getMember().getNickname();
 			model.addAttribute("memNickName", memNickName);
 			
 			model.addAttribute("questionForm", questionForm);
@@ -244,7 +244,7 @@ public class QuestionController {
 		model.addAttribute("question", question);
 		model.addAttribute("comments", comments);
 
-		String memNickName = member.getNickname();
+		String memNickName = question.getMember().getNickname();
 		model.addAttribute("memNickName", memNickName);
 		
 		model.addAttribute("member", member);

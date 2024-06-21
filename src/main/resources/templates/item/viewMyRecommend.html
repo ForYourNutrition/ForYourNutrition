@@ -30,6 +30,7 @@
       margin: 0;
       font-size: 1.2em;
     }
+    .carousel-inner { height: 300px;}
     .item p {
       margin: 0;
       font-size: 1em;
@@ -45,10 +46,12 @@
 	  left: 50%;
 	  transform: translateX(-50%);
 	}
+    .item {
+      height: 250px;
+    }
   </style>
 </head>
 <body>
-  <div class="carousel">
     <div class="carousel-inner" id="carouselInner">
       <th:block th:each="item : ${recommendedItems}">
         <div class="item" th:onclick="|window.location.href='@{/item/viewItem(item_id=${item.item_id})}'|">
@@ -58,8 +61,6 @@
         </div>
       </th:block>
     </div>
-  </div>
-</div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 <script type="text/javascript">
@@ -70,7 +71,7 @@
       infinite: true,
       dots: true,
       autoplay: true,
-      autoplaySpeed: 5000, // 슬라이드가 2초마다 자동으로 이동
+      autoplaySpeed: 3000, // 슬라이드가 2초마다 자동으로 이동
       prevArrow: '<button type="button" class="slick-prev">&#9664;</button>',
       nextArrow: '<button type="button" class="slick-next">&#9654;</button>'
     });

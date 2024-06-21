@@ -28,7 +28,7 @@ public class ItemGetResponse {
 
 	private int sales;
 
-	//private String img;
+	private String img;
 
 	public static ItemGetResponse from(Item item) {
 		return new ItemGetResponse(
@@ -40,7 +40,8 @@ public class ItemGetResponse {
 			item.getCategory(),
 			item.getTarget(),
 			item.getEffect(),
-			item.getSales()
+			item.getSales(),
+			item.getImg()
 		);
 	}
 }

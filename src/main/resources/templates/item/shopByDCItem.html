@@ -119,7 +119,7 @@
         <img border="0" th:src="@{/images/img.png}" />
         <h3 th:text="${item.name}">Item Name</h3>
         <p th:text="${item.dcRate} + '%'">할인율</p>
-        <p th:text="${item.price}">가격</p>
+        <p th:text="${item.price} + '원'">가격</p>
         <!-- 추가적인 Item 정보들 -->
     </div>
 </div>

@@ -163,9 +163,8 @@
             margin-top: 10px;
         }
         .recommendationContainer {
-            width: 90%;
+            width: 60%;
             height: 200px;
-            background-color: #f0f0f0;
             border: 1px solid #ddd;
             border-radius: 10px;
             padding: 20px;
@@ -174,43 +173,12 @@
             display: flex;
             justify-content: center;
         }
-
-        .recommendationContainer .carousel {
-            display: flex;
-            overflow: hidden;
-            width: 900px; /* Adjust the width as necessary */
-        }
-
-        .recommendationContainer .carousel-inner {
-            display: flex;
-            transition: transform 0.5s ease;
-            width: 100%;
-        }
-
         .recommendationContainer .item {
             box-sizing: border-box;
             padding: 10px;
             text-align: center;
             margin: 0 15px; /* Add margin to increase spacing */
         }
-
-        .recommendationContainer .carousel-controls {
-            display: flex;
-            justify-content: space-between;
-            width: 50px; /* Adjust width if necessary */
-        }
-
-        .recommendationContainer .carousel-controls button {
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .recommendationContainer .carousel-controls button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
         h1 {
             font-size: 24px;
             color: #333;
@@ -240,6 +208,25 @@
             color: #999;
             text-decoration: line-through;
         }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #2980b9;
+            padding-bottom: 5px;
+        }
+        .section p, .section li {
+            margin: 5px 0;
+        }
+        .section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .section ul li:before {
+            content: "■ ";
+            color: #2980b9;
+        }
     </style>
 </head>
 <body>
@@ -251,7 +238,7 @@
         </div>
         <div class="product-details">
             <h1 th:text="${item.name}">Product Name</h1>
-            <p class="category">카테고리 > <span th:text="${item.category}"></span></p>
+            <p class="category"><b>카테고리 > </b><span th:text="${item.category}"></span></p>
             <p class="price">정가 > <span class="original-price" th:text="${item.price}"></span>원</p>
             <p class="price">세일가 > <span class="sale-price" th:text="(${item.price} * (100 - ${item.dcRate})) / 100"></span>원</p>
             <div class="infos">
@@ -312,6 +299,7 @@
     </div>
 
     <div class="recommendationContainer" th:insert="~{item/viewComparativeItem}"></div>
+    <p></p>
     <div class="product-info">
         <div class="tabs">
             <button class="active" onclick="showTab('details')">상품 상세</button>
@@ -321,13 +309,72 @@
         <div id="details" class="tab-content active">
             <h2>상품 상세</h2>
             <p><strong>Detail:</strong> <span th:text="${item.detail}"></span></p>
+            <div th:if="${item.category == '비타민'}">
+                <img src="/images/vita.jpg" alt="Category 1 Image">
+            </div>
+            <div th:if="${item.category == '칼슘,마그네슘'}">
+                <img src="/images/calma.jpg" alt="Category 2 Image">
+            </div>
+            <div th:if="${item.category == '오메가3'}">
+                <img src="/images/omega.jpg" alt="Category 3 Image">
+            </div>
+            <div th:if="${item.category == '철분'}">
+                <img src="/images/chul.jpg" alt="Default Image">
+            </div>
+            <div th:if="${item.category == '프로바이오틱스'}">
+                <img src="/images/pro.jpg" alt="Default Image">
+            </div>
         </div>
         <div id="reviews" class="tab-content">
             <div th:insert="~{/review/reviewList :: review}"></div>
         </div>
         <div id="shipping" class="tab-content">
-            <h2>배송 안내</h2>
-            <p>배송 안내 내용</p>
+            <div class="section">
+                <h2>배송안내</h2>
+                <p>배송 : 일반 택배</p>
+                <p>배송비 : 상품 상세페이지 참고</p>
+                <p>상품배송일: 주문 후 영업일 기준 3~5일 이내 출고예정</p>
+                <ul>
+                    <li>상품별로 상품 특성 및 배송지에 따라 배송유형 및 소요기간이 달라질 수 있습니다.</li>
+                    <li>브랜드사 사정으로 인하여 지연 및 품절이 발생 할 수 있습니다.</li>
+                    <li>일부 주문상품 또는 예약상품의 경우 기본 배송일 외에 추가 배송 소요일이 발생될 수 있습니다.</li>
+                    <li>동일 브랜드의 상품이라도 상품별 출고일시가 달라 각각 배송될 수 있습니다.</li>
+                    <li>제주 및 도서산간 지역은 출고, 반품, 교환시 추가 배송비 (항공, 도선료 등) 이 부과 될 수 있습니다.</li>
+                    <li>상품의 배송비는 브랜드사의 정책에 따라 다르며 공휴일 및 휴일은 배송이 불가합니다.</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>교환/반품 안내</h2>
+                <p>상품하자 이외 단순 변심에 의한 교환/반품 택배비 고객부담으로 왕복택배비가 발생합니다.</p>
+                <p>(전자상거래 등에서의 소비자보호에 관한 법률 제18조(청약 철회등) 9항에 의거 소비자의 사정에 의한 청약 철회 시 택배비는 소비자 부담입니다.)</p>
+                <p>교환 / 반품은 미개봉 제품에 한해 배송완료 후 7일 이내 접수하여 주시기 바랍니다.</p>
+            </div>
+
+            <div class="section">
+                <h2>반품 / 교환이 불가능한 경우</h2>
+                <ul>
+                    <li>제품을 사용 또는 훼손한 경우, 사은품 누락, 상품 TAG, 보증서, 상품 부자재가 제거 혹은 분실된 경우</li>
+                    <li>밀봉포장을 개봉했거나 포장재를 훼손 또는 분실한 경우</li>
+                    <li>시간이 경과되어 재판매가 어려울 정도로 상품가치가 상실된 경우</li>
+                    <li>기타 전자상거래 등에서의 소비자보호에 관한 법률이 정하는 청약철회 제한사유에 해당하는 경우</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>취소 / 환불</h2>
+                <ul>
+                    <li>주문상태가 주문, 입금완료 상태일때는 마이페이지에서 직접 주문 취소가 가능하며 브랜드사의 승인여부 (이미 배송을 했거나, 포장을 완료한 경우)에 따라 취소가 불가 할 수 있습니다.</li>
+                    <li>취소 / 환불 대금환불이 지연 시 전자상거래법에 의거하여 환불지연 배상처리 절차가 진행됩니다.</li>
+                    <li>구매자가 미성년자인 경우에는 상품 구입 시 법정대리인이 동의하지 아니하면 미성년자 본인 또는 법정대리인이 구매취소 할 수 있습니다.</li>
+                    <li>출고 이후 환불요청 시 상품 회수 후 처리됩니다.</li>
+                    <li>환불기간은 결제수단에 따라 상이하며, 아래 내용 참고 부탁드립니다.</li>
+                    <ul>
+                        <li>[신용카드 및 체크카드 환불기간] 카드사에서 확인 절차를 거치는 관계로 평균 3~7일 영업일 이내 환불처리가 완료됩니다.</li>
+                        <li>[무통장입금] 무통장 입금의 경우 평균 3영업일 이내 요청 하신 계좌로 환불됩니다.</li>
+                    </ul>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

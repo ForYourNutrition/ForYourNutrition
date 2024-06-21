@@ -37,7 +37,7 @@ public class IRecommendController {
 	private final ItemService itemService;
 
 	// 개인 추천 아이템 조회
-	@GetMapping("/viewMyRecommend.do")
+	@GetMapping("/viewMyRecommend")
 	public String getPersonalRecommendation(
 		@RequestParam("member_id") String memberId,
 		HttpSession session, Model model
@@ -51,7 +51,7 @@ public class IRecommendController {
 	}
 
 	// 전체 추천 아이템 조회
-	@GetMapping("/viewItemRecommend.do")
+	@GetMapping("/viewItemRecommend")
 	public String getAllRecommendation(
 		@RequestParam("item_id") int itemId,
 		Model model
@@ -63,7 +63,7 @@ public class IRecommendController {
 	}
 
 	// 카테고리별 추천 아이템 조회
-	@GetMapping("/viewCategoryRecommend.do")
+	@GetMapping("/viewCategoryRecommend")
 	public String getCategoryRecommendation(
 		@RequestParam("item_id") int itemId,
 		@RequestParam("category") int ctype,
@@ -76,7 +76,7 @@ public class IRecommendController {
 	}
 
 	//비교 상품 불러오기
-	@GetMapping("/viewComparativeItem.do")
+	@GetMapping("/viewComparativeItem")
 	public String getComparativeItem(
 		@RequestParam("item_id") int itemId,
 		Model model

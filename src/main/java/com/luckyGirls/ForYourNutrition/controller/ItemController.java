@@ -40,7 +40,7 @@ public class ItemController {
 	@Autowired
 	private ReviewService reviewService;
 
-	@GetMapping("/viewItem.do")
+	@GetMapping("/viewItem")
 	public String getItem(@RequestParam("item_id") int item_id, Model model, @RequestParam(value = "page", defaultValue = "1") int page) throws Exception {
 		ItemGetResponse itemGetResponse = itemService.getItem(item_id);
 		System.out.println(itemGetResponse.toString());
@@ -67,7 +67,7 @@ public class ItemController {
 		return "item/viewItem"; // "item/viewItem" 뷰 이름 반환
 	}
 
-	@GetMapping("/searchItemList.do")
+	@GetMapping("/searchItemList")
 	public Page<Item> getItemList(@RequestParam("text") String text,
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "9") int pageSize,
@@ -87,7 +87,7 @@ public class ItemController {
 		return itemList;
 	}
 
-	@GetMapping("/shopByCategoryItem.do")
+	@GetMapping("/shopByCategoryItem")
 	public Page<Item> getCategoryItemList(@RequestParam(value = "category", defaultValue = "비타민") String category,
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "9") int pageSize,
@@ -123,7 +123,7 @@ public class ItemController {
 		return itemList;
 	}
 
-	@GetMapping("/shopByTargetItem.do")
+	@GetMapping("/shopByTargetItem")
 	public Page<Item> getTargetItemList(@RequestParam(value = "target", defaultValue = "2") int target,
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "9") int pageSize,
@@ -159,7 +159,7 @@ public class ItemController {
 		return itemList;
 	}
 
-	@GetMapping("/shopByEffectItem.do")
+	@GetMapping("/shopByEffectItem")
 	public Page<Item> getEffectItemList(@RequestParam(value = "effect", defaultValue = "3") int effect,
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "9") int pageSize,
@@ -195,7 +195,7 @@ public class ItemController {
 		return itemList;
 	}
 
-	@GetMapping("/shopByDCItem.do")
+	@GetMapping("/shopByDCItem")
 	public Page<Item> getDcItemList(
 		@RequestParam(defaultValue = "0") int page,
 		@RequestParam(defaultValue = "9") int pageSize,
@@ -214,7 +214,7 @@ public class ItemController {
 		return itemList;
 	}
 
-	@GetMapping("/viewBestItemList.do")
+	@GetMapping("/viewBestItemList")
 	public List<Item> getDcItemList(Model model) {
 		List<Item> itemList = itemService.getBestItemList();
 

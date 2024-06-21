@@ -164,7 +164,7 @@
         }
         .recommendationContainer {
             width: 60%;
-            height: 200px;
+            height: 300px;
             border: 1px solid #ddd;
             border-radius: 10px;
             padding: 20px;
@@ -297,7 +297,7 @@
             </form>
         </div>
     </div>
-
+	<div><h3>비교 상품</h3></div>
     <div class="recommendationContainer" th:insert="~{item/viewComparativeItem}"></div>
     <p></p>
     <div class="product-info">
@@ -419,9 +419,6 @@
         });
         document.querySelector('.tabs button[onclick="showTab(\'' + tabId + '\')"]').classList.add('active');
     }
-    const item = {
-        img: [[${item.img}]] // 이미지 경로를 여기에 입력하세요.
-    };
 
     // JavaScript를 통해 이미지 경로를 설정
     document.getElementById('dynamicImage').src = item.img;

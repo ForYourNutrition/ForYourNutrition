@@ -11,9 +11,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-    }
-    .carousel {
-      width: 100%; /* Adjust as necessary */
+      width: 100%;
     }
     .item {
       box-sizing: border-box;
@@ -41,6 +39,12 @@
       height:200px; 
       width:150px;
     }
+    .slick-dots {
+	  position: absolute;
+	  bottom: 100%; /* Adjust this value to bring dots closer to the slides */
+	  left: 50%;
+	  transform: translateX(-50%);
+	}
   </style>
 </head>
 <body>
@@ -60,7 +64,7 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function(){
-    $('#carouselInner').slick({
+    $('.carousel-inner').slick({
       slidesToShow: 3,
       slidesToScroll: 1,
       infinite: true,

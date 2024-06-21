@@ -17,15 +17,20 @@
             text-align: center;
             margin: 0 30px; /* Add margin to increase spacing */
         }
+        #comimage{
+            height: 200px;
+            width: 160px;
+        }
     </style>
 </head>
 <body>
-<center><h3>비교 상품</h3></center>
+<div>
+</div>
 <div>
         <div class="cpcontainer">
                 <th:block th:each="item : ${comparativeItems}">
                     <div class="item" th:onclick="|window.location.href='@{/item/viewItem(item_id=${item.item_id})}'|">
-                        <img border="0" th:src="@{/images/img.png}" />
+                        <img id="comimage" border="0" th:src="@{${item.img}}" alt="Dynamic Image" />
                         <p th:text="${item.name}">Item Name</p>
                     </div>
                 </th:block>

@@ -45,7 +45,7 @@ public class ItemController {
 		ItemGetResponse itemGetResponse = itemService.getItem(item_id);
 		System.out.println(itemGetResponse.toString());
 		model.addAttribute("item", itemGetResponse);
-		
+		System.out.println("img - " + itemGetResponse.getImg());
 		Item item = itemService.getItemById(item_id);
         
         int pageSize = 10; // 한 페이지에 표시할 리뷰 수
@@ -57,6 +57,7 @@ public class ItemController {
         int endPage = Math.min(totalPages, page + 2);
 
         model.addAttribute("item", item);
+		model.addAttribute("img", item.getImg());
         model.addAttribute("reviews", reviewPage.getContent());
         model.addAttribute("nowPage", page);
         model.addAttribute("totalPages", totalPages);

@@ -17,10 +17,12 @@
             box-sizing: border-box;
             padding: 10px;
             text-align: center;
+            width: 300px; /* 너비를 200픽셀로 설정 */
+    		height: 300px; /* 높이를 200픽셀로 설정 */
         }
         .bestItem img {
-            max-width: 100%;
-            height: auto;
+            width: 100%; /* 부모 요소의 너비에 맞춤 */
+		    height: auto; /* 자동으로 높이 조절하여 비율 유지 */
             display: block;
             margin: 0 auto 10px; /* Center the image and add space below */
         }
@@ -33,13 +35,17 @@
             font-size: 1em;
             color: #666;
         }
+        #dimg {
+        	height:200px; 
+        	width:150px;
+        }
     </style>
 </head>
 <body>
 <center><h3>Best Item</h3></center>
 <div class="best">
     <div th:each="item : ${itemList}" class="bestItem" th:onclick="|window.location.href='@{/item/viewItem(item_id=${item.item_id})}'|">
-        <img border="0" th:src="@{/images/img.png}" />
+        <img id="dimg" border="0" th:src="@{${item.img}}" alt="Dynamic Image" />
         <h3 th:text="${item.name}">Item Name</h3>
         <p th:text="${item.detail}">Item Description</p>
     </div>

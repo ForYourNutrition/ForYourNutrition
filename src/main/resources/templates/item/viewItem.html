@@ -164,7 +164,7 @@
         }
         .recommendationContainer {
             width: 60%;
-            height: 200px;
+            height: 300px;
             border: 1px solid #ddd;
             border-radius: 10px;
             padding: 20px;
@@ -234,7 +234,7 @@
 <div class="container">
     <div class="product-main">
         <div class="image-container">
-            <img border="0" src="/images/img.png" />
+             <img id="itemImg" border="0" th:src="@{${item.img}}" alt="Dynamic Image" />
         </div>
         <div class="product-details">
             <h1 th:text="${item.name}">Product Name</h1>
@@ -297,7 +297,7 @@
             </form>
         </div>
     </div>
-
+	<div><h3>비교 상품</h3></div>
     <div class="recommendationContainer" th:insert="~{item/viewComparativeItem}"></div>
     <p></p>
     <div class="product-info">
@@ -419,6 +419,9 @@
         });
         document.querySelector('.tabs button[onclick="showTab(\'' + tabId + '\')"]').classList.add('active');
     }
+
+    // JavaScript를 통해 이미지 경로를 설정
+    document.getElementById('dynamicImage').src = item.img;
 </script>
 
 </body>

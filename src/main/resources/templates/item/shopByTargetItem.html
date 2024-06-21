@@ -105,6 +105,11 @@
             flex: 1;
             margin: 0 10px;
         }
+
+        #dyImage{
+            height: 180px;
+            width: 160px;
+        }
     </style>
 </head>
 <body>
@@ -143,7 +148,8 @@
 </h3>
 <div class="item-container">
     <div th:each="item : ${itemList.content}" class="item-box" th:onclick="|window.location.href='@{/item/viewItem(item_id=${item.item_id})}'|">
-        <img border="0" th:src="@{/images/img.png}" />
+
+        <img id="dyImage" border="0" th:src="@{${item.img}}" alt="Dynamic Image" />
         <h3 th:text="${item.name}">Item Name</h3>
         <p th:text="${item.price}">가격</p>
         <p th:text="${item.detail}">Item Description</p>

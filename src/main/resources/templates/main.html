@@ -158,7 +158,7 @@
         function searchItems() {
             var text = document.getElementById('searchInput').value;
             if (text) {
-                window.location.href = '/item/searchItemList.do?text=' + encodeURIComponent(text);
+                window.location.href = '/item/searchItemList?text=' + encodeURIComponent(text);
             } else {
                 alert('검색어를 입력하세요.');
             }

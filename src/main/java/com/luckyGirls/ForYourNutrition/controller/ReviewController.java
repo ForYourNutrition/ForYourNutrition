@@ -241,7 +241,7 @@ public class ReviewController {
                 memberService.updateMember(member);
 				
 				// item_id 값을 포함한 item 페이지로 리다이렉트
-				return "redirect:/item/viewItem.do?item_id=" + item_id;
+				return "redirect:/item/viewItem?item_id=" + item_id;
 			}
 			// 권한이 없거나 리뷰를 찾지 못한 경우 리뷰 목록 페이지로 리다이렉트
 			return "redirect:/review/reviewList";

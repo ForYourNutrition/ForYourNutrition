@@ -57,16 +57,16 @@
 		<br />
 		<div class="pagination">
 			<a th:if="${nowPage > 1}"
-				th:href="@{/item/viewItem.do(item_id=${item.item_id}, page=${nowPage - 1}, sort=${sort})}">이전</a>
+				th:href="@{/item/viewItem(item_id=${item.item_id}, page=${nowPage - 1}, sort=${sort})}">이전</a>
 			<th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
 				<a th:if="${page != nowPage}"
-					th:href="@{/item/viewItem.do(item_id=${item.item_id}, page=${page}, sort=${sort})}"
+					th:href="@{/item/viewItem(item_id=${item.item_id}, page=${page}, sort=${sort})}"
 					th:text="${page}"></a>
 				<strong th:if="${page == nowPage}" th:text="${page}"
 					style="color: red"></strong>
 			</th:block>
 			<a th:if="${nowPage < totalPages}"
-				th:href="@{/item/viewItem.do(item_id=${item.item_id}, page=${nowPage + 1}, sort=${sort})}">다음</a>
+				th:href="@{/item/viewItem(item_id=${item.item_id}, page=${nowPage + 1}, sort=${sort})}">다음</a>
 		</div>
 
 		<br/><br/>

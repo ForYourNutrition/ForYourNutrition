@@ -38,7 +38,7 @@
 <body>
 <center><h3>Best Item</h3></center>
 <div class="best">
-    <div th:each="item : ${itemList}" class="bestItem" th:onclick="|window.location.href='@{/item/viewItem.do(item_id=${item.item_id})}'|">
+    <div th:each="item : ${itemList}" class="bestItem" th:onclick="|window.location.href='@{/item/viewItem(item_id=${item.item_id})}'|">
         <img border="0" th:src="@{/images/img.png}" />
         <h3 th:text="${item.name}">Item Name</h3>
         <p th:text="${item.detail}">Item Description</p>

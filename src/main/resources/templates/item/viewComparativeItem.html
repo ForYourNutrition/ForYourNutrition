@@ -5,62 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Category Recommendation</title>
     <style>
-        .carousel-container {
+        .cpcontainer {
             display: flex;
             align-items: center;
             width: 100%;
             justify-content: center;
         }
-        .carousel {
-            display: flex;
-            overflow: hidden;
-            width: 1000px; /* Adjust the width as necessary */
-        }
-        .carousel-inner {
-            display: flex;
-            transition: transform 0.5s ease;
-            width: 100%;
-        }
         .item {
             box-sizing: border-box;
-            padding: 10px;
+            padding: 30px;
             text-align: center;
-            margin: 0 15px; /* Add margin to increase spacing */
-        }
-        .carousel-controls {
-            display: flex;
-            justify-content: space-between;
-            width: 50px; /* Adjust width if necessary */
-        }
-        .carousel-controls button {
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-        .carousel-controls button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+            margin: 0 30px; /* Add margin to increase spacing */
         }
     </style>
 </head>
 <body>
+<center><h3>비교 상품</h3></center>
 <div>
-    <div class="carousel-container">
-        <div class="carousel">
-            <div class="carousel-inner" id="carouselInner">
+        <div class="cpcontainer">
                 <th:block th:each="item : ${comparativeItems}">
-                    <div class="item" th:onclick="|window.location.href='@{/item/viewItem.do(item_id=${item.item_id})}'|">
+                    <div class="item" th:onclick="|window.location.href='@{/item/viewItem(item_id=${item.item_id})}'|">
                         <img border="0" th:src="@{/images/img.png}" />
                         <p th:text="${item.name}">Item Name</p>
                     </div>
                 </th:block>
-            </div>
         </div>
-    </div>
-    <div class="carousel-controls">
-        <button id="prevBtn" onclick="prevSlide()">&#10094;</button>
-        <button id="nextBtn" onclick="nextSlide()">&#10095;</button>
-    </div>
 </div>
 <script>
     let currentIndex = 0;

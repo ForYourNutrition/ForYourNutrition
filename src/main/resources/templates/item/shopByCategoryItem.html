@@ -132,7 +132,7 @@
 <h3 th:if="${all}" class="print">전체</h3>
 <h3 th:if="${!all}" class="print"><span th:text="${category}"></span></h3>
 <div class="item-container">
-  <div th:each="item : ${itemList.content}" class="item-box" th:onclick="|window.location.href='@{/item/viewItem.do(item_id=${item.item_id})}'|">
+  <div th:each="item : ${itemList.content}" class="item-box" th:onclick="|window.location.href='@{/item/viewItem(item_id=${item.item_id})}'|">
     <img border="0" th:src="@{/images/img.png}" />
     <h3 th:text="${item.name}">Item Name</h3>
     <p th:text="${item.price}">가격</p>
@@ -143,14 +143,14 @@
 
 <div class="paging">
     <span th:if="${currentPage > 0}">
-        <a th:href="@{/item/shopByCategoryItem.do(category=${category}, page=${currentPage - 1}, pageSize=${pageSize}, sortBy=${sortBy})}">Previous</a>
+        <a th:href="@{/item/shopByCategoryItem(category=${category}, page=${currentPage - 1}, pageSize=${pageSize}, sortBy=${sortBy})}">Previous</a>
     </span>
   <span th:if="${totalPages > 0}" th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-        <a th:href="@{/item/shopByCategoryItem.do(category=${category}, page=${i}, pageSize=${pageSize}, sortBy=${sortBy})}"
+        <a th:href="@{/item/shopByCategoryItem(category=${category}, page=${i}, pageSize=${pageSize}, sortBy=${sortBy})}"
            th:text="${i + 1}">1</a>
     </span>
   <span th:if="${currentPage < totalPages - 1}">
-        <a th:href="@{/item/shopByCategoryItem.do(category=${category}, page=${currentPage + 1}, pageSize=${pageSize}, sortBy=${sortBy})}">Next</a>
+        <a th:href="@{/item/shopByCategoryItem(category=${category}, page=${currentPage + 1}, pageSize=${pageSize}, sortBy=${sortBy})}">Next</a>
     </span>
 </div>
 <p></p>
@@ -159,7 +159,7 @@
   function searchItems() {
     var text = document.getElementById('searchInput').value;
     if (text) {
-      window.location.href = '/item/searchItemList.do?text=' + encodeURIComponent(text);
+      window.location.href = '/item/searchItemList?text=' + encodeURIComponent(text);
     } else {
       alert('검색어를 입력하세요.');
     }
@@ -173,9 +173,9 @@
 
     // category 값에 따라 URL 변경
     if (category) {
-      window.location.href = '/item/shopByCategoryItem.do?category=' + encodeURIComponent(text) + '&page=' + currentPage + '&pageSize=' + pageSize + '&sortBy=' + sortBy;
+      window.location.href = '/item/shopByCategoryItem?category=' + encodeURIComponent(text) + '&page=' + currentPage + '&pageSize=' + pageSize + '&sortBy=' + sortBy;
     } else {
-      window.location.href = '/item/shopByCategoryItem.do?page=' + currentPage + '&pageSize=' + pageSize + '&sortBy=' + sortBy + '&all=' + true;
+      window.location.href = '/item/shopByCategoryItem?page=' + currentPage + '&pageSize=' + pageSize + '&sortBy=' + sortBy + '&all=' + true;
     }
   }
 

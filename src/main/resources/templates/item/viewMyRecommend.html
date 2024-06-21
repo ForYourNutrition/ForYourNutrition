@@ -11,7 +11,6 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 100%;
     }
     .carousel {
       width: 100%; /* Adjust as necessary */
@@ -20,6 +19,8 @@
       box-sizing: border-box;
       padding: 10px;
       text-align: center;
+      width: 300px; /* 너비를 200픽셀로 설정 */
+      height: 300px; /* 높이를 200픽셀로 설정 */
     }
     .item img {
       max-width: 100%;
@@ -36,9 +37,9 @@
       font-size: 1em;
       color: #666;
     }
-    #dynamicImage{
-      height: 200px;
-      width: 100px;
+    #dnimg{
+      height:200px; 
+      width:150px;
     }
   </style>
 </head>
@@ -47,7 +48,7 @@
     <div class="carousel-inner" id="carouselInner">
       <th:block th:each="item : ${recommendedItems}">
         <div class="item" th:onclick="|window.location.href='@{/item/viewItem(item_id=${item.item_id})}'|">
-          <img id="dynamicImage" border="0" th:src="@{${item.img}}" alt="Dynamic Image" />
+          <img id="dnimg" border="0" th:src="@{${item.img}}" alt="Dynamic Image" />
           <h3 th:text="${item.name}">Item Name</h3>
           <p th:text="${item.detail}">Item Description</p>
         </div>
